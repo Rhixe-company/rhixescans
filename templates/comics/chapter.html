@@ -1,0 +1,65 @@
+{% include 'comics/base.html' %} {% load crispy_forms_tags %} {% load static %}
+{% block content %}
+
+<style>
+  .chapter-container {
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+  }
+  .comics-container {
+    font-size: 20px;
+    padding: 20px;
+  }
+  .card__img {
+    width: auto;
+    height: auto;
+  }
+</style>
+<div class="chapter-container">
+  <div class="comics-container">
+    <a href="{%  url 'comic' chapters.comics.id %}">
+      {{ chapters.comics.title }}</a
+    >
+    <div><h3>{{ chapters.name }}</h3></div>
+    <br />
+    <div class="card__img">
+      {% for page in pages %}
+      <img src="{{ page.images.url }}" alt="{{ page.images_url }}" />
+      {% endfor%}
+    </div>
+    <hr />
+    {% if request.user.is_authenticated %}
+    <div>
+      <form method="POST" action="">
+        {% csrf_token %}
+        <input type="text" name="text" placeholder="Add new Comment" />
+        <input type="submit" value="Submit" />
+      </form>
+    </div>
+    {% endif %}
+    <br />
+    <div class="comment-wrapper">
+      <span>reviews available {{chapters.numReviews}}</span>
+      {% for comment in comments %}
+      <div>
+        {% if request.user == comment.user %}
+        <a href="{% url 'delete-review' comment.id %}">Delete</a>
+        {% endif %}
+        <small>@{{comment.user}} {{comment.created | timesince }} </small>
+        <p>{{comment.text}}</p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div>
+    <h5>Participants</h5>
+    <hr />
+    {% for user in participants %}
+    <div>
+      <p>@{{user.username}}</p>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock content %}

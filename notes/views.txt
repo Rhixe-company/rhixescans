@@ -1,0 +1,383 @@
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from .forms import ComicForm, ChapterForm, CustomUserCreationForm, UserForm, ReviewForm
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import authenticate, login, logout
+from bs4 import BeautifulSoup
+from django.contrib.auth.models import User
+from requests_html import HTMLSession
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.db.models import Q
+from Comics.models import Comic, Chapter, Website, Genre, Review, Likes
+from django.http import HttpResponse
+# Create your views here.
+s = HTMLSession()
+
+
+def index(request):
+    q = request.GET.get('q') if request.GET.get('q') != None else ''
+    comics = Comic.objects.filter(
+        Q(title__icontains=q)
+    ).order_by('updated')
+    page = request.GET.get('page')
+    paginator = Paginator(comics, 15)
+    try:
+        comics = paginator.page(page)
+    except PageNotAnInteger:
+        comics = paginator.page(1)
+    except EmptyPage:
+        comics = paginator.page(paginator.num_pages)
+
+    context = {'comics': comics}
+    return render(request, 'comics/index.html', context)
+
+
+def genreview(request):
+    q = request.GET.get('q') if request.GET.get('q') != None else ''
+    comics = Comic.objects.filter(Q(genres__name__icontains=q) |
+                                  Q(title__icontains=q) |
+                                  Q(author__icontains=q) |
+                                  Q(category__icontains=q))
+    comics_count = comics.count()
+    genres = Genre.objects.all()
+    comics_review = Review.objects.all()
+    page = request.GET.get('page')
+    paginator = Paginator(comics, 24)
+    try:
+        comics = paginator.page(page)
+    except PageNotAnInteger:
+        comics = paginator.page(1)
+    except EmptyPage:
+        comics = paginator.page(paginator.num_pages)
+    context = {'comics': comics, 'genres': genres,
+               'comics_count': comics_count, 'comics_review': comics_review}
+    return render(request, 'comics/genres.html', context)
+
+
+@login_required(login_url='login')
+def scrape(request):
+    if request.method == 'POST':
+        baseurl = 'https://asura.gg/manga'
+
+        def load(x):
+            url = f'{baseurl}/?page={x}'
+            r = s.get(url)
+            soup = BeautifulSoup(r.text, 'html.parser')
+            return soup.select('div.bsx a')
+
+        def parse(articles):
+            website, created = Website.objects.get_or_create(
+                url=baseurl
+            )
+            comiclinks = []
+            for link in articles:
+                comiclinks.append(link['href'])
+
+            for link in comiclinks:
+                r = s.get(link)
+                print(f'Website:{link}')
+                if r.status_code == 200:
+                    sp = BeautifulSoup(r.content, features='lxml')
+                    chapterlist = []
+                    try:
+                        title = sp.find(
+                            "h1", class_="entry-title").text.strip(),
+                        image = sp.find(
+                            "div", class_="thumb").find('img')['src']
+                        description = sp.select_one(
+                            "div.entry-content p").text.strip(),
+                        rating = sp.find(
+                            "div", class_="num").text.strip(),
+                        status = sp.select_one(
+                            "div.imptdt i").text.strip(),
+                        author = sp.select_one(
+                            "span.author").text.strip(),
+                        category = sp.select_one("div.tsinfo a").text.strip(),
+                        genres = [genre.text.strip()
+                                  for genre in sp.find("span", class_="mgen").find_all('a')],
+                    except:
+                        title = sp.find(
+                            "h1", class_="entry-title").text.strip(),
+                        image = sp.find(
+                            "div", class_="thumb").find('img')['src']
+                        description = ''
+                        rating = sp.find(
+                            "div", class_="num").text.strip(),
+                        status = sp.select_one(
+                            "div.imptdt i").text.strip(),
+                        author = sp.select_one(
+                            "span.author").text.strip(),
+                        category = sp.select_one("div.tsinfo a").text.strip(),
+                        genree = soup.find("span", class_="mgen")
+                        for objj in genree.find_all('a'):
+                            genres = objj.text.strip()
+                    comic, created = Comic.objects.get_or_create(
+                        title=title,
+                        rating=rating,
+                        description=description,
+                        image_url=image,
+                        status=status,
+                        category=category,
+                        author=author,
+                        website=website,
+                        user=request.user,
+                    )
+
+                    genre, created = comic.genres.update_or_create(
+                        name=genres)
+                    chapters = sp.select("div.chbox a")
+                    for page in chapters:
+                        chapterlist.append(page.attrs['href'])
+                        for link in chapterlist:
+                            r = s.get(link)
+                            if r.status_code == 200:
+                                soup = BeautifulSoup(
+                                    r.content, features='lxml')
+                                name = soup.select_one(
+                                    "h1.entry-title").text.strip(),
+                                chapter, created = Chapter.objects.get_or_create(
+                                    comics=comic,
+                                    website=website,
+                                    name=name,
+                                    user=request.user,
+                                )
+                                posts = soup.select(
+                                    "div.rdminimal img")
+                                for page in posts:
+                                    pages = page['src']
+                                    new_page, created = chapter.pages.get_or_create(
+                                        images_url=pages,
+                                        chapters=chapter
+                                    )
+                            else:
+                                print('failed')
+                                pass
+
+                else:
+                    print('failed')
+                    pass
+        x = 1
+
+        while True:
+            print(f'Page {x}')
+            articles = load(x)
+            x = x+1
+
+            if len(articles) != 0:
+                parse(articles)
+            else:
+                break
+
+        return redirect('scrape')
+    return render(request, 'comics/scrape.html')
+
+
+def comicview(request, pk):
+    Comics = Comic.objects.get(id=pk)
+    chapters = Comics.chapter_set.all()
+    genres = Comics.genres.all()
+    context = {'Comics': Comics, 'chapters': chapters, 'genres': genres, }
+    return render(request, 'comics/comic.html', context)
+
+
+def chapterview(request, pk):
+    chapters = Chapter.objects.get(id=pk)
+    pages = chapters.pages.all()
+    comments = chapters.review_set.all()
+    participants = chapters.participants.all()
+    if request.method == 'POST':
+        review = Review.objects.create(
+            user=request.user,
+            chapter=chapters,
+            text=request.POST.get('text')
+        )
+        chapters.participants.add(request.user)
+        reviews = chapters.review_set.all()
+        chapters.numReviews = len(reviews)
+        chapters.save()
+        return redirect('chapter', pk=chapters.id)
+
+    context = {'pages': pages, 'chapters': chapters,
+               'comments': comments, 'participants': participants}
+    return render(request, 'comics/chapter.html', context)
+
+
+@login_required(login_url='login')
+def createComic(request):
+
+    form = ComicForm()
+    if request.method == 'POST':
+        form = ComicForm(request.POST)
+        if form.is_valid():
+            comic = form.save(commit=False)
+            comic.user = request.user
+            comic.save()
+            return redirect('index')
+    context = {'form': form}
+    return render(request, 'comics/comic_form.html', context)
+
+
+@login_required(login_url='login')
+def updateComic(request, pk):
+    Comics = Comic.objects.get(id=pk)
+    form = ComicForm(instance=Comics)
+
+    if request.method == 'POST':
+        form = ComicForm(request.POST, instance=Comics)
+        if form.is_valid():
+            comic = form.save(commit=False)
+            comic.user = request.user
+            comic.save()
+            return redirect('index')
+    context = {'form': form}
+    return render(request, 'comics/comic_form.html', context)
+
+
+@login_required(login_url='login')
+def deleteComic(request, pk):
+    comic = Comic.objects.get(id=pk)
+    if request.method == 'POST':
+        comic.delete()
+        return redirect('index')
+    return render(request, 'comics/delete.html', {'obj': comic})
+
+
+@login_required(login_url='login')
+def createChapter(request):
+    form = ChapterForm()
+    if request.method == 'POST':
+        form = ChapterForm(request.POST)
+        if form.is_valid():
+            chapter = form.save(commit=False)
+            chapter.user = request.user
+            chapter.save()
+            return redirect('index')
+    context = {'form': form}
+    return render(request, 'comics/chapter_form.html', context)
+
+
+@login_required(login_url='login')
+def updateChapter(request, pk):
+    chapter = Chapter.objects.get(id=pk)
+    form = ChapterForm(instance=chapter)
+
+    if request.method == 'POST':
+        form = ChapterForm(request.POST, instance=chapter)
+        if form.is_valid():
+            chapter = form.save(commit=False)
+            chapter.user = request.user
+            chapter.save()
+            return redirect('index')
+    context = {'form': form}
+    return render(request, 'comics/chapter_form.html', context)
+
+
+@login_required(login_url='login')
+def deleteChapter(request, pk):
+    chapter = Chapter.objects.get(id=pk)
+    if request.method == 'POST':
+        chapter.delete()
+        return redirect('index')
+    return render(request, 'comics/delete.html', {'obj': chapter})
+
+
+@login_required(login_url='login')
+def deleteReview(request, pk):
+    review = Review.objects.get(id=pk)
+    if request.user != review.user:
+        return HttpResponse('Your are not allowed here!!')
+    if request.method == 'POST':
+        review.delete()
+        return redirect('chapter', pk=review.chapter.id)
+    return render(request, 'comics/delete.html', {'obj': review})
+
+
+def loginPage(request):
+    if request.user.is_authenticated:
+        return redirect('index')
+
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+
+        # Little Hack to work around re-building the usermodel
+        try:
+            user = User.objects.get(email=email)
+            user = authenticate(
+                request, username=user.username, password=password)
+        except:
+            messages.error(request, 'User with this email does not exists')
+            return redirect('login')
+
+        if user is not None:
+            login(request, user)
+            return redirect('index')
+        else:
+            messages.error(request, 'Email OR password is incorrect')
+
+    context = {}
+    return render(request, 'comics/login.html', context)
+
+
+def logoutUser(request):
+    logout(request)
+    return redirect('index')
+
+
+def registerPage(request):
+    form = CustomUserCreationForm()
+    if request.method == 'POST':
+        form = CustomUserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save(commit=False)
+            user.save()
+            messages.success(request, 'Account successfuly created!')
+
+            user = authenticate(request, username=user.username,
+                                password=request.POST['password1'])
+
+            if user is not None:
+                login(request, user)
+
+            next_url = request.GET.get('next')
+            if next_url == '' or next_url == None:
+                next_url = 'index'
+            return redirect(next_url)
+        else:
+            messages.error(request, 'An error has occured with registration')
+    context = {'form': form}
+    return render(request, 'comics/register.html', context)
+
+
+def userProfile(request, pk):
+    user = User.objects.get(id=pk)
+    comics = user.comic_set.all()
+    comics_count = comics.count()
+    comics_review = user.review_set.all()
+    genres = Genre.objects.all()
+
+    page = request.GET.get('page')
+    paginator = Paginator(comics, 24)
+    try:
+        comics = paginator.page(page)
+    except PageNotAnInteger:
+        comics = paginator.page(1)
+    except EmptyPage:
+        comics = paginator.page(paginator.num_pages)
+    context = {'user': user, 'comics': comics, 'genres': genres,
+               'comics_count': comics_count, 'comics_review': comics_review}
+    return render(request, 'comics/profile.html', context)
+
+
+@login_required(login_url='login')
+def updateUser(request):
+    user = request.user
+    form = UserForm(instance=user)
+
+    if request.method == 'POST':
+        form = UserForm(request.POST, request.FILES, instance=user)
+        if form.is_valid():
+            form.save()
+            return redirect('user-profile', pk=user.id)
+    context = {'form': form}
+    return render(request, 'comics/update-user.html', context)

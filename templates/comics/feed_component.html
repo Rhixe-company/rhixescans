@@ -1,0 +1,24 @@
+{% for comic in comics %}
+<div>
+  {% if request.user.is_superuser %}
+  <a href="{% url 'update-comic' comic.id %}">Edit</a>
+  <br />
+  <a href="{% url 'delete-comic' comic.id %}">Delete</a>
+  {% endif %}
+</div>
+<div>
+  <a href="{%  url 'comic' comic.id %}">
+    <img
+      class="card__img"
+      src="{{ comic.image.url }}"
+      alt="{{ comic.image_url }}"
+    />
+  </a>
+  <a href="{%  url 'comic' comic.id %}">
+    <h4>{{ comic.title }}</h4>
+  </a>
+  <em class="card__qoute">{{ comic.rating }}</em>
+  <p class="card__lead">{{ comic.status }}</p>
+  <small>{{ comic.created|timesince }} ago</small>
+</div>
+{% endfor %}

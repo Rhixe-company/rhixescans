@@ -1,0 +1,19 @@
+#print(comic)
+            #chapters = sp.select("div.chbox a")
+            # for page in chapters:
+            #    chapterlist.append(page.attrs['href'])
+            # for link in chapterlist:
+            #    r = s.get(link)
+            #    if r.status_code == 200:
+            #        sp = BeautifulSoup(
+            #            r.content, features='lxml')
+            #        chapter = {
+            #            'name': sp.select_one(
+            #                "h1.entry-title").text.strip(),
+            #            'pages_url': [image['src'] for image in sp.select(
+            #                "div.rdminimal img")]
+            #        }
+
+            #        print(chapter)
+            #    else:
+            #        print('failed')

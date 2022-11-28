@@ -1,0 +1,170 @@
+from django.db import models
+from django.utils.text import slugify
+from django.urls import reverse
+from django.contrib.auth.models import User
+
+from io import BytesIO
+import requests
+
+
+from datetime import timezone
+from django.core import files
+
+
+# Create your models here.
+
+
+def comics_images_location(instance, filename):
+    return '{}/{}'.format(str(instance.title).replace(" ", "_").replace(":", " ").replace("/", "").replace("\\", ""), filename)
+
+
+class Comic(models.Model):
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    title = models.CharField(max_length=5000)
+    description = models.TextField(blank=True, null=True)
+    image = models.FileField(
+        upload_to=comics_images_location, max_length=100000)
+    image_url = models.URLField(blank=True, max_length=100000)
+    rating = models.DecimalField(
+        max_digits=9, decimal_places=1, null=True)
+    status = models.CharField(max_length=1000, blank=True)
+    category = models.ManyToManyField('Tag', blank=True)
+    genres = models.ManyToManyField('Genre', blank=True)
+    updated = models.DateTimeField(auto_now=True)
+    created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.title
+
+    def save(self, *args, **kwargs):
+
+        if self.image == '' and self.image_url != '':
+
+            resp = requests.get(self.image_url, stream=True)
+
+            pb = BytesIO()
+            pb.write(resp.content)
+            pb.flush()
+            file_name = self.image_url.split("/")[-1]
+            self.image.save(file_name, files.File(pb),
+                            save=True)
+        else:
+            return super().save(*args, **kwargs)
+
+    @property
+    def created_dynamic(self):
+        now = timezone.now()
+        return now
+
+
+class Genre(models.Model):
+    comics = models.ForeignKey(Comic, on_delete=models.CASCADE)
+    name = models.CharField(max_length=500)
+
+    def __str__(self):
+        return self.name
+
+
+class Tag(models.Model):
+    comics = models.ForeignKey(Comic, on_delete=models.CASCADE)
+    name = models.CharField(max_length=500)
+
+    def __str__(self):
+        return self.name
+
+
+def comics_chapters_images_location(instance, filename):
+    return '{}/{}/{}'.format(str(instance.comics.title).replace(" ", "_").replace(":", " ").replace("/", "").replace("\\", ""), instance.chapters.name, filename)
+
+
+class Chapter(models.Model):
+    comics = models.ForeignKey(Comic, on_delete=models.CASCADE)
+    name = models.CharField(max_length=100000)
+    files = models.ManyToManyField('Image')
+
+    updated = models.DateTimeField(auto_now=True)
+    created = models.DateTimeField(auto_now_add=True, null=True)
+    slug = models.SlugField(null=True, unique=True, max_length=100000)
+    numReviews = models.IntegerField(null=True, blank=True)
+
+    class Meta:
+        ordering = ['slug']
+
+    def get_absolute_url(self):
+        return reverse('Chapters', args=[self.slug])
+
+    def __str__(self):
+        return self.name
+
+    def save(self, *args, **kwargs):
+        if self.name == None:
+            name = slugify(self.slug)
+            has_name = Chapter.objects.filter(name=name).exists()
+            count = 1
+            while has_name:
+                count += 1
+                name = slugify(self.slug) + '-' + str(count)
+                has_name = Chapter.objects.filter(name=name).exists()
+
+            self.slug = slugify(self.name.replace(" ", ""))
+        return super().save(*args, **kwargs)
+
+    @property
+    def created_dynamic(self):
+        now = timezone.now()
+        return now
+
+
+class Image(models.Model):
+    chapters = models.ForeignKey(
+        Chapter, on_delete=models.CASCADE, related_name='chapter_images')
+    comics = models.ForeignKey(
+        Comic, on_delete=models.SET_NULL, null=True, related_name='comics_chapter_images')
+
+    images = models.FileField(
+        upload_to=comics_chapters_images_location, max_length=100000)
+
+    created = models.DateTimeField(auto_now_add=True, null=True)
+
+    def __str__(self):
+        return str(self.images)+' I '+str(self.chapters)
+
+    @property
+    def created_dynamic(self):
+        now = timezone.now()
+        return now
+
+
+RATE_CHOICES = [
+    (1, '1 - Trash'),
+    (2, '2 - Horrible'),
+    (3, '3 - Terrible'),
+    (4, '4 - Bad'),
+    (5, '5 - OK'),
+    (6, '6 - Watchable'),
+    (7, '7 - Good'),
+    (8, '8 - Very Good'),
+    (9, '9 - Perfect'),
+    (10, '10 - Master Piece'),
+]
+
+
+class Review(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    chapter = models.ForeignKey(Chapter, on_delete=models.SET_NULL, null=True)
+    date = models.DateTimeField(auto_now_add=True)
+    text = models.TextField(max_length=3000, blank=True)
+    rate = models.PositiveSmallIntegerField(choices=RATE_CHOICES)
+    likes = models.PositiveIntegerField(default=0)
+    unlikes = models.PositiveIntegerField(default=0)
+
+    def __str__(self):
+        return self.user.username
+
+
+class Likes(models.Model):
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name='user_like')
+    type_like = models.PositiveSmallIntegerField()
+    review = models.ForeignKey(
+        Review, on_delete=models.CASCADE, related_name='review_like')

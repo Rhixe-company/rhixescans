@@ -1,0 +1,89 @@
+{% include 'comics/base.html' %} {% load static %} {% block content %}
+<div>
+  <a href="{{request.META.HTTP_REFERER}}">Go Back</a>
+  <div>
+    {% if request.user.is_superuser %}
+
+    <a href="{% url 'update-comic' Comics.id %}">Edit</a>
+
+    <a href="{% url 'delete-comic' Comics.id %}">Delete</a>
+    <br />
+    <a href="{% url 'create-comic' %}">Create New Comic</a>
+
+    <a href="{% url 'create-chapter' %}">Create New Chapter</a>
+
+    {% endif %}
+    <div>
+      <h1>{{ Comics.title }}</h1>
+    </div>
+    <div>
+      <img
+        src="{{ Comics.image.url }}"
+        alt="{{ Comics.image_url }}"
+        width="400"
+        height="400"
+      />
+    </div>
+
+    <div>
+      Description:
+      <p>{{ Comics.description }}</p>
+    </div>
+    <div>
+      Rating:
+      <strong>{{ Comics.rating }}</strong>
+    </div>
+    <div>
+      Category:
+      <p>{{ Comics.category }}</p>
+    </div>
+    <div>
+      Status:
+      <p>{{ Comics.status }}</p>
+    </div>
+    <div>
+      Author:
+      <p>{{ Comics.author }}</p>
+    </div>
+    <div>
+      Date:
+      <p>{{ Comics.created|timesince }} ago</p>
+    </div>
+    {% for genre in genres%}
+    <div>
+      Genres:
+      <p>{{genre.name}}</p>
+    </div>
+    {% endfor%}
+  </div>
+
+  <div>
+    <h3>Chapter</h3>
+    <hr />
+    {% for chapter in chapters %}
+    <div>
+      <ul>
+        <li>
+          <div>
+            {% if request.user.is_superuser %}
+
+            <a href="{% url 'update-chapter' chapter.id %}">Edit</a>
+
+            <a href="{% url 'delete-chapter' chapter.id %}">Delete</a>
+
+            {% endif %}
+          </div>
+          <div>
+            <a href="{%  url 'chapter' chapter.id %}"
+              >{{chapter.name}}<small>
+                {{chapter.created|timesince}} ago</small
+              ></a
+            >
+          </div>
+        </li>
+      </ul>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock content %}

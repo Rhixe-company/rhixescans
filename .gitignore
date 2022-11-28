@@ -1,0 +1,13 @@
+*.log
+*.pot
+*.pyc
+__pycache__/
+
+static/media
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
