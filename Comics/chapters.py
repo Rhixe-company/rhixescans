@@ -8,7 +8,7 @@ class ChaptersSpider(scrapy.Spider):
 
     def start_requests(self):
 
-        yield scrapy.Request('https://asura.gg/manga/')
+        yield scrapy.Request('https://asura.gg/manga/?page=1')
 
     def parse(self, response):
 
