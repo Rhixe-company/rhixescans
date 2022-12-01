@@ -126,7 +126,7 @@ const ChaptersListScreen = ({ history }) => {
               ))}
             </tbody>
           </Table>
-          <Paginate pages={pages} page={page} />
+          <Paginate pages={pages} page={page} isAdmin={true} />
         </div>
       )}
     </div>
