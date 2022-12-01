@@ -48,5 +48,3 @@ class ComicsSpider(scrapy.Spider):
                 obj1, created = Genre.objects.filter(
                     Q(name=genres)
                 ).get_or_create(comics=obj, defaults={'name': genres})
-                obj.genres.add(obj1)
-                obj.save()
