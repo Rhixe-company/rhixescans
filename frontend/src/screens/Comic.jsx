@@ -67,9 +67,9 @@ export const Comic = ({ match }) => {
           <Loader />
         ) : (
           <div>
+            <h3>Recent Chapters</h3>
             {chapters.map((chapter) => (
               <ul key={chapter.id}>
-                <h3>Recent Chapters</h3>
                 <li>
                   <Link to={`/comics/chapter/${chapter.id}/`}>
                     <span>{chapter?.name}</span>
