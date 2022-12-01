@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Button, Image } from "react-bootstrap";
 import Loader from "../components/ui/Loader";
 import Message from "../components/ui/Message";
+import InfiniteScroll from "react-infinite-scroll-component";
 const ChapterScreen = ({ match }) => {
   const [chapter, setChapter] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -19,7 +20,7 @@ const ChapterScreen = ({ match }) => {
   }, [match]);
 
   return (
-    <div>
+    <section>
       <Link to="/">
         <Button>Go Back </Button>
       </Link>
@@ -37,18 +38,20 @@ const ChapterScreen = ({ match }) => {
           </div>
           <div>
             {chapter.pages.map((page, index) => (
-              <span key={index}>
-                <Image
-                  className="w-full"
-                  src={page?.images}
-                  alt={page?.images_url}
-                />
-              </span>
+              <div>
+                <InfiniteScroll
+                  dataLength={chapter.pages}
+                  className="pages"
+                  key={index}
+                >
+                  <Image src={page?.images} alt={page?.images_url} />
+                </InfiniteScroll>
+              </div>
             ))}
           </div>
         </div>
       )}
-    </div>
+    </section>
   );
 };
 

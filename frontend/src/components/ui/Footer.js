@@ -1,13 +1,11 @@
 import React from "react";
-import { Container, Row, Col } from "react-bootstrap";
+import { Container } from "react-bootstrap";
 
 const Footer = () => {
   return (
     <footer>
       <Container>
-        <Row>
-          <Col className="text-center py-3">Copyright &copy; Rhixescans</Col>
-        </Row>
+        <p>Copyright &copy; Rhixescans</p>
       </Container>
     </footer>
   );

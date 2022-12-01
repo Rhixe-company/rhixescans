@@ -43,34 +43,24 @@ RATING_CHOICES = [
 s = HTMLSession()
 
 
-class Website(models.Model):
-    url = models.URLField(null=False)
-
-    def __str__(self):
-        return self.url
-
-
 class Genre(models.Model):
-    name = models.CharField(max_length=100, blank=True, null=True)
+    comics = models.ForeignKey('Comic', on_delete=models.SET_NULL, null=True)
+    name = models.CharField(max_length=100, unique=True, blank=True, null=True)
 
     def __str__(self):
         return self.name
 
 
 class Comic(models.Model):
-    user = models.ForeignKey(
-        User, on_delete=models.SET_NULL, null=True)
     reader = models.ManyToManyField(
         User, related_name='readers', blank=True)
-    url = models.URLField(blank=False, null=True)
-    link = models.ManyToManyField(
-        Website, related_name='links', blank=True)
     title = models.CharField(max_length=200, unique=True, null=False)
     description = models.TextField(blank=True)
     image = models.ImageField(
         upload_to=comics_images_location, null=False)
     image_url = models.URLField(null=True)
-    rating = models.CharField(max_length=100, null=False)
+    rating = models.DecimalField(
+        max_digits=9, decimal_places=1, null=False)
     status = models.CharField(
         max_length=100, choices=STATUS_CHOICES, default='Ongoing')
     author = models.CharField(max_length=100, blank=True)
@@ -79,6 +69,9 @@ class Comic(models.Model):
     genres = models.ManyToManyField(Genre, blank=True)
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['id']
 
     def __str__(self):
         return self.title
@@ -142,7 +135,7 @@ class Chapter(models.Model):
     created = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        ordering = ['id']
+        ordering = ['-updated']
 
     def __str__(self):
         return self.name
@@ -163,7 +156,7 @@ class Review(models.Model):
     created = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        ordering = ['updated']
+        ordering = ['-created']
 
     def __str__(self):
         return self.text[0:50]

@@ -20,17 +20,13 @@ export class Posts extends Component {
                 as="div"
                 className="font-bold text-black-500 text-xl mb-2"
               >
-                <strong>{comic.title}</strong>
+                <h5>{comic.title}</h5>
               </Card.Title>
             </Link>
             <Link to={`/comic/${comic.id}/`}>
               <Card.Img src={comic.image} alt="" className="w-full" />
             </Link>
-            <br></br>
-            <Card.Text as="span">
-              Category:
-              {comic.category}
-            </Card.Text>
+
             <Card.Text as="div">
               <div className="my-3">
                 <Rating
@@ -40,23 +36,27 @@ export class Posts extends Component {
                 />
               </div>
             </Card.Text>
+            <Card.Text as="span">{comic.status}</Card.Text>
+            <br />
+            <Card.Text as="span">{comic.category}</Card.Text>
             <br />
             {comic.genres.map((genre) => (
-              <div key={genre?.id}>
-                <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2">
-                  #{genre?.name}
-                </span>
-              </div>
+              <Card.Text
+                as="span"
+                key={genre.id}
+                className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2"
+              >
+                {genre.name}
+              </Card.Text>
             ))}
-            <br />
           </Card.Body>
+          <br />
 
-          {comic.chapters.map((chapter) => (
-            <div key={chapter?.id}>
+          {comic.chapters.map((chapter, index) => (
+            <div key={chapter.id}>
               <Link to={`/comics/chapter/${chapter.id}/`}>
                 <small>{chapter?.name}</small>
               </Link>
-              <hr />
             </div>
           ))}
         </Card>

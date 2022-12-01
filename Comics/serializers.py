@@ -80,12 +80,12 @@ class ComicSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def get_genres(self, obj):
-        genres = obj.genres.all()
+        genres = obj.genre_set.all()
         serializer = GenreSerializer(genres, many=True)
         return serializer.data
 
     def get_chapters(self, obj):
-        chapters = obj.chapter_set.all()[:1]
+        chapters = obj.chapter_set.all()[:5]
         serializer = ChapterSerializer(chapters, many=True)
         return serializer.data
 

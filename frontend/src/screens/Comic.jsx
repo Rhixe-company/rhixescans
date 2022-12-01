@@ -1,29 +1,29 @@
+import PropTypes from "prop-types";
 import React, { useEffect, useState } from "react";
 import { connect, useDispatch, useSelector } from "react-redux";
-import { listComicsDetails } from "../actions/comicsActions";
-import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
-import { Table, Image } from "react-bootstrap";
+import { Table } from "react-bootstrap";
+import { listComicsDetails } from "../actions/comicsActions";
 import Loader from "../components/ui/Loader";
 
-export const ComicScreen = ({ match }) => {
+export const Comic = ({ match }) => {
+  const comicId = match.params.id;
   const dispatch = useDispatch();
   const comicsDetails = useSelector((state) => state.comicsDetails);
   const { comic } = comicsDetails;
   const [chapters, setChapters] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    dispatch(listComicsDetails(match.params.id));
-    fetch(`api/comics/${match.params.id}/chapters/`)
+    dispatch(listComicsDetails(comicId));
+    fetch(`api/comics/${comicId}/chapters/`)
       .then((res) => res.json())
       .then((data) => {
         setChapters(data.chapters);
-        setIsLoading(false);
-        console.log(data);
+        setLoading(false);
       })
       .catch((err) => console.log(err));
-  }, [dispatch, match]);
+  }, [dispatch, comicId]);
   return (
     <div>
       <div>
@@ -35,12 +35,14 @@ export const ComicScreen = ({ match }) => {
           className="table-sm align-items-center"
         >
           <thead>
-            <th>TITLE</th>
-            <th>IMAGE</th>
-            <th>DESCRIPTION</th>
-            <th>CATEGORY</th>
-            <th>RATING</th>
-            <th>STATUS</th>
+            <tr>
+              <th>TITLE</th>
+              <th>IMAGE</th>
+              <th>DESCRIPTION</th>
+              <th>CATEGORY</th>
+              <th>RATING</th>
+              <th>STATUS</th>
+            </tr>
           </thead>
           <tbody key={comic.id}>
             <tr>
@@ -49,7 +51,7 @@ export const ComicScreen = ({ match }) => {
               </td>
               <td>
                 <Link to={`/comic/${comic.id}/`}>
-                  <Image src={comic.image} alt={comic.image_url} />
+                  <img src={comic.image} alt={comic.image_url} />
                 </Link>
               </td>
               <td>{comic.description}</td>
@@ -59,33 +61,30 @@ export const ComicScreen = ({ match }) => {
             </tr>
           </tbody>
         </Table>
+        <hr />
+        {!loading && chapters.length === 0 && <small>No Chapters Found</small>}
+        {loading ? (
+          <Loader />
+        ) : (
+          <div>
+            {chapters.map((chapter) => (
+              <ul key={chapter.id}>
+                <h3>Recent Chapters</h3>
+                <li>
+                  <Link to={`/comics/chapter/${chapter.id}/`}>
+                    <span>{chapter?.name}</span>
+                  </Link>
+                </li>
+              </ul>
+            ))}
+          </div>
+        )}
       </div>
-      <hr />
-      {!isLoading && chapters.length === 0 && (
-        <h5 className="text-5xl text-center mx-auto mt-32">
-          No Chapters Found
-        </h5>
-      )}
-      {isLoading ? (
-        <Loader />
-      ) : (
-        <div>
-          {chapters.map((chapter) => (
-            <ul key={chapter.id}>
-              <li>
-                <Link to={`/comics/chapter/${chapter.id}/`}>
-                  <span>{chapter?.name}</span>
-                </Link>
-              </li>
-            </ul>
-          ))}
-        </div>
-      )}
     </div>
   );
 };
 
-ComicScreen.propTypes = {
+Comic.propTypes = {
   listComicsDetails: PropTypes.func.isRequired,
 };
 
@@ -93,4 +92,6 @@ const mapStateToProps = (state) => ({
   comic: state.comicsDetails.comic,
 });
 
-export default connect(mapStateToProps, { listComicsDetails })(ComicScreen);
+export default connect(mapStateToProps, {
+  listComicsDetails,
+})(Comic);

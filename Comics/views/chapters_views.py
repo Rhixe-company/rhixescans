@@ -1,7 +1,7 @@
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
 from rest_framework import status
 
 
@@ -17,25 +17,10 @@ def getChapters(request):
         query = ''
 
     chapters = Chapter.objects.filter(
-        name__icontains=query).order_by('-updated')
-
-    page = request.query_params.get('page')
-    paginator = Paginator(chapters, 20)
-
-    try:
-        chapters = paginator.page(page)
-    except PageNotAnInteger:
-        chapters = paginator.page(1)
-    except EmptyPage:
-        chapters = paginator.page(paginator.num_pages)
-
-    if page == None:
-        page = 1
-
-    page = int(page)
-    print('Page:', page)
+        name__icontains=query)
     serializer = ChapterSerializer(chapters, many=True)
-    return Response({'chapters': serializer.data, 'page': page, 'pages': paginator.num_pages})
+    context = {'chapters': serializer.data}
+    return Response(context)
 
 
 @api_view(['GET'])

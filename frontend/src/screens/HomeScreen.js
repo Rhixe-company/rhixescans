@@ -1,56 +1,84 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Row, Col } from "react-bootstrap";
-import Comics from "../components/content/Comics";
-import Loader from "../components/ui/Loader";
-import Message from "../components/ui/Message";
+import Rating from "../components/ui/Rating";
+import { Link } from "react-router-dom";
+import { Card } from "react-bootstrap";
 import Paginate from "../components/ui/Paginate";
 import ComicsCarousel from "../components/content/ComicsCarousel";
-
 import { listComics } from "../actions/comicsActions";
-import { listChapters } from "../actions/chaptersActions";
 
-const HomeScreen = ({ history }) => {
+function PostsScreen({ history }) {
   const dispatch = useDispatch();
   const comicsList = useSelector((state) => state.comicsList);
-  const { error, loading, comics, page, pages } = comicsList;
-  const chaptersList = useSelector((state) => state.chaptersList);
-  const { chapters } = chaptersList;
+  const { comics, page, pages } = comicsList;
 
   let keyword = history.location.search;
 
   useEffect(() => {
     dispatch(listComics(keyword));
-    dispatch(listChapters());
   }, [dispatch, keyword]);
-
   return (
-    <div>
+    <section className="container mx-auto">
+      {!keyword && <ComicsCarousel />}
+      <br />
+      <h1>Latest Comics</h1>
       <div>
-        <div>
-          {!keyword && <ComicsCarousel />}
+        {comics.map((comic) => (
+          <div key={comic.id}>
+            <Card className="my-3 p-3 rounded">
+              <Card.Body className="px-6 py-4">
+                <Link to={`/comic/${comic.id}/`}>
+                  <Card.Title
+                    as="div"
+                    className="font-bold text-black-500 text-xl mb-2"
+                  >
+                    <h5>{comic.title}</h5>
+                  </Card.Title>
+                </Link>
+                <Link to={`/comic/${comic.id}/`}>
+                  <Card.Img src={comic.image} alt="" className="w-full" />
+                </Link>
 
-          <h1>Latest Comics</h1>
-          {loading ? (
-            <Loader />
-          ) : error ? (
-            <Message variant="danger">{error}</Message>
-          ) : (
-            <div>
-              <Row>
-                {comics.map((comic) => (
-                  <Col key={comic.id} sm={12} md={6} lg={4} xl={3}>
-                    <Comics chapters={chapters} comic={comic} />
-                  </Col>
+                <Card.Text as="div">
+                  <div className="my-3">
+                    <Rating
+                      value={comic.rating}
+                      text={`${comic.rating} `}
+                      color={"#f8e825"}
+                    />
+                  </div>
+                </Card.Text>
+                <Card.Text as="span">{comic.status}</Card.Text>
+                <br />
+                <Card.Text as="span">{comic.category}</Card.Text>
+                <br />
+                {comic.genres.map((genre) => (
+                  <Card.Text
+                    as="span"
+                    key={genre.id}
+                    className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2"
+                  >
+                    {genre.name}
+                  </Card.Text>
                 ))}
-              </Row>
-              <Paginate page={page} pages={pages} keyword={keyword} />
-            </div>
-          )}
-        </div>
-      </div>
-    </div>
-  );
-};
+              </Card.Body>
+              <br />
 
-export default HomeScreen;
+              {comic.chapters.map((chapter) => (
+                <div key={chapter.id}>
+                  <Link to={`/comics/chapter/${chapter.id}/`}>
+                    <small>{chapter?.name}</small>
+                  </Link>
+                </div>
+              ))}
+            </Card>
+          </div>
+        ))}
+
+        <Paginate page={page} pages={pages} keyword={keyword} />
+      </div>
+    </section>
+  );
+}
+
+export default PostsScreen;
