@@ -41,7 +41,7 @@ const ComicsListScreen = ({ history }) => {
     dispatch({ type: COMICS_CREATE_RESET });
 
     if (!userInfo.isAdmin) {
-      history.push("/login");
+      history.push("#/login");
     }
 
     if (successCreate) {
