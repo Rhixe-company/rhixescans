@@ -71,7 +71,7 @@ class Comic(models.Model):
     created = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        ordering = ['id']
+        ordering = ['title']
 
     def __str__(self):
         return self.title
@@ -135,7 +135,7 @@ class Chapter(models.Model):
     created = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        ordering = ['-updated']
+        ordering = ['id']
 
     def __str__(self):
         return self.name
