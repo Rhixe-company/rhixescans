@@ -3,7 +3,7 @@ from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 
 from rest_framework import status
-
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from Comics.models import *
 from Comics.serializers import *
@@ -18,8 +18,24 @@ def getChapters(request):
 
     chapters = Chapter.objects.filter(
         name__icontains=query)
+    chapters_count = chapters.count()
+    page = request.query_params.get('page')
+    paginator = Paginator(chapters, 200)
+    try:
+        chapters = paginator.page(page)
+    except PageNotAnInteger:
+        chapters = paginator.page(1)
+    except EmptyPage:
+        chapters = paginator.page(paginator.num_pages)
+
+    if page == None:
+        page = 1
+
+    page = int(page)
+    print('Page:', page)
     serializer = ChapterSerializer(chapters, many=True)
-    context = {'chapters': serializer.data}
+    context = {'chapters': serializer.data, 'page': page,
+               'pages': paginator.num_pages, 'chapters_count': chapters_count}
     return Response(context)
 
 
