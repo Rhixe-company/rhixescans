@@ -1,7 +1,6 @@
 from django.core.management.base import BaseCommand
 from scrapy.crawler import CrawlerRunner
-from scrapy.settings import Settings
-from scraper.scraper import settings as my_settings
+from scrapy.utils.project import get_project_settings
 from scrapy.utils.log import configure_logging
 from twisted.internet import reactor, defer
 from Comics.comics import ComicsSpider
@@ -13,9 +12,8 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         configure_logging()
-        crawler_settings = Settings()
-        crawler_settings.setmodule(my_settings)
-        runner = CrawlerRunner(settings=crawler_settings)
+        settings = get_project_settings()
+        runner = CrawlerRunner(settings)
 
         @defer.inlineCallbacks
         def crawl():
