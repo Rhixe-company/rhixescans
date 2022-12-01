@@ -16,7 +16,7 @@ function Paginate({ pages, page, keyword = "", isAdmin = false }) {
             to={
               !isAdmin
                 ? `/?keyword=${keyword}&page=${x + 1}`
-                : `/admin/chapters/?keyword=${keyword}&page=${x + 1}`
+                : `#!/?keyword=${keyword}&page=${x + 1}`
             }
           >
             <Pagination.Item active={x + 1 === page}>{x + 1}</Pagination.Item>
