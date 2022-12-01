@@ -19,7 +19,7 @@ def getComics(request):
         Q(category__icontains=query) |
         Q(author__icontains=query) |
         Q(genres__name__icontains=query)
-    ).order_by('-updated')
+    ).order_by('updated')
     comics_count = comics.count()
     page = request.query_params.get('page')
     paginator = Paginator(comics, 24)
@@ -45,7 +45,7 @@ def getComics(request):
 
 @api_view(['GET'])
 def getTopComics(request):
-    comics = Comic.objects.filter(rating__gte=9.8).order_by('-rating')[0:15]
+    comics = Comic.objects.filter(rating__gte=9.8).order_by('rating')[0:15]
     serializer = ComicSerializer(comics, many=True)
     return Response(serializer.data)
 
