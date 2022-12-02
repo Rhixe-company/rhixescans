@@ -48,26 +48,26 @@ class ComicsSpider(scrapy.Spider):
                 obj1, created = Genre.objects.filter(
                     Q(name=genres)
                 ).get_or_create(comics=obj, defaults={'name': genres})
-        chapters = response.css('ul.clstyle')
-        for c in chapters:
-            n = c.css('li a::attr(href)').getall()
-            for name in n:
-                names = name.split("/")[-2]
-                obj2, created = Chapter.objects.filter(
-                    Q(name=name)
-                ).get_or_create(comics=obj, name=names, defaults={'name': names})
         chapter_page_links = response.css('ul.clstyle li a::attr(href)')
         yield from response.follow_all(chapter_page_links, self.parse_chapters)
 
     def parse_chapters(self, response):
+        title = response.css(
+            "div.allc a::text").get().strip()
+        name = response.css(
+            "h1.entry-title::text").get().strip()
+        comic = Comic.objects.get(title=title)
+        obj, created = Chapter.objects.filter(
+            Q(name=name)
+        ).get_or_create(comics=comic, name=name, defaults={'name': name})
         soup = BeautifulSoup(response.text, features='lxml')
-        name = response.css('div.bixbox ol li a ::attr(href)')[
-            2].get().split("/")[-2]
-        alreadyExists = Chapter.objects.get(
-            name=name)
+
         posts = soup.select(
             "div.rdminimal img")
         for page in posts:
             pages = page['src']
-            obj, created = alreadyExists.pages.get_or_create(
-                chapters=alreadyExists, images_url=pages, defaults={'images_url': pages})
+            obj1, created = Page.objects.filter(
+                Q(images_url=pages)
+            ).get_or_create(chapters=obj, images_url=pages, defaults={'images_url': pages})
+            obj.pages.add(obj1)
+            obj.save()
