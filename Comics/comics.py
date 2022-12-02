@@ -56,8 +56,8 @@ class ComicsSpider(scrapy.Spider):
                 obj2, created = Chapter.objects.filter(
                     Q(name=name)
                 ).get_or_create(comics=obj, name=names, defaults={'name': names})
-        for link in response.css('ul.clstyle li a::attr(href)'):
-            yield response.follow(link.get(), callback=self.parse_chapters)
+        chapter_page_links = response.css('ul.clstyle li a::attr(href)')
+        yield from response.follow_all(chapter_page_links, self.parse_chapters)
 
     def parse_chapters(self, response):
         soup = BeautifulSoup(response.text, features='lxml')
