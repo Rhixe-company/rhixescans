@@ -22,7 +22,7 @@ def getComics(request):
     ).order_by('-created')
     comics_count = comics.count()
     page = request.query_params.get('page')
-    paginator = Paginator(comics, 24)
+    paginator = Paginator(comics, 26)
 
     try:
         comics = paginator.page(page)
