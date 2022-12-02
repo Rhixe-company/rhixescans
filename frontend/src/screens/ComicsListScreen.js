@@ -1,7 +1,8 @@
 import React, { useEffect } from "react";
 import { LinkContainer } from "react-router-bootstrap";
 import { Link } from "react-router-dom";
-import { Button, Row, Table, Image } from "react-bootstrap";
+import { Button, Row, Image } from "react-bootstrap";
+import Table from "react-bootstrap/Table";
 import { useDispatch, useSelector } from "react-redux";
 import Loader from "../components/ui/Loader";
 import Message from "../components/ui/Message";
@@ -85,13 +86,7 @@ const ComicsListScreen = ({ history }) => {
         <div>
           <ComicForm createComicHandler={createComicHandler} />
 
-          <Table
-            striped
-            bordered
-            hover
-            responsive
-            className="table-sm align-items-center"
-          >
+          <Table striped bordered hover size="sm" responsive="sm">
             <thead>
               <tr>
                 <th>TITLE</th>
@@ -100,6 +95,7 @@ const ComicsListScreen = ({ history }) => {
                 <th>CATEGORY</th>
                 <th>RATING</th>
                 <th>STATUS</th>
+                <th>AUTHOR</th>
                 <th />
                 <th />
               </tr>
@@ -121,6 +117,7 @@ const ComicsListScreen = ({ history }) => {
                     <td>{comic.rating}</td>
                     <td>{comic.category}</td>
                     <td>{comic.status}</td>
+                    <td>{comic.author}</td>
 
                     <div>
                       <LinkContainer to={`/admin/comic/${comic.id}/edit`}>

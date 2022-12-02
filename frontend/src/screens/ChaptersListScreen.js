@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { LinkContainer } from "react-router-bootstrap";
-import { Table, Button } from "react-bootstrap";
+import { Button } from "react-bootstrap";
+import Table from "react-bootstrap/Table";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import Loader from "../components/ui/Loader";
@@ -89,11 +90,11 @@ const ChaptersListScreen = ({ history }) => {
         <Message variant="danger">{error}</Message>
       ) : (
         <div>
-          <Table striped bordered hover responsive className="table-sm">
+          <Table striped bordered hover size="sm" responsive="sm">
             <thead>
               <tr>
+                <th>Id</th>
                 <th>Name</th>
-
                 <th></th>
               </tr>
             </thead>
@@ -101,6 +102,11 @@ const ChaptersListScreen = ({ history }) => {
             <tbody>
               {chapters.map((chapter) => (
                 <tr key={chapter.id}>
+                  <td>
+                    <Link to={`/comics/chapter/${chapter.id}/`}>
+                      <span>{chapter.id}</span>
+                    </Link>
+                  </td>
                   <td>
                     <Link to={`/comics/chapter/${chapter.id}/`}>
                       <span>{chapter.name}</span>

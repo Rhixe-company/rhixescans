@@ -27,13 +27,7 @@ export const ComicScreen = ({ match }) => {
   return (
     <div>
       <div>
-        <Table
-          striped
-          bordered
-          hover
-          responsive
-          className="table-sm align-items-center"
-        >
+        <Table striped bordered hover size="sm" variant="dark">
           <thead>
             <th>TITLE</th>
             <th>IMAGE</th>

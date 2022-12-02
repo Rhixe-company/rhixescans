@@ -1,16 +1,12 @@
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
-import { Table } from "react-bootstrap";
+import { Image } from "react-bootstrap";
+import Table from "react-bootstrap/Table";
+
 const Comicgrid = ({ comic }) => {
   return (
     <div>
-      <Table
-        striped
-        bordered
-        hover
-        responsive
-        className="table-sm align-items-center"
-      >
+      <Table striped bordered hover size="sm" responsive="sm">
         <thead>
           <tr>
             <th>TITLE</th>
@@ -29,7 +25,7 @@ const Comicgrid = ({ comic }) => {
             </td>
             <td>
               <Link to={`/comic/${comic.id}/`}>
-                <img src={comic.image} alt={comic.image_url} />
+                <Image src={comic.image} alt={comic.image_url} />
               </Link>
             </td>
             <td>{comic.description}</td>

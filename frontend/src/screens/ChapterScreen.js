@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Button } from "react-bootstrap";
+import { Button, Image } from "react-bootstrap";
 import Loader from "../components/ui/Loader";
 import Message from "../components/ui/Message";
 import InfiniteScroll from "react-infinite-scroll-component";
@@ -44,7 +44,7 @@ const ChapterScreen = ({ match }) => {
                   className="pages"
                   key={index}
                 >
-                  <img
+                  <Image
                     className="page"
                     src={page?.images}
                     alt={page?.images_url}
