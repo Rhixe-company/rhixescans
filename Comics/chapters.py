@@ -1,6 +1,7 @@
 import scrapy
 from .models import Chapter, Page, Comic
 from django.db.models import Q
+from bs4 import BeautifulSoup
 
 
 class ChaptersSpider(scrapy.Spider):
@@ -25,20 +26,18 @@ class ChaptersSpider(scrapy.Spider):
             yield response.follow(link.get(), callback=self.parse_chapters)
 
     def parse_chapters(self, response):
-        title = response.css(
-            "div.allc a::text").get().strip()
-        comic = Comic.objects.get(title=title)
-        name = response.css(
-            "h1.entry-title::text").get().strip()
-        obj, created = Chapter.objects.filter(
-            Q(name=name)
-        ).get_or_create(comics=comic, defaults={'name': name})
-        posts = response.css(
-            "div.rdminimal img::attr(src)").getall()
-        for page in posts:
-            pages = page
-            obj1, created = Page.objects.filter(
-                Q(images_url=pages)
-            ).get_or_create(chapters=obj, defaults={'images_url': pages})
-            obj.pages.add(obj1)
-            obj.save()
+
+        name = response.css('div.bixbox ol li a ::attr(href)')[
+            2].get().split("/")[-2]
+
+        alreadyExists = Chapter.objects.get(
+            name=name)
+        try:
+            posts = response.css(
+                "div.rdminimal img::attr(src)").getall()
+            for page in posts:
+                pages = page
+                obj1, created = alreadyExists.pages.get_or_create(
+                    chapters=alreadyExists, defaults={'images_url': pages})
+        except:
+            print('pages not found')

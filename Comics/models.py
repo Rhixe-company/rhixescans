@@ -126,7 +126,8 @@ class Chapter(models.Model):
     participants = models.ManyToManyField(
         User, related_name='participants', blank=True)
     comics = models.ForeignKey(Comic, on_delete=models.CASCADE)
-    name = models.CharField(max_length=1000, null=True)
+    name = models.CharField(
+        max_length=1000, unique=True, null=False)
     pages = models.ManyToManyField(Page, blank=True, related_name='pages')
     numReviews = models.IntegerField(null=True, blank=True)
     rating = models.DecimalField(
@@ -135,7 +136,7 @@ class Chapter(models.Model):
     created = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        ordering = ['id']
+        ordering = ['created']
 
     def __str__(self):
         return self.name
