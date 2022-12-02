@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Button, Image } from "react-bootstrap";
+import { Button } from "react-bootstrap";
 import Loader from "../components/ui/Loader";
 import Message from "../components/ui/Message";
 import InfiniteScroll from "react-infinite-scroll-component";
@@ -38,13 +38,17 @@ const ChapterScreen = ({ match }) => {
           </div>
           <div>
             {chapter.pages.map((page, index) => (
-              <div>
+              <div className="pages">
                 <InfiniteScroll
                   dataLength={chapter.pages}
                   className="pages"
                   key={index}
                 >
-                  <Image src={page?.images} alt={page?.images_url} />
+                  <img
+                    className="page"
+                    src={page?.images}
+                    alt={page?.images_url}
+                  />
                 </InfiniteScroll>
               </div>
             ))}

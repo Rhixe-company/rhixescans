@@ -30,24 +30,27 @@ class ComicsSpider(scrapy.Spider):
         description = [description.strip() for description in response.css(
             'div.entry-content p::text').getall()]
         author = response.css(
-            'span.author::text').get().strip()
+            'div.flex-wrap div.fmed span::text')[1].get().strip()
         category = response.css(
             'div.imptdt a::text').get().strip()
+
         obj, created = Comic.objects.filter(
             Q(title=title)
         ).get_or_create(image_url=image_url, rating=rating, status=status, description=description, category=category, author=author, defaults={'title': title})
 
         g = response.css("span.mgen a::text").getall()
-        for genre in g:
-            genres = genre
 
-            alreadyExists = Genre.objects.filter(name=genres).exists()
-            if alreadyExists:
-                pass
-            else:
-                obj1, created = Genre.objects.filter(
+        for genre in g:
+            try:
+                genres = genre
+                obj1, created1 = Genre.objects.filter(
                     Q(name=genres)
-                ).get_or_create(comics=obj, defaults={'name': genres})
+                ).get_or_create(name=genres, defaults={'name': genres})
+
+            except:
+                pass
+        obj.genres.add(obj1)
+        obj.save()
         chapter_page_links = response.css('ul.clstyle li a::attr(href)')
         yield from response.follow_all(chapter_page_links, self.parse_chapters)
 

@@ -44,7 +44,6 @@ s = HTMLSession()
 
 
 class Genre(models.Model):
-    comics = models.ForeignKey('Comic', on_delete=models.SET_NULL, null=True)
     name = models.CharField(max_length=100, unique=True, blank=True, null=True)
 
     def __str__(self):
@@ -71,7 +70,7 @@ class Comic(models.Model):
     created = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        ordering = ['title']
+        ordering = ['-updated']
 
     def __str__(self):
         return self.title
@@ -136,7 +135,7 @@ class Chapter(models.Model):
     created = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        ordering = ['created']
+        ordering = ['-id']
 
     def __str__(self):
         return self.name

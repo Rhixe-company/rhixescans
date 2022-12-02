@@ -2,9 +2,9 @@ import PropTypes from "prop-types";
 import React, { useEffect, useState } from "react";
 import { connect, useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { Table } from "react-bootstrap";
 import { listComicsDetails } from "../actions/comicsActions";
 import Loader from "../components/ui/Loader";
+import Comicgrid from "../components/Comicgrid";
 
 export const Comic = ({ match }) => {
   const comicId = match.params.id;
@@ -27,40 +27,9 @@ export const Comic = ({ match }) => {
   return (
     <div>
       <div>
-        <Table
-          striped
-          bordered
-          hover
-          responsive
-          className="table-sm align-items-center"
-        >
-          <thead>
-            <tr>
-              <th>TITLE</th>
-              <th>IMAGE</th>
-              <th>DESCRIPTION</th>
-              <th>CATEGORY</th>
-              <th>RATING</th>
-              <th>STATUS</th>
-            </tr>
-          </thead>
-          <tbody key={comic.id}>
-            <tr>
-              <td>
-                <Link to={`/comic/${comic.id}/`}>{comic.title}</Link>
-              </td>
-              <td>
-                <Link to={`/comic/${comic.id}/`}>
-                  <img src={comic.image} alt={comic.image_url} />
-                </Link>
-              </td>
-              <td>{comic.description}</td>
-              <td>{comic.rating}</td>
-              <td>{comic.category}</td>
-              <td>{comic.status}</td>
-            </tr>
-          </tbody>
-        </Table>
+        <div>
+          <Comicgrid comic={comic} />
+        </div>
         <hr />
         {!loading && chapters.length === 0 && <small>No Chapters Found</small>}
         {loading ? (

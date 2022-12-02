@@ -23,12 +23,8 @@ class ChapterInline(admin.TabularInline):
     extra = 3
 
 
-class GenreInline(admin.TabularInline):
-    model = Genre
-
-
 class ComicAdmin(admin.ModelAdmin):
-    inlines = [ChapterInline, GenreInline]
+    inlines = [ChapterInline]
 
 
 class ChapterAdmin(admin.ModelAdmin):
