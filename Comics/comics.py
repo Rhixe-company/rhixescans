@@ -63,6 +63,7 @@ class ComicsSpider(scrapy.Spider):
             ).get_or_create(comics=comic, name=name, defaults={'name': name})
         else:
             print(f'This Object Not found ,pls create:{comic}')
+            pass
         soup = BeautifulSoup(response.text, features='lxml')
         posts = soup.select(
             "div.rdminimal img")
