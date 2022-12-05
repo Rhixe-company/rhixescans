@@ -39,7 +39,7 @@ class ComicsSpider(scrapy.Spider):
         for genre in g:
             genres = str(genre)
             try:
-                obj.genres.get_or_create(
+                obj1, created = obj.genres.get_or_create(
                     name=genres, defaults={'name': genres})
             except:
                 pass
@@ -64,14 +64,9 @@ class ComicsSpider(scrapy.Spider):
             obj1, created = Page.objects.filter(
                 Q(images_url=pages)
             ).get_or_create(chapters=obj, images_url=pages, defaults={'images_url': pages})
-            alreadyexists = Page.objects.filter(
-                Q(images_url=pages)
-            ).exists()
-            if alreadyexists:
-                try:
-                    obj.pages.add(obj1)
-                    obj.save()
-                except:
-                    print('Chapter already Exists')
-            else:
+            try:
+                obj.pages.add(obj1)
+                obj.save()
+            except:
+                print(f'{name}: already Exists')
                 pass
