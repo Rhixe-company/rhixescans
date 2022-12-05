@@ -20,7 +20,8 @@ SECRET_KEY = 'django-insecure-4(b!ri*$ep@zit-g_066-ox3ysi*mu2@px@0fz2mn@0=&f*hau
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'rhixe.company','www.rhixe.company']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost',
+                 'rhixe.company', 'www.rhixe.company']
 
 
 # Application definition
@@ -208,4 +209,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 #AWS_STORAGE_BUCKET_NAME = 'proshop-bucket-demo'
 if os.getcwd() == '/app':
-    DEBUG = True
+    DEBUG = False
