@@ -15,8 +15,8 @@ class ComicsSpider(scrapy.Spider):
         comic_page_links = response.css('div.bsx a::attr(href)')
         yield from response.follow_all(comic_page_links, self.parse_webtoon)
 
-        #next_page = response.css('a.r::attr(href)')
-        # yield from response.follow_all(next_page, self.parse)
+        next_page = response.css('a.r::attr(href)')
+        yield from response.follow_all(next_page, self.parse)
 
     def parse_webtoon(self, response):
         title = response.css(
