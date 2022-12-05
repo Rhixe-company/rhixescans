@@ -7,7 +7,7 @@ import Paginate from "../components/ui/Paginate";
 import ComicsCarousel from "../components/content/ComicsCarousel";
 import { listComics } from "../actions/comicsActions";
 
-function PostsScreen({ history }) {
+function HomeScreen({ history }) {
   const dispatch = useDispatch();
   const comicsList = useSelector((state) => state.comicsList);
   const { comics, page, pages } = comicsList;
@@ -28,7 +28,7 @@ function PostsScreen({ history }) {
             <Card className="my-3 p-3 rounded">
               <Card.Body className="px-6 py-4">
                 <Link to={`/comic/${comic.id}/`}>
-                  <Card.Img src={comic.image} alt="" fluid />
+                  <Card.Img src={comic.image} alt={comic.image_url} />
                 </Link>
                 <div className="my-3">
                   <Rating
@@ -85,4 +85,4 @@ function PostsScreen({ history }) {
   );
 }
 
-export default PostsScreen;
+export default HomeScreen;

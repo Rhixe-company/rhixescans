@@ -5,14 +5,18 @@ import { Link } from "react-router-dom";
 import { listComicsDetails } from "../actions/comicsActions";
 import Loader from "../components/ui/Loader";
 import Comicgrid from "../components/ui/Comicgrid";
+import { Button } from "react-bootstrap";
+import Message from "../components/ui/Message";
 
 export const Comic = ({ match }) => {
   const comicId = match.params.id;
   const dispatch = useDispatch();
   const comicsDetails = useSelector((state) => state.comicsDetails);
-  const { comic } = comicsDetails;
+  const { error, loading, comic } = comicsDetails;
+  const userLogin = useSelector((state) => state.userLogin);
+  const { userInfo } = userLogin;
   const [chapters, setChapters] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [isloading, setisLoading] = useState(true);
 
   useEffect(() => {
     dispatch(listComicsDetails(comicId));
@@ -20,35 +24,57 @@ export const Comic = ({ match }) => {
       .then((res) => res.json())
       .then((data) => {
         setChapters(data.chapters);
-        setLoading(false);
+        setisLoading(false);
       })
       .catch((err) => console.log(err));
   }, [dispatch, comicId]);
   return (
     <div>
-      <div>
+      {loading ? (
+        <Loader />
+      ) : error ? (
+        <Message variant="danger">{error}</Message>
+      ) : (
         <div>
-          <Comicgrid comic={comic} />
+          {userInfo ? (
+            <div>
+              <Link to="/">
+                <Button>Go Back </Button>
+              </Link>
+              <div>
+                <Comicgrid comic={comic} />
+              </div>
+              <br />
+              {!isloading && chapters.length === 0 && (
+                <small>No Chapters Found</small>
+              )}
+              {isloading ? (
+                <Loader />
+              ) : (
+                <div>
+                  <h3>Recent Chapters</h3>
+                  {chapters.map((chapter) => (
+                    <ul key={chapter.id}>
+                      <li>
+                        <Link to={`/comics/chapter/${chapter.id}/`}>
+                          <span>{chapter?.name}</span>
+                        </Link>
+                        <hr />
+                      </li>
+                    </ul>
+                  ))}
+                </div>
+              )}
+            </div>
+          ) : (
+            <div>
+              <Link to="/login">
+                <Button>Please Login To Read Comic</Button>
+              </Link>
+            </div>
+          )}
         </div>
-        <hr />
-        {!loading && chapters.length === 0 && <small>No Chapters Found</small>}
-        {loading ? (
-          <Loader />
-        ) : (
-          <div>
-            <h3>Recent Chapters</h3>
-            {chapters.map((chapter) => (
-              <ul key={chapter.id}>
-                <li>
-                  <Link to={`/comics/chapter/${chapter.id}/`}>
-                    <span>{chapter?.name}</span>
-                  </Link>
-                </li>
-              </ul>
-            ))}
-          </div>
-        )}
-      </div>
+      )}
     </div>
   );
 };
