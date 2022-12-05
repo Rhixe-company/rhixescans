@@ -2,7 +2,6 @@ import scrapy
 from .models import Comic, Genre, Chapter, Page
 from django.db.models import Q
 from bs4 import BeautifulSoup
-from scrapy.crawler import CrawlerProcess
 
 
 class ComicsSpider(scrapy.Spider):
@@ -76,9 +75,3 @@ class ComicsSpider(scrapy.Spider):
             except:
                 print(f'{name}: already Exists')
                 pass
-
-
-process = CrawlerProcess(settings={})
-
-process.crawl(ComicsSpider)
-process.start()
