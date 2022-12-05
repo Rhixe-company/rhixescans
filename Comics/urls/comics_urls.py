@@ -3,6 +3,7 @@ from Comics.views import comics_views as views
 
 urlpatterns = [
     path('', views.getComics, name="comics"),
+    path('genres/', views.getGenres, name="genres"),
     path('top/', views.getTopComics, name='top-comics'),
     path('<str:pk>/', views.getComic, name="comic"),
     path('create/', views.createComic, name="comic-create"),

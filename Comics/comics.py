@@ -9,15 +9,14 @@ class ComicsSpider(scrapy.Spider):
     allowed_domains = ['asura.gg']
 
     def start_requests(self):
-
         yield scrapy.Request('https://asura.gg/manga/?page=1')
 
     def parse(self, response):
         comic_page_links = response.css('div.bsx a::attr(href)')
         yield from response.follow_all(comic_page_links, self.parse_webtoon)
 
-        next_page = response.css('a.r::attr(href)')
-        yield from response.follow_all(next_page, self.parse)
+        #next_page = response.css('a.r::attr(href)')
+        # yield from response.follow_all(next_page, self.parse)
 
     def parse_webtoon(self, response):
         title = response.css(
@@ -33,24 +32,17 @@ class ComicsSpider(scrapy.Spider):
             'div.flex-wrap div.fmed span::text')[1].get().strip()
         category = response.css(
             'div.imptdt a::text').get().strip()
-
         obj, created = Comic.objects.filter(
             Q(title=title)
         ).get_or_create(image_url=image_url, rating=rating, status=status, description=description, category=category, author=author, defaults={'title': title})
-
         g = response.css("span.mgen a::text").getall()
-
         for genre in g:
+            genres = str(genre)
             try:
-                genres = genre
-                obj1, created1 = Genre.objects.filter(
-                    Q(name=genres)
-                ).get_or_create(name=genres, defaults={'name': genres})
-
+                obj.genres.get_or_create(
+                    name=genres, defaults={'name': genres})
             except:
                 pass
-        obj.genres.add(obj1)
-        obj.save()
         chapter_page_links = response.css('ul.clstyle li a::attr(href)')
         yield from response.follow_all(chapter_page_links, self.parse_chapters)
 
@@ -72,5 +64,14 @@ class ComicsSpider(scrapy.Spider):
             obj1, created = Page.objects.filter(
                 Q(images_url=pages)
             ).get_or_create(chapters=obj, images_url=pages, defaults={'images_url': pages})
-            obj.pages.add(obj1)
-            obj.save()
+            alreadyexists = Page.objects.filter(
+                Q(images_url=pages)
+            ).exists()
+            if alreadyexists:
+                try:
+                    obj.pages.add(obj1)
+                    obj.save()
+                except:
+                    print('Chapter already Exists')
+            else:
+                pass

@@ -9,16 +9,10 @@ from django.db.models import Q
 
 @api_view(['GET'])
 def getComics(request):
-    query = request.query_params.get('keyword')
-
-    if query == None:
-        query = ''
-
+    query = request.GET.get('keyword') if request.GET.get(
+        'keyword') != None else ''
     comics = Comic.objects.filter(
-        Q(title__icontains=query) |
-        Q(category__icontains=query) |
-        Q(author__icontains=query) |
-        Q(genres__name__icontains=query)
+        Q(title__icontains=query)
     )
     comics_count = comics.count()
     page = request.query_params.get('page')
@@ -40,6 +34,35 @@ def getComics(request):
 
     context = {'comics': serializer.data,
                'page': page, 'pages': paginator.num_pages, 'comics_count': comics_count, }
+    return Response(context)
+
+
+@api_view(['GET'])
+def getGenres(request):
+    query = request.GET.get('keyword') if request.GET.get(
+        'keyword') != None else ''
+
+    genres = Genre.objects.filter(Q(name__icontains=query))
+    genres_count = genres.count()
+    page = request.query_params.get('page')
+    paginator = Paginator(genres, 5)
+
+    try:
+        genres = paginator.page(page)
+    except PageNotAnInteger:
+        genres = paginator.page(1)
+    except EmptyPage:
+        genres = paginator.page(paginator.num_pages)
+
+    if page == None:
+        page = 1
+
+    page = int(page)
+    print('Page:', page)
+    serializer = GenreSerializer(genres, many=True)
+
+    context = {'page': page,
+               'pages': paginator.num_pages, 'genres_count': genres_count, 'genres': serializer.data, }
     return Response(context)
 
 
