@@ -38,10 +38,15 @@ class ComicsSpider(scrapy.Spider):
         g = response.css("span.mgen a::text").getall()
         for genre in g:
             genres = str(genre)
+            obj1, created = Genre.objects.filter(
+                Q(name=genres)
+            ).get_or_create(
+                name=genres, defaults={'name': genres})
             try:
-                obj1, created = obj.genres.get_or_create(
-                    name=genres, defaults={'name': genres})
+                obj.genres.add(obj1)
+                obj.save()
             except:
+                print('Genres not Added')
                 pass
         chapter_page_links = response.css('ul.clstyle li a::attr(href)')
         yield from response.follow_all(chapter_page_links, self.parse_chapters)
