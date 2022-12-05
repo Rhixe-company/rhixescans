@@ -57,11 +57,13 @@ class ComicsSpider(scrapy.Spider):
         name = response.css(
             "h1.entry-title::text").get().strip()
         comic = Comic.objects.get(title=title)
-        obj, created = Chapter.objects.filter(
-            Q(name=name)
-        ).get_or_create(comics=comic, name=name, defaults={'name': name})
+        if comic:
+            obj, created = Chapter.objects.filter(
+                Q(name=name)
+            ).get_or_create(comics=comic, name=name, defaults={'name': name})
+        else:
+            print(f'This Object Not found ,pls create:{comic}')
         soup = BeautifulSoup(response.text, features='lxml')
-
         posts = soup.select(
             "div.rdminimal img")
         for page in posts:
