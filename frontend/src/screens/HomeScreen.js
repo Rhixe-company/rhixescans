@@ -46,7 +46,6 @@ function PostsScreen({ history }) {
                     <h5>{comic.title}</h5>
                   </Card.Title>
                 </Link>
-                <br />
                 <Card.Text as="div">
                   <small>{comic.status}</small>
                 </Card.Text>
