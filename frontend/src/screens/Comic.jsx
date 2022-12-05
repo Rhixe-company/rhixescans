@@ -4,7 +4,7 @@ import { connect, useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { listComicsDetails } from "../actions/comicsActions";
 import Loader from "../components/ui/Loader";
-import Comicgrid from "../components/Comicgrid";
+import Comicgrid from "../components/ui/Comicgrid";
 
 export const Comic = ({ match }) => {
   const comicId = match.params.id;

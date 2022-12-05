@@ -43,7 +43,11 @@ export const ComicScreen = ({ match }) => {
               </td>
               <td>
                 <Link to={`/comic/${comic.id}/`}>
-                  <Image src={comic.image} alt={comic.image_url} />
+                  <Image
+                    src={comic.image}
+                    alt={comic.image_url}
+                    className="w-full"
+                  />
                 </Link>
               </td>
               <td>{comic.description}</td>

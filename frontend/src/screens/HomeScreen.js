@@ -27,6 +27,17 @@ function PostsScreen({ history }) {
           <div key={comic.id}>
             <Card className="my-3 p-3 rounded">
               <Card.Body className="px-6 py-4">
+                <div className="my-3">
+                  <Link to={`/comic/${comic.id}/`}>
+                    <Card.Img src={comic.image} alt="" fluid />
+                  </Link>
+                  <Rating
+                    value={comic.rating}
+                    text={`${comic.rating} `}
+                    color={"#f8e825"}
+                  />
+                </div>
+
                 <Link to={`/comic/${comic.id}/`}>
                   <Card.Title
                     as="div"
@@ -35,23 +46,15 @@ function PostsScreen({ history }) {
                     <h5>{comic.title}</h5>
                   </Card.Title>
                 </Link>
-                <Link to={`/comic/${comic.id}/`}>
-                  <Card.Img src={comic.image} alt="" className="w-full" />
-                </Link>
 
                 <Card.Text as="div">
-                  <div className="my-3">
-                    <Rating
-                      value={comic.rating}
-                      text={`${comic.rating} `}
-                      color={"#f8e825"}
-                    />
-                  </div>
+                  <small>{comic.status}</small>
                 </Card.Text>
-                <Card.Text as="span">{comic.status}</Card.Text>
-                <br />
-                <Card.Text as="span">{comic.category}</Card.Text>
-                <br />
+
+                <Card.Text as="div">
+                  <strong>{comic.category}</strong>
+                </Card.Text>
+
                 {comic.genres.map((genre) => (
                   <Card.Text
                     as="span"
@@ -62,13 +65,14 @@ function PostsScreen({ history }) {
                   </Card.Text>
                 ))}
               </Card.Body>
-              <br />
-
+              <hr />
               {comic.chapters.map((chapter) => (
-                <div key={chapter.id}>
-                  <Link to={`/comics/chapter/${chapter.id}/`}>
-                    <small>{chapter?.name}</small>
-                  </Link>
+                <div>
+                  <Card.Text key={chapter.id} as="div">
+                    <Link to={`/comics/chapter/${chapter.id}/`}>
+                      <strong>{chapter?.name}</strong>
+                    </Link>
+                  </Card.Text>
                 </div>
               ))}
             </Card>

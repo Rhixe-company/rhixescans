@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import Loader from "../components/ui/Loader";
 import Message from "../components/ui/Message";
-import Paginate from "../components/Paginate";
+import Paginat from "../components/ui/Paginat";
 import ChapterForm from "../components/content/ChapterForm";
 import {
   listChapters,
@@ -132,7 +132,7 @@ const ChaptersListScreen = ({ history }) => {
               ))}
             </tbody>
           </Table>
-          <Paginate pages={pages} page={page} isAdmin={true} />
+          <Paginat pages={pages} page={page} isAdmin={true} />
         </div>
       )}
     </div>
