@@ -68,7 +68,7 @@ def getGenres(request):
 
 @api_view(['GET'])
 def getTopComics(request):
-    comics = Comic.objects.filter(rating__gte=9.9).order_by('title')[0:20]
+    comics = Comic.objects.filter(rating__gte=9.9).order_by('title')[0:9]
     serializer = ComicSerializer(comics, many=True)
     return Response(serializer.data)
 
