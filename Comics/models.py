@@ -13,7 +13,7 @@ def comics_images_location(instance, filename):
 
 
 def comics_chapters_images_location(instance, filename):
-    return '{}/{}/{}'.format(str(instance.chapters.comics.title).replace(" ", "_").replace(":", " ").replace("/", "").replace("\\", ""),  instance.chapters.id, filename)
+    return '{}/{}/{}'.format(str(instance.chapters.comics.title).replace(" ", "_").replace(":", " ").replace("/", "").replace("\\", ""),  instance.chapters.name, filename)
 
 
 STATUS_CHOICES = [
@@ -60,8 +60,8 @@ class Comic(models.Model):
     image_url = models.URLField(null=True)
     rating = models.DecimalField(
         max_digits=9, decimal_places=1, null=False)
-    status = models.CharField(
-        max_length=100, choices=STATUS_CHOICES, default='Ongoing')
+    status = models.BooleanField(
+        max_length=100, choices=STATUS_CHOICES)
     author = models.CharField(max_length=100, blank=True)
     category = models.CharField(
         max_length=100, default='Manhwa', choices=CATEGORY_CHOICES)

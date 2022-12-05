@@ -57,11 +57,11 @@ class ComicsSpider(scrapy.Spider):
         name = response.css(
             "h1.entry-title::text").get().strip()
         comic = Comic.objects.get(title=title)
-        if comic:
+        try:
             obj, created = Chapter.objects.filter(
                 Q(name=name)
             ).get_or_create(comics=comic, name=name, defaults={'name': name})
-        else:
+        except:
             print(f'This Object Not found ,pls create:{comic}')
             pass
         soup = BeautifulSoup(response.text, features='lxml')

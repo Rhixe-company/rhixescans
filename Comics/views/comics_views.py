@@ -15,7 +15,7 @@ def getComics(request):
         Q(title__icontains=query)
     )
     comics_count = comics.count()
-    page = request.query_params.get('page')
+    page = request.GET.get('page')
     paginator = Paginator(comics, 26)
 
     try:
@@ -44,7 +44,7 @@ def getGenres(request):
 
     genres = Genre.objects.filter(Q(name__icontains=query))
     genres_count = genres.count()
-    page = request.query_params.get('page')
+    page = request.GET.get('page')
     paginator = Paginator(genres, 5)
 
     try:
