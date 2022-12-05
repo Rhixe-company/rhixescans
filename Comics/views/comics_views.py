@@ -13,7 +13,7 @@ def getComics(request):
         'keyword') != None else ''
     comics = Comic.objects.filter(
         Q(title__icontains=query)
-    ).order_by('updated')
+    )
     comics_count = comics.count()
     page = request.query_params.get('page')
     paginator = Paginator(comics, 26)

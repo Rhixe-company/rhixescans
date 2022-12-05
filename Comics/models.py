@@ -70,7 +70,7 @@ class Comic(models.Model):
     created = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        ordering = ['title']
+        ordering = ['updated', '-title']
 
     def __str__(self):
         return self.title
