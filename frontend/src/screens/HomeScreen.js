@@ -65,13 +65,14 @@ function PostsScreen({ history }) {
                   </Card.Text>
                 ))}
               </Card.Body>
-              <hr />
+              <br />
               {comic.chapters.map((chapter) => (
                 <div>
                   <Card.Text key={chapter.id} as="div">
                     <Link to={`/comics/chapter/${chapter.id}/`}>
                       <strong>{chapter?.name}</strong>
                     </Link>
+                    <hr />
                   </Card.Text>
                 </div>
               ))}
