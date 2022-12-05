@@ -85,7 +85,7 @@ class ComicSerializer(serializers.ModelSerializer):
         return serializer.data
 
     def get_chapters(self, obj):
-        chapters = obj.chapter_set.all()[:5]
+        chapters = obj.chapter_set.all()[:2]
         serializer = ChapterSerializer(chapters, many=True)
         return serializer.data
 
