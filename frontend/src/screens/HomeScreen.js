@@ -27,10 +27,10 @@ function PostsScreen({ history }) {
           <div key={comic.id}>
             <Card className="my-3 p-3 rounded">
               <Card.Body className="px-6 py-4">
+                <Link to={`/comic/${comic.id}/`}>
+                  <Card.Img src={comic.image} alt="" fluid />
+                </Link>
                 <div className="my-3">
-                  <Link to={`/comic/${comic.id}/`}>
-                    <Card.Img src={comic.image} alt="" fluid />
-                  </Link>
                   <Rating
                     value={comic.rating}
                     text={`${comic.rating} `}
@@ -46,7 +46,7 @@ function PostsScreen({ history }) {
                     <h5>{comic.title}</h5>
                   </Card.Title>
                 </Link>
-
+                <br />
                 <Card.Text as="div">
                   <small>{comic.status}</small>
                 </Card.Text>
@@ -54,7 +54,7 @@ function PostsScreen({ history }) {
                 <Card.Text as="div">
                   <strong>{comic.category}</strong>
                 </Card.Text>
-
+                <br />
                 {comic.genres.map((genre) => (
                   <Card.Text
                     as="span"
