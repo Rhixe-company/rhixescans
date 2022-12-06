@@ -60,8 +60,9 @@ class Comic(models.Model):
     image_url = models.URLField(null=True)
     rating = models.DecimalField(
         max_digits=9, decimal_places=1, null=False)
-    status = models.BooleanField(
+    status = models.CharField(
         max_length=100, choices=STATUS_CHOICES)
+    active = models.BooleanField(default=True)
     author = models.CharField(max_length=100, blank=True)
     category = models.CharField(
         max_length=100, default='Manhwa', choices=CATEGORY_CHOICES)
