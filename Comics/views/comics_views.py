@@ -12,11 +12,13 @@ def getComics(request):
     query = request.GET.get('keyword') if request.GET.get(
         'keyword') != None else ''
     comics = Comic.objects.filter(
-        Q(title__icontains=query)
+        Q(title__icontains=query) |
+        Q(status='Ongoing') |
+        Q(status='Completed')
     )
     comics_count = comics.count()
     page = request.GET.get('page')
-    paginator = Paginator(comics, 26)
+    paginator = Paginator(comics, 20)
 
     try:
         comics = paginator.page(page)

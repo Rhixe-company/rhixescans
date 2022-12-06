@@ -20,7 +20,7 @@ def getChapters(request):
         name__icontains=query)
     chapters_count = chapters.count()
     page = request.query_params.get('page')
-    paginator = Paginator(chapters, 26)
+    paginator = Paginator(chapters, 20)
     try:
         chapters = paginator.page(page)
     except PageNotAnInteger:
