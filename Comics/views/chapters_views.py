@@ -15,7 +15,7 @@ def getChapters(request):
         'keyword') != None else ''
 
     chapters = Chapter.objects.filter(
-        name__icontains=query)
+        name__icontains=query)[:30]
     chapters_count = chapters.count()
 
     serializer = ChapterSerializer(chapters, many=True)
