@@ -10,7 +10,7 @@ import { listComics } from "../actions/comicsActions";
 function HomeScreen({ history }) {
   const dispatch = useDispatch();
   const comicsList = useSelector((state) => state.comicsList);
-  const { comics, page, pages } = comicsList;
+  const { comics, page, pages, comics_count } = comicsList;
 
   let keyword = history.location.search;
 
@@ -21,7 +21,7 @@ function HomeScreen({ history }) {
     <Container className="container mx-auto">
       {!keyword && <ComicsCarousel />}
       <br />
-      <h1>Latest Comics</h1>
+      <strong>{comics_count} comics available</strong>
       <div>
         {comics.map((comic) => (
           <div key={comic.id}>

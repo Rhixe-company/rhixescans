@@ -18,7 +18,7 @@ def getComics(request):
     )
     comics_count = comics.count()
     page = request.GET.get('page')
-    paginator = Paginator(comics, 20)
+    paginator = Paginator(comics, 24)
 
     try:
         comics = paginator.page(page)
@@ -46,6 +46,7 @@ def getGenres(request):
 
     genres = Genre.objects.filter(Q(name__icontains=query))
     genres_count = genres.count()
+
     page = request.GET.get('page')
     paginator = Paginator(genres, 5)
 
@@ -80,14 +81,6 @@ def getComic(request, pk):
     comic = Comic.objects.get(id=pk)
     serializer = ComicSerializer(comic, many=False)
     return Response(serializer.data)
-
-
-@api_view(['GET'])
-def getChapters(request, pk):
-    comics = Comic.objects.get(id=pk)
-    chapters = comics.chapter_set.all().order_by('id')
-    serializer = ChapterSerializer(chapters, many=True)
-    return Response({'chapters': serializer.data})
 
 
 @api_view(['POST'])

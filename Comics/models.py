@@ -51,6 +51,7 @@ class Genre(models.Model):
 
 
 class Comic(models.Model):
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     reader = models.ManyToManyField(
         User, related_name='readers', blank=True)
     title = models.CharField(max_length=200, unique=True, null=False)

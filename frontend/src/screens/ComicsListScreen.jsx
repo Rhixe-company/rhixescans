@@ -16,7 +16,7 @@ const ComicsListScreen = ({ history }) => {
   const dispatch = useDispatch();
 
   const comicsList = useSelector((state) => state.comicsList);
-  const { loading, error, comics, pages, page } = comicsList;
+  const { loading, error, comics, pages, page, comics_count } = comicsList;
 
   const comicDelete = useSelector((state) => state.comicDelete);
   const {
@@ -84,6 +84,7 @@ const ComicsListScreen = ({ history }) => {
         <Message variant="danger">{error}</Message>
       ) : (
         <div>
+          <strong>{comics_count} comics available</strong>
           <Table striped bordered hover size="sm" responsive="sm">
             <thead>
               <tr>

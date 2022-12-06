@@ -30,6 +30,7 @@ export const comicsListReducer = (state = { comics: [] }, action) => {
       return {
         loading: false,
         comics: action.payload.comics,
+        comics_count: action.payload.comics_count,
         page: action.payload.page,
         pages: action.payload.pages,
       };

@@ -1,11 +1,11 @@
 from django.shortcuts import render
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
 from rest_framework.response import Response
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth.models import User
 from Comics.models import Genre
-from Comics.serializers import UserSerializer, UserSerializerWithToken
+from Comics.serializers import UserSerializer
 # Create your views here.
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
@@ -18,7 +18,7 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     def validate(self, attrs):
         data = super().validate(attrs)
 
-        serializer = UserSerializerWithToken(self.user).data
+        serializer = UserSerializer(self.user).data
         for k, v in serializer.items():
             data[k] = v
 
@@ -40,7 +40,7 @@ def registerUser(request):
             password=make_password(data['password'])
         )
 
-        serializer = UserSerializerWithToken(user, many=False)
+        serializer = UserSerializer(user, many=False)
         return Response(serializer.data)
     except:
         message = {'detail': 'User with this email already exists'}
@@ -51,7 +51,7 @@ def registerUser(request):
 @permission_classes([IsAuthenticated])
 def updateUserProfile(request):
     user = request.user
-    serializer = UserSerializerWithToken(user, many=False)
+    serializer = UserSerializer(user, many=False)
 
     data = request.data
     user.first_name = data['name']
@@ -86,22 +86,10 @@ def getUsers(request):
 @permission_classes([IsAdminUser])
 def getUserById(request, pk):
     user = User.objects.get(id=pk)
-    comics = user.comic_set.all()
-    comics_count = comics.count()
-    comics_review = user.review_set.all()
-    genres = Genre.objects.all()
-    page = request.GET.get('page')
-    paginator = Paginator(comics, 24)
-    try:
-        comics = paginator.page(page)
-    except PageNotAnInteger:
-        comics = paginator.page(1)
-    except EmptyPage:
-        comics = paginator.page(paginator.num_pages)
-    context = {'user': user, 'comics': comics, 'genres': genres,
-               'comics_count': comics_count, 'comics_review': comics_review}
+
     serializer = UserSerializer(user, many=False)
-    return Response(serializer.data, context)
+
+    return Response({'user': serializer.data})
 
 
 @api_view(['PUT'])
