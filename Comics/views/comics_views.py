@@ -1,5 +1,5 @@
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAdminUser, AllowAny
+from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from Comics.models import *
@@ -77,6 +77,7 @@ def getTopComics(request):
 
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def getComic(request, pk):
     comic = Comic.objects.get(id=pk)
     serializer = ComicSerializer(comic, many=False)
@@ -129,6 +130,7 @@ def deleteComic(request, pk):
 
 
 @api_view(['POST'])
+@permission_classes([IsAdminUser])
 def uploadImage(request):
     data = request.data
 

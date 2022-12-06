@@ -24,6 +24,7 @@ def getChapters(request):
 
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def getChapter(request, pk):
     chapter = Chapter.objects.get(id=pk)
     serializer = ChapterSerializer(chapter, many=False)
