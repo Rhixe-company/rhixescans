@@ -28,14 +28,13 @@ function HomeScreen({ history }) {
             <Card className="my-3 p-3 rounded">
               <Card.Body className="px-6 py-4">
                 <Link to={`/comic/${comic.id}/`}>
-                  <Card.Img src={comic.image} alt={comic.image_url} />
                   <Card.Title
                     as="div"
                     className="font-bold text-black-500 text-xl mb-2"
                   >
-                    <b>Title:</b>
                     <strong>{comic.title}</strong>
                   </Card.Title>
+                  <Card.Img src={comic.image} alt={comic.image_url} />
                 </Link>
                 <small>
                   <b>Status:</b>
@@ -62,25 +61,16 @@ function HomeScreen({ history }) {
                   <strong>{comic.category}</strong>
                 </Card.Text>
                 <br />
-                {comic.genres.map((genre) => (
-                  <Card.Text as="div" key={genre.id}>
-                    <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2">
-                      {genre.name}
-                    </span>
+                {comic.genres.map((genre, index) => (
+                  <Card.Text
+                    as="span"
+                    key={index}
+                    className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2"
+                  >
+                    <strong>{genre.name}</strong>
                   </Card.Text>
                 ))}
               </Card.Body>
-              <br />
-              {comic.chapters.map((chapter) => (
-                <div>
-                  <Card.Text key={chapter.id} as="div">
-                    <Link to={`/comics/chapter/${chapter.id}/`}>
-                      <strong>{chapter?.name}</strong>
-                    </Link>
-                    <hr />
-                  </Card.Text>
-                </div>
-              ))}
             </Card>
           </div>
         ))}

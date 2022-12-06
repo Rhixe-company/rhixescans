@@ -9,12 +9,12 @@ import RegisterScreen from "./screens/RegisterScreen";
 import ProfileScreen from "./screens/ProfileScreen";
 import UserListScreen from "./screens/UserListScreen";
 import UserEditScreen from "./screens/UserEditScreen";
-import Comic from "./screens/Comic";
+import ComicScreen from "./screens/ComicScreen";
 import ComicsEditScreen from "./screens/ComicsEditScreen";
 import ChaptersListScreen from "./screens/ChaptersListScreen";
 import ChaptersEditScreen from "./screens/ChaptersEditScreen";
 import HomeScreen from "./screens/HomeScreen";
-import ChapterScreen from "./screens/ChapterScreen";
+import ChaptersScreen from "./screens/ChaptersScreen";
 import ComicsListScreen from "./screens/ComicsListScreen";
 import "./assets/main.css";
 import "./index.css";
@@ -26,8 +26,8 @@ class App extends Component {
           <Header />
           <Container>
             <Route path="/" component={HomeScreen} exact />
-            <Route path="/comic/:id/" component={Comic} />
-            <Route path="/comics/chapter/:id/" component={ChapterScreen} />
+            <Route path="/comic/:id/" component={ComicScreen} />
+            <Route path="/comics/chapter/:id/" component={ChaptersScreen} />
             <Route path="/login" component={LoginScreen} />
             <Route path="/register" component={RegisterScreen} />
             <Route path="/profile" component={ProfileScreen} />

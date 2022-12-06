@@ -13,8 +13,8 @@ def getComics(request):
         'keyword') != None else ''
     comics = Comic.objects.filter(
         Q(title__icontains=query) |
-        Q(status='Ongoing') |
-        Q(status='Completed')
+        Q(category__icontains=query) |
+        Q(author__icontains=query)
     )
     comics_count = comics.count()
     page = request.GET.get('page')

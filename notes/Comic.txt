@@ -42,7 +42,11 @@ export const Comic = ({ match }) => {
                 <Button>Go Back </Button>
               </Link>
               <div>
-                <Comicgrid comic={comic} />
+                <Comicgrid
+                  comic={comic}
+                  genres={comic.genres}
+                  chapters={comic.chapters}
+                />
               </div>
               <br />
               {!isloading && chapters.length === 0 && (

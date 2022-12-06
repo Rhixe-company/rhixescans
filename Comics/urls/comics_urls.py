@@ -10,5 +10,4 @@ urlpatterns = [
     path('upload/', views.uploadImage, name="image-upload"),
     path('update/<str:pk>/', views.updateComic, name="comic-update"),
     path('delete/<str:pk>/', views.deleteComic, name="comic-delete"),
-    path('<str:pk>/chapters/', views.getChapters, name="comic-chapters"),
 ]

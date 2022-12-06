@@ -11,39 +11,16 @@ from Comics.serializers import *
 
 @api_view(['GET'])
 def getChapters(request):
-    query = request.query_params.get('keyword')
-
-    if query == None:
-        query = ''
+    query = request.GET.get('keyword') if request.GET.get(
+        'keyword') != None else ''
 
     chapters = Chapter.objects.filter(
         name__icontains=query)
     chapters_count = chapters.count()
-    page = request.query_params.get('page')
-    paginator = Paginator(chapters, 20)
-    try:
-        chapters = paginator.page(page)
-    except PageNotAnInteger:
-        chapters = paginator.page(1)
-    except EmptyPage:
-        chapters = paginator.page(paginator.num_pages)
 
-    if page == None:
-        page = 1
-
-    page = int(page)
-    print('Page:', page)
     serializer = ChapterSerializer(chapters, many=True)
-    context = {'chapters': serializer.data, 'page': page,
-               'pages': paginator.num_pages, 'chapters_count': chapters_count}
+    context = {'chapters': serializer.data, 'chapters_count': chapters_count}
     return Response(context)
-
-
-@api_view(['GET'])
-def getTopChapters(request):
-    chapters = Chapter.objects.filter(rating__gte=8).order_by('-rating')[0:5]
-    serializer = ChapterSerializer(chapters, many=True)
-    return Response(serializer.data)
 
 
 @api_view(['GET'])

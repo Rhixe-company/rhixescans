@@ -37,13 +37,9 @@ const ChapterScreen = ({ match }) => {
             </Link>
           </div>
           <div>
-            {chapter.pages.map((page, index) => (
-              <div className="pages">
-                <InfiniteScroll
-                  dataLength={chapter.pages}
-                  className="pages"
-                  key={index}
-                >
+            {chapter.pages?.map((page, index) => (
+              <div className="pages" key={index}>
+                <InfiniteScroll dataLength={page} className="pages">
                   <Image
                     className="page"
                     src={page?.images}

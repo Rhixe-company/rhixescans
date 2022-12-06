@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
 import { LinkContainer } from "react-router-bootstrap";
 import { Link } from "react-router-dom";
-import { Button, Row, Image } from "react-bootstrap";
-import Table from "react-bootstrap/Table";
+import { Button, Table, Container, Image } from "react-bootstrap";
+
 import { useDispatch, useSelector } from "react-redux";
 import Loader from "../components/ui/Loader";
 import Message from "../components/ui/Message";
@@ -71,7 +71,7 @@ const ComicsListScreen = ({ history }) => {
   };
 
   return (
-    <Row>
+    <Container>
       {loadingDelete && <Loader />}
       {errorDelete && <Message variant="danger">{errorDelete}</Message>}
 
@@ -84,18 +84,15 @@ const ComicsListScreen = ({ history }) => {
         <Message variant="danger">{error}</Message>
       ) : (
         <div>
-          <ComicForm createComicHandler={createComicHandler} />
-
           <Table striped bordered hover size="sm" responsive="sm">
             <thead>
               <tr>
+                <th>ID</th>
                 <th>TITLE</th>
                 <th>IMAGE</th>
-                <th>DESCRIPTION</th>
                 <th>CATEGORY</th>
                 <th>RATING</th>
                 <th>STATUS</th>
-                <th>AUTHOR</th>
                 <th />
                 <th />
               </tr>
@@ -106,26 +103,25 @@ const ComicsListScreen = ({ history }) => {
                 <>
                   <tr key={comic.id}>
                     <td>
+                      <Link to={`/comic/${comic.id}/`}>{comic.id}</Link>
+                    </td>
+                    <td>
                       <Link to={`/comic/${comic.id}/`}>{comic.title}</Link>
                     </td>
                     <td>
-                      <Link to={`/comic/${comic.id}/`}>
-                        <Image src={comic.image} alt={comic.image_url} fluid />
-                      </Link>
+                      <Image src={comic.image} alt={comic.image_url} fluid />
                     </td>
-                    <td>{comic.description}</td>
                     <td>{comic.rating}</td>
                     <td>{comic.category}</td>
                     <td>{comic.status}</td>
-                    <td>{comic.author}</td>
-
-                    <div>
+                    <td>
                       <LinkContainer to={`/admin/comic/${comic.id}/edit`}>
                         <Button variant="light" className="btn-sm">
                           <i className="fas fa-edit">Edit</i>
                         </Button>
                       </LinkContainer>
-
+                    </td>
+                    <td>
                       <Button
                         variant="danger"
                         className="btn-sm"
@@ -133,16 +129,19 @@ const ComicsListScreen = ({ history }) => {
                       >
                         <i className="fas fa-trash">Delete</i>
                       </Button>
-                    </div>
+                    </td>
                   </tr>
                 </>
               ))}
             </tbody>
           </Table>
           <Paginate pages={pages} page={page} isAdmin={true} />
+          <div>
+            <ComicForm createComicHandler={createComicHandler} />
+          </div>
         </div>
       )}
-    </Row>
+    </Container>
   );
 };
 
