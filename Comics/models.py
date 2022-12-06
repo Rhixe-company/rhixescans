@@ -62,7 +62,6 @@ class Comic(models.Model):
         max_digits=9, decimal_places=1, null=False)
     status = models.CharField(
         max_length=100, choices=STATUS_CHOICES)
-    active = models.BooleanField(default=True)
     author = models.CharField(max_length=100, blank=True)
     category = models.CharField(
         max_length=100, default='Manhwa', choices=CATEGORY_CHOICES)

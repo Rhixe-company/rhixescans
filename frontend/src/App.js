@@ -4,7 +4,6 @@ import { HashRouter as Router, Route } from "react-router-dom";
 
 import Header from "./components/ui/Header";
 import Footer from "./components/ui/Footer";
-
 import LoginScreen from "./screens/LoginScreen";
 import RegisterScreen from "./screens/RegisterScreen";
 import ProfileScreen from "./screens/ProfileScreen";
@@ -40,8 +39,8 @@ class App extends Component {
               path="/admin/chapter/:id/edit"
               component={ChaptersEditScreen}
             />
+            <Footer />
           </Container>
-          <Footer />
         </Router>
       </Fragment>
     );

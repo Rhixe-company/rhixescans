@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Rating from "../components/ui/Rating";
 import { Link } from "react-router-dom";
-import { Card } from "react-bootstrap";
+import { Card, Container } from "react-bootstrap";
 import Paginate from "../components/ui/Paginate";
 import ComicsCarousel from "../components/content/ComicsCarousel";
 import { listComics } from "../actions/comicsActions";
@@ -18,7 +18,7 @@ function HomeScreen({ history }) {
     dispatch(listComics(keyword));
   }, [dispatch, keyword]);
   return (
-    <section className="container mx-auto">
+    <Container className="container mx-auto">
       {!keyword && <ComicsCarousel />}
       <br />
       <h1>Latest Comics</h1>
@@ -29,38 +29,44 @@ function HomeScreen({ history }) {
               <Card.Body className="px-6 py-4">
                 <Link to={`/comic/${comic.id}/`}>
                   <Card.Img src={comic.image} alt={comic.image_url} />
-                </Link>
-                <div className="my-3">
-                  <Rating
-                    value={comic.rating}
-                    text={`${comic.rating} `}
-                    color={"#f8e825"}
-                  />
-                </div>
-
-                <Link to={`/comic/${comic.id}/`}>
                   <Card.Title
                     as="div"
                     className="font-bold text-black-500 text-xl mb-2"
                   >
-                    <h5>{comic.title}</h5>
+                    <b>Title:</b>
+                    <strong>{comic.title}</strong>
                   </Card.Title>
                 </Link>
+                <small>
+                  <b>Status:</b>
+                  {comic.status}
+                </small>
                 <Card.Text as="div">
-                  <small>{comic.status}</small>
+                  <div className="my-3">
+                    <b>Rating:</b>
+
+                    <Rating
+                      value={comic.rating}
+                      text={` ${comic.rating} `}
+                      color={"#f8e825"}
+                    />
+                  </div>
+                  <p>
+                    <b>Author:</b>
+                    {comic.author}
+                  </p>
                 </Card.Text>
 
                 <Card.Text as="div">
+                  <b>Category:</b>
                   <strong>{comic.category}</strong>
                 </Card.Text>
                 <br />
                 {comic.genres.map((genre) => (
-                  <Card.Text
-                    as="span"
-                    key={genre.id}
-                    className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2"
-                  >
-                    {genre.name}
+                  <Card.Text as="div" key={genre.id}>
+                    <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2">
+                      {genre.name}
+                    </span>
                   </Card.Text>
                 ))}
               </Card.Body>
@@ -81,7 +87,7 @@ function HomeScreen({ history }) {
 
         <Paginate page={page} pages={pages} keyword={keyword} />
       </div>
-    </section>
+    </Container>
   );
 }
 
