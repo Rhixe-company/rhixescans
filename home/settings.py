@@ -34,8 +34,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'Comics.apps.ComicsConfig',
+    'users.apps.UsersConfig',
     'rest_framework',
-    'rest_framework_simplejwt.token_blacklist',
+
     'corsheaders',
     'scraper',
     'crispy_forms',
@@ -54,9 +55,9 @@ REST_FRAMEWORK = {
 }
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(days=364),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=364),
-    'ROTATE_REFRESH_TOKENS': True,
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=30),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=30),
+    'ROTATE_REFRESH_TOKENS': False,
     'BLACKLIST_AFTER_ROTATION': True,
     'UPDATE_LAST_LOGIN': False,
 
@@ -76,8 +77,8 @@ SIMPLE_JWT = {
     'JTI_CLAIM': 'jti',
 
     'SLIDING_TOKEN_REFRESH_EXP_CLAIM': 'refresh_exp',
-    'SLIDING_TOKEN_LIFETIME': timedelta(days=364),
-    'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=364),
+    'SLIDING_TOKEN_LIFETIME': timedelta(minutes=1000),
+    'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=30),
 }
 
 CORS_ALLOW_ALL_ORIGINS = True
