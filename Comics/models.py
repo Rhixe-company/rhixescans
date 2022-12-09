@@ -75,8 +75,11 @@ class Comic(models.Model):
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        ordering = ['title']
+
     def __str__(self):
-        return str(self.title) + 'Thumbnail:'+str(self.image) + 'Rates:'+str(self.rating) + 'Synopis:'+str(self.description)
+        return str(self.title) + 'I:'+str(self.image)
 
     @property
     def created_dynamic(self):
@@ -101,13 +104,9 @@ class Comic(models.Model):
 class Chapter(models.Model):
     comics = models.ForeignKey(Comic, on_delete=models.CASCADE)
     name = models.CharField(
-        max_length=1000, unique=True, null=False)
+        max_length=1000, unique=True, blank=False, null=True)
     pages = models.ManyToManyField('Page', blank=True, related_name='pages')
-    participants = models.ManyToManyField(
-        User, related_name='participants', blank=True)
-    numReviews = models.IntegerField(null=True, blank=True)
-    rating = models.DecimalField(
-        max_digits=9, decimal_places=1, null=True, blank=True)
+    numPages = models.IntegerField(default=0, null=True, blank=True)
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
 
@@ -126,8 +125,8 @@ class Chapter(models.Model):
 class Page(models.Model):
     chapters = models.ForeignKey(Chapter, on_delete=models.CASCADE)
     images = models.ImageField(
-        upload_to=comics_chapters_images_location, max_length=10000, null=False, blank=False)
-    images_url = models.URLField(max_length=10000, null=True, blank=True)
+        upload_to=comics_chapters_images_location, max_length=10000, blank=False)
+    images_url = models.URLField(max_length=10000, blank=False)
 
     class Meta:
         ordering = ['id']

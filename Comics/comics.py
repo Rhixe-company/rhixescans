@@ -79,6 +79,9 @@ class ComicsSpider(scrapy.Spider):
             except:
                 print(f'{name}: already Exists')
                 pass
+        numpages = obj.page_set.all()
+        obj.numPages = len(numpages)
+        obj.save()
         chapters = comic.chapter_set.all()
         comic.numChapters = len(chapters)
         comic.save()

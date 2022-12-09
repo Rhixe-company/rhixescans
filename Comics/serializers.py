@@ -18,7 +18,6 @@ class GenreSerializer(serializers.ModelSerializer):
 
 class ChapterSerializer(serializers.ModelSerializer):
     pages = serializers.SerializerMethodField(read_only=True)
-    participants = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Chapter
@@ -27,11 +26,6 @@ class ChapterSerializer(serializers.ModelSerializer):
     def get_pages(self, obj):
         pages = obj.pages.all()
         serializer = PageSerializer(pages, many=True)
-        return serializer.data
-
-    def get_participants(self, obj):
-        participants = obj.participants.all()
-        serializer = UserSerializer(participants, many=True)
         return serializer.data
 
 
