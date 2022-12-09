@@ -16,10 +16,10 @@ def getComics(request):
         Q(category__icontains=query) |
         Q(author__icontains=query)
     ).order_by('-updated')
-    comics_count = comics.count()
+
     page = request.GET.get('page')
     paginator = Paginator(comics, 24)
-
+    comics_count = comics.count()
     try:
         comics = paginator.page(page)
     except PageNotAnInteger:
@@ -32,10 +32,11 @@ def getComics(request):
 
     page = int(page)
     print('Page:', page)
+
     serializer = ComicSerializer(comics, many=True)
 
-    context = {'comics': serializer.data,
-               'page': page, 'pages': paginator.num_pages, 'comics_count': comics_count, }
+    context = {'comics_count': comics_count, 'comics': serializer.data,
+               'page': page, 'pages': paginator.num_pages, }
     return Response(context)
 
 
