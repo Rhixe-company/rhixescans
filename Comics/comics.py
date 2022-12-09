@@ -57,6 +57,7 @@ class ComicsSpider(scrapy.Spider):
         name = response.css(
             "h1.entry-title::text").get().strip()
         comic = Comic.objects.get(title=title)
+
         try:
             obj, created = Chapter.objects.filter(
                 Q(name=name)
@@ -78,3 +79,6 @@ class ComicsSpider(scrapy.Spider):
             except:
                 print(f'{name}: already Exists')
                 pass
+        chapters = comic.chapter_set.all()
+        comic.numChapters = len(chapters)
+        comic.save()

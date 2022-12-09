@@ -20,11 +20,16 @@ STATUS_CHOICES = [
     ('Completed', 'Completed'),
     ('Ongoing', 'Ongoing'),
     ('Dropped', 'Dropped'),
+    ('Coming Soon', 'Coming Soon'),
+    ('Hiatus', 'Hiatus'),
 ]
 
 CATEGORY_CHOICES = [
-    ('Manhwa', 'Manhwa'),
+    ('Manga', 'Manga'),
     ('Manhua', 'Manhua'),
+    ('Manhwa', 'Manhwa'),
+    ('Comic', 'Comic'),
+    ('Novel', 'Novel'),
 ]
 
 RATING_CHOICES = [
@@ -40,11 +45,10 @@ RATING_CHOICES = [
     (10, '10 - Master Piece'),
 ]
 
-s = HTMLSession()
-
 
 class Genre(models.Model):
-    name = models.CharField(max_length=100, unique=True, blank=True, null=True)
+    name = models.CharField(max_length=1000, unique=True,
+                            blank=False, null=False)
 
     def __str__(self):
         return self.name
@@ -54,24 +58,25 @@ class Comic(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     reader = models.ManyToManyField(
         User, related_name='readers', blank=True)
-    title = models.CharField(max_length=200, unique=True, null=False)
+    title = models.CharField(max_length=2000, unique=True, null=False)
     description = models.TextField(blank=True)
     image = models.ImageField(
-        upload_to=comics_images_location, null=False)
-    image_url = models.URLField(null=True)
+        upload_to=comics_images_location, blank=True)
+    image_url = models.URLField(blank=False, null=False)
     rating = models.DecimalField(
-        max_digits=9, decimal_places=1, null=False)
+        max_digits=9, decimal_places=1, blank=False, null=False)
     status = models.CharField(
         max_length=100, choices=STATUS_CHOICES)
-    author = models.CharField(max_length=100, blank=True)
+    author = models.CharField(max_length=1000, blank=True)
     category = models.CharField(
-        max_length=100, default='Manhwa', choices=CATEGORY_CHOICES)
+        max_length=1000, default='Manhwa', choices=CATEGORY_CHOICES)
+    numChapters = models.IntegerField(default=0, null=True, blank=True)
     genres = models.ManyToManyField(Genre, blank=True)
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.title
+        return str(self.title) + 'Thumbnail:'+str(self.image) + 'Rates:'+str(self.rating) + 'Synopis:'+str(self.description)
 
     @property
     def created_dynamic(self):
@@ -81,6 +86,7 @@ class Comic(models.Model):
     def save(self, *args, **kwargs):
 
         if self.image == '' and self.image_url != '':
+            s = HTMLSession()
             resp = s.get(self.image_url,  stream=True)
             pb = BytesIO()
             pb.write(resp.content)
@@ -92,22 +98,47 @@ class Comic(models.Model):
             return super().save(*args, **kwargs)
 
 
+class Chapter(models.Model):
+    comics = models.ForeignKey(Comic, on_delete=models.CASCADE)
+    name = models.CharField(
+        max_length=1000, unique=True, null=False)
+    pages = models.ManyToManyField('Page', blank=True, related_name='pages')
+    participants = models.ManyToManyField(
+        User, related_name='participants', blank=True)
+    numReviews = models.IntegerField(null=True, blank=True)
+    rating = models.DecimalField(
+        max_digits=9, decimal_places=1, null=True, blank=True)
+    updated = models.DateTimeField(auto_now=True)
+    created = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-updated']
+
+    def __str__(self):
+        return self.name
+
+    @property
+    def created_dynamic(self):
+        now = timezone.now()
+        return now
+
+
 class Page(models.Model):
-    chapters = models.ForeignKey(
-        'Chapter', on_delete=models.CASCADE, related_name='Pages')
+    chapters = models.ForeignKey(Chapter, on_delete=models.CASCADE)
     images = models.ImageField(
-        upload_to=comics_chapters_images_location, max_length=10000)
-    images_url = models.URLField(null=True, max_length=10000)
+        upload_to=comics_chapters_images_location, max_length=10000, null=False, blank=False)
+    images_url = models.URLField(max_length=10000, null=True, blank=True)
 
     class Meta:
         ordering = ['id']
 
     def __str__(self):
-        return str(self.images)
+        return str(self.images) + 'Link:'+str(self.images_url)
 
     def save(self, *args, **kwargs):
 
         if self.images == '' and self.images_url != '':
+            s = HTMLSession()
             resp = s.get(self.images_url, stream=True)
             pb = BytesIO()
             pb.write(resp.content)
@@ -117,31 +148,6 @@ class Page(models.Model):
                              save=True)
         else:
             return super().save(*args, **kwargs)
-
-
-class Chapter(models.Model):
-    participants = models.ManyToManyField(
-        User, related_name='participants', blank=True)
-    comics = models.ForeignKey(Comic, on_delete=models.CASCADE)
-    name = models.CharField(
-        max_length=1000, unique=True, null=False)
-    pages = models.ManyToManyField(Page, blank=True, related_name='pages')
-    numReviews = models.IntegerField(null=True, blank=True)
-    rating = models.DecimalField(
-        max_digits=9, decimal_places=1, null=True, blank=True)
-    updated = models.DateTimeField(auto_now=True)
-    created = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        ordering = ['-created']
-
-    def __str__(self):
-        return self.name
-
-    @property
-    def created_dynamic(self):
-        now = timezone.now()
-        return now
 
 
 class Review(models.Model):
