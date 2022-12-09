@@ -30,6 +30,7 @@ export const chaptersListReducer = (state = { chapters: [] }, action) => {
       return {
         loading: false,
         chapters: action.payload.chapters,
+        chapters_count: action.payload.chapters_count,
         page: action.payload.page,
         pages: action.payload.pages,
       };

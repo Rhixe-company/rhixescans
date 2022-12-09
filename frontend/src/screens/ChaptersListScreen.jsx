@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import Loader from "../components/ui/Loader";
 import Message from "../components/ui/Message";
-
+import Paginat from "../components/ui/Paginat";
 import ChapterForm from "../components/content/ChapterForm";
 import {
   listChapters,
@@ -18,7 +18,8 @@ const ChaptersListScreen = ({ history }) => {
   const dispatch = useDispatch();
 
   const chaptersList = useSelector((state) => state.chaptersList);
-  const { loading, error, chapters } = chaptersList;
+  const { loading, error, chapters, pages, page, chapters_count } =
+    chaptersList;
 
   const chapterDelete = useSelector((state) => state.chapterDelete);
   const {
@@ -86,6 +87,7 @@ const ChaptersListScreen = ({ history }) => {
         <Message variant="danger">{error}</Message>
       ) : (
         <div>
+          <strong>{chapters_count} chapters available</strong>
           <div>
             <Table striped bordered hover size="sm" responsive="sm">
               <thead>
@@ -129,6 +131,7 @@ const ChaptersListScreen = ({ history }) => {
                 ))}
               </tbody>
             </Table>
+            <Paginat pages={pages} page={page} isAdmin={true} />
           </div>
           <ChapterForm createChapterHandler={createChapterHandler} />
         </div>
