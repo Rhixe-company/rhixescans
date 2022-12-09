@@ -18,7 +18,7 @@ def getChapters(request):
         name__icontains=query)
     chapters_count = chapters.count()
     page = request.GET.get('page')
-    paginator = Paginator(chapters, 200)
+    paginator = Paginator(chapters, 1000)
 
     try:
         chapters = paginator.page(page)
