@@ -81,8 +81,7 @@ def getTopComics(request):
 def getComic(request, pk):
     comic = Comic.objects.get(id=pk)
     serializer = ComicSerializer(comic, many=False)
-    context = {'comic': serializer.data}
-    return Response(context)
+    return Response(serializer.data)
 
 
 @api_view(['POST'])
