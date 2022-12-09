@@ -32,7 +32,7 @@ class ChapterSerializer(serializers.ModelSerializer):
 class ComicSerializer(serializers.ModelSerializer):
     genres = serializers.SerializerMethodField(read_only=True)
     chapters = serializers.SerializerMethodField(read_only=True)
-    reader = serializers.SerializerMethodField(read_only=True)
+    users = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Comic
@@ -48,7 +48,7 @@ class ComicSerializer(serializers.ModelSerializer):
         serializer = ChapterSerializer(chapters, many=True)
         return serializer.data
 
-    def get_reader(self, obj):
-        reader = obj.reader.all()
-        serializer = UserSerializer(reader, many=True)
+    def get_users(self, obj):
+        users = obj.user.all()
+        serializer = UserSerializer(users, many=True)
         return serializer.data

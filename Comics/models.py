@@ -55,9 +55,7 @@ class Genre(models.Model):
 
 
 class Comic(models.Model):
-    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
-    reader = models.ManyToManyField(
-        User, related_name='readers', blank=True)
+    user = models.ManyToManyField(User,  blank=True)
     title = models.CharField(max_length=2000, unique=True, null=False)
     description = models.TextField(blank=True)
     image = models.ImageField(
@@ -71,7 +69,8 @@ class Comic(models.Model):
     category = models.CharField(
         max_length=1000, default='Manhwa', choices=CATEGORY_CHOICES)
     numChapters = models.IntegerField(default=0, null=True, blank=True)
-    genres = models.ManyToManyField(Genre, blank=True)
+    genres = models.ManyToManyField(
+        Genre, blank=True)
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
 
