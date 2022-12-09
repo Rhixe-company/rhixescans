@@ -30,9 +30,9 @@ class ChapterSerializer(serializers.ModelSerializer):
 
 
 class ComicSerializer(serializers.ModelSerializer):
-    genres = serializers.SerializerMethodField(read_only=True)
-    chapters = serializers.SerializerMethodField(read_only=True)
     users = serializers.SerializerMethodField(read_only=True)
+    chapters = serializers.SerializerMethodField(read_only=True)
+    genres = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Comic
