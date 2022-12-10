@@ -51,8 +51,8 @@ class ComicsSpider(scrapy.Spider):
             "div.allc a::text").get().strip()
         name = response.css(
             "h1.entry-title::text").get().strip()
-        comic = Comic.objects.filter(Q(title__icontains=title) |
-                                     Q(slug__icontains=slug)).get(title=title, slug=slug)
+        comic = Comic.objects.filter(
+            Q(title=title)).get(title=title, slug=slug)
         # 1 -  Comic exists
         if comic:
             obj, created = Chapter.objects.filter(
