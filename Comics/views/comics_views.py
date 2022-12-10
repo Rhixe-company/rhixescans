@@ -18,7 +18,7 @@ def getComics(request):
     ).order_by('-updated')
 
     page = request.GET.get('page')
-    paginator = Paginator(comics, 24)
+    paginator = Paginator(comics, 20)
     comics_count = comics.count()
     try:
         comics = paginator.page(page)
@@ -49,7 +49,7 @@ def getGenres(request):
 
     )
     page = request.GET.get('page')
-    paginator = Paginator(genres, 24)
+    paginator = Paginator(genres, 100)
     genres_count = genres.count()
     try:
         genres = paginator.page(page)
