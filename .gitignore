@@ -13,3 +13,18 @@ env.bak/
 venv.bak/
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
+.cache/
+coverage/
+dist/*
+!dist/index.html
+node_modules/
+*.log
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
