@@ -1,4 +1,3 @@
-import React, { Component, Fragment } from "react";
 import { Container } from "react-bootstrap";
 import { HashRouter as Router, Route } from "react-router-dom";
 
@@ -17,34 +16,39 @@ import HomeScreen from "./screens/HomeScreen";
 import ChaptersScreen from "./screens/ChaptersScreen";
 import ComicsListScreen from "./screens/ComicsListScreen";
 
-class App extends Component {
-  render() {
-    return (
-      <Fragment>
-        <Router>
-          <Header />
-          <Container>
-            <Route path="/" component={HomeScreen} exact />
-            <Route path="/comic/:id/" component={ComicScreen} />
-            <Route path="/comics/chapter/:id/" component={ChaptersScreen} />
-            <Route path="/login" component={LoginScreen} />
-            <Route path="/register" component={RegisterScreen} />
-            <Route path="/profile" component={ProfileScreen} />
-            <Route path="/admin/users" component={UserListScreen} />
-            <Route path="/admin/user/:id/edit" component={UserEditScreen} />
-            <Route path="/admin/comics" component={ComicsListScreen} />
-            <Route path="/admin/comic/:id/edit" component={ComicsEditScreen} />
-            <Route path="/admin/chapters" component={ChaptersListScreen} />
-            <Route
-              path="/admin/chapter/:id/edit"
-              component={ChaptersEditScreen}
-            />
-            <Footer />
-          </Container>
-        </Router>
-      </Fragment>
-    );
-  }
-}
+const App = () => {
+  return (
+    <Router>
+      <Header />
+      <main className="py-3">
+        <Container>
+          <Route path="/comic/:id/" component={ComicScreen} />
+          <Route path="/comics/chapter/:id/" component={ChaptersScreen} />
+          <Route path="/login" component={LoginScreen} />
+          <Route path="/register" component={RegisterScreen} />
+          <Route path="/profile" component={ProfileScreen} />
+          <Route path="/admin/users" component={UserListScreen} />
+          <Route path="/admin/user/:id/edit" component={UserEditScreen} />
+          <Route path="/admin/comics" component={ComicsListScreen} />
+          <Route path="/admin/comic/:id/edit" component={ComicsEditScreen} />
+          <Route path="/admin/chapters" component={ChaptersListScreen} />
+          <Route
+            path="/admin/chapter/:id/edit"
+            component={ChaptersEditScreen}
+          />
+          <Route path="/search/:keyword" component={HomeScreen} exact />
+          <Route path="/page/:pageNumber" component={HomeScreen} exact />
+          <Route
+            path="/search/:keyword/page/:pageNumber"
+            component={HomeScreen}
+            exact
+          />
+          <Route path="/" component={HomeScreen} exact />
+        </Container>
+      </main>
+      <Footer />
+    </Router>
+  );
+};
 
 export default App;
