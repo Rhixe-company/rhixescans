@@ -56,32 +56,27 @@ class ComicsSpider(scrapy.Spider):
             "div.allc a::text").get().strip()
         name = response.css(
             "h1.entry-title::text").get().strip()
-        comic = Comic.objects.get(title__icontains=title)
+        comic = Comic.objects.get(Q(title__icontains=title))
         # 1 -  Comic exists
         if comic:
-            # 1 - Chapter exists
-            alreadyExists = comic.chapter_set.filter(name=name).exists()
-            if alreadyExists:
-
-                pass
-            else:
-                obj, created = Chapter.objects.filter(
-                    Q(name=name)
-                ).get_or_create(comics=comic, name=name, defaults={'name': name})
-                soup = BeautifulSoup(response.text, features='lxml')
-                posts = soup.select(
-                    "div.rdminimal img")
-                for page in posts:
-                    pages = page['src']
-                    obj1, created = Page.objects.filter(
-                        Q(images_url=pages)
-                    ).get_or_create(chapters=obj, images_url=pages, defaults={'images_url': pages})
-                    obj.pages.add(obj1)
-                    numpages = obj.page_set.all()
-                    obj.numPages = len(numpages)
-                    obj.save()
+            obj, created = Chapter.objects.filter(
+                Q(name=name)
+            ).get_or_create(comics=comic, name=name, defaults={'name': name})
+            soup = BeautifulSoup(response.text, features='lxml')
+            posts = soup.select(
+                "div.rdminimal img")
+            for page in posts:
+                pages = page['src']
+                obj1, created = Page.objects.filter(
+                    Q(images_url=pages)
+                ).get_or_create(chapters=obj, images_url=pages, defaults={'images_url': pages})
+                obj.pages.add(obj1)
+                numpages = obj.page_set.all()
+                obj.numPages = len(numpages)
+                obj.save()
             chapters = comic.chapter_set.all()
             comic.numChapters = len(chapters)
             comic.save()
+
         else:
             print(f'{comic} not found')
