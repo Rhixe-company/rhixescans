@@ -7,6 +7,8 @@ from requests_html import HTMLSession
 
 # Create your models here.
 
+s = HTMLSession()
+
 
 def comics_images_location(instance, filename):
     return '{}/{}'.format(str(instance.title).replace(" ", "_").replace(":", " ").replace("/", "").replace("\\", ""), filename)
@@ -88,7 +90,7 @@ class Comic(models.Model):
     def save(self, *args, **kwargs):
 
         if self.image == '' and self.image_url != '':
-            s = HTMLSession()
+
             resp = s.get(self.image_url,  stream=True)
             pb = BytesIO()
             pb.write(resp.content)
@@ -136,7 +138,6 @@ class Page(models.Model):
     def save(self, *args, **kwargs):
 
         if self.images == '' and self.images_url != '':
-            s = HTMLSession()
             resp = s.get(self.images_url, stream=True)
             pb = BytesIO()
             pb.write(resp.content)
