@@ -4,7 +4,7 @@ from scrapy.utils.project import get_project_settings
 from scrapy.utils.log import configure_logging
 from twisted.internet import reactor, defer
 from Comics.chapters import ChaptersSpider
-from downloader.spiders.comics import ComicsSpider
+from Comics.comics import ComicsSpider
 
 
 class Command(BaseCommand):
