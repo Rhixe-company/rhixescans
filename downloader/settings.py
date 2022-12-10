@@ -1,6 +1,4 @@
-# -*- coding: utf-8 -*-
-
-# Scrapy settings for scraper project
+# Scrapy settings for downloader project
 #
 # For simplicity, this file contains only settings considered important or
 # commonly used. You can find more settings consulting the documentation:
@@ -9,38 +7,25 @@
 #     https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #     https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 
-
 import django
 import os
 import sys
-BOT_NAME = 'scraper'
+sys.path.append('/home/bot/Desktop/dev/projects/rhixescans.com')
 
-SPIDER_MODULES = ['scraper.scraper.spiders']
-NEWSPIDER_MODULE = 'scraper.scraper.spiders'
+os.environ['DJANGO_SETTINGS_MODULE'] = 'home.settings'
+django.setup()
 
-# Splash Setup
-SPLASH_URL = "http://localhost:8050"
-DOWNLOADER_MIDDLEWARES = {
-    'scrapy_splash.SplashCookiesMiddleware': 723,
-    'scrapy_splash.SplashMiddleware': 725,
-    'scrapy.downloadermiddlewares.httpcompression.HttpCompressionMiddleware': 810,
-}
-SPIDER_MIDDLEWARES = {
-    'scrapy_splash.SplashDeduplicateArgsMiddleware': 100,
-}
-SPIDER_MIDDLEWARES = {
-    'scrapy_deltafetch.DeltaFetch': 100,
-}
-DELTAFETCH_ENABLED = True
+BOT_NAME = 'downloader'
 
-DUPEFILTER_CLASS = 'scrapy_splash.SplashAwareDupeFilter'
-HTTPCACHE_STORAGE = 'scrapy_splash.SplashAwareFSCacheStorage'
+SPIDER_MODULES = ['downloader.spiders']
+NEWSPIDER_MODULE = 'downloader.spiders'
+
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-USER_AGENT = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36"
-
+#USER_AGENT = 'downloader (+http://www.yourdomain.com)'
+#USER_AGENT = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36"
 # Obey robots.txt rules
-ROBOTSTXT_OBEY = True
+ROBOTSTXT_OBEY = False
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 #CONCURRENT_REQUESTS = 32
@@ -68,13 +53,21 @@ ROBOTSTXT_OBEY = True
 # Enable or disable spider middlewares
 # See https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 # SPIDER_MIDDLEWARES = {
-#    'scraper.middlewares.ScraperSpiderMiddleware': 543,
+#    'downloader.middlewares.DownloaderSpiderMiddleware': 543,
 # }
+# scrapy-deltafetch config
+
+SPIDER_MIDDLEWARES = {
+    'scrapy_deltafetch.DeltaFetch': 100,
+}
+DELTAFETCH_ENABLED = True
+DELTAFETCH_RESET = True
+
 
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 # DOWNLOADER_MIDDLEWARES = {
-#    'scraper.middlewares.ScraperDownloaderMiddleware': 543,
+#    'downloader.middlewares.DownloaderDownloaderMiddleware': 543,
 # }
 
 # Enable or disable extensions
@@ -85,10 +78,12 @@ ROBOTSTXT_OBEY = True
 
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
-# ITEM_PIPELINES = {
-#    'scraper.scraper.pipelines.ChapterPipeline': 200,
-#    'scraper.scraper.pipelines.ComicPipeline': 300,
-# }
+ITEM_PIPELINES = {
+    'downloader.pipelines.DescriptionPipeline': 280,
+    'downloader.pipelines.AuthorPipeline': 290,
+    'downloader.pipelines.RatingPipeline': 300,
+    'downloader.pipelines.JsonWriterPipeline': 310,
+}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html
@@ -110,8 +105,5 @@ ROBOTSTXT_OBEY = True
 #HTTPCACHE_DIR = 'httpcache'
 #HTTPCACHE_IGNORE_HTTP_CODES = []
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
-sys.path.append('/home/bot/Desktop/dev/projects/rhixescans.com')
-os.environ['DJANGO_SETTINGS_MODULE'] = 'home.settings'
-# If you you use django outside of manage.py context, you
-# need to explicitly setup the django
-django.setup()
+
+# Set settings whose default value is deprecated to a future-proof value
