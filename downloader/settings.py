@@ -57,12 +57,6 @@ ROBOTSTXT_OBEY = True
 # }
 # scrapy-deltafetch config
 
-SPIDER_MIDDLEWARES = {
-    'scrapy_deltafetch.DeltaFetch': 100,
-}
-DELTAFETCH_ENABLED = True
-DELTAFETCH_RESET = True
-
 
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
