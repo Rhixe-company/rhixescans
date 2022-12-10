@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { connect, useDispatch, useSelector } from "react-redux";
-import { listComicsDetails } from "../actions/comicsActions";
+import { listComicsDetails, listComicChapters } from "../actions/comicsActions";
 import Comicgrid from "../components/content/Comicgrid";
 import Message from "../components/ui/Message";
 import Loader from "../components/ui/Loader";
@@ -14,8 +14,11 @@ export const ComicScreen = ({ match }) => {
   const { comic, error, loading } = comicsDetails;
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
+  const comicChapters = useSelector((state) => state.comicChapters);
+  const { chapters } = comicChapters;
   useEffect(() => {
     dispatch(listComicsDetails(comicId));
+    dispatch(listComicChapters(comicId));
   }, [dispatch, comicId]);
   return (
     <Container>
@@ -28,10 +31,21 @@ export const ComicScreen = ({ match }) => {
           <div>
             {userInfo ? (
               <div>
-                <Comicgrid comic={comic} />
                 <Link to="/">
                   <Button>Go Back Home</Button>
                 </Link>
+                <Comicgrid comic={comic} key={comic.id} />
+                <>
+                  <h1>Total Chapters: {comic.numChapters}</h1>
+                  {chapters?.map((chapter) => (
+                    <li as="span" key={chapter?.id}>
+                      <Link to={`/comics/chapter/${chapter.id}/`}>
+                        <strong>{chapter?.name}</strong>
+                      </Link>
+                      <br />
+                    </li>
+                  ))}
+                </>
               </div>
             ) : (
               <Link to="/login">
@@ -47,8 +61,10 @@ export const ComicScreen = ({ match }) => {
 
 const mapStateToProps = (state) => ({
   comic: state.comicsDetails.comic,
+  chapters: state.comicChapters.chapters,
 });
 
 export default connect(mapStateToProps, {
   listComicsDetails,
+  listComicChapters,
 })(ComicScreen);

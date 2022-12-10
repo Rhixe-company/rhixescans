@@ -44,30 +44,25 @@ def getComics(request):
 def getGenres(request):
     query = request.GET.get('keyword') if request.GET.get(
         'keyword') != None else ''
+    genres = Genre.objects.filter(
+        Q(name__icontains=query)
 
-    genres = Genre.objects.filter(Q(name__icontains=query))
-    genres_count = genres.count()
-
+    )
     page = request.GET.get('page')
-    paginator = Paginator(genres, 5)
-
+    paginator = Paginator(genres, 24)
+    genres_count = genres.count()
     try:
         genres = paginator.page(page)
     except PageNotAnInteger:
         genres = paginator.page(1)
     except EmptyPage:
         genres = paginator.page(paginator.num_pages)
-
     if page == None:
         page = 1
-
     page = int(page)
     print('Page:', page)
     serializer = GenreSerializer(genres, many=True)
-
-    context = {'page': page,
-               'pages': paginator.num_pages, 'genres_count': genres_count, 'genres': serializer.data, }
-    return Response(context)
+    return Response({'genres_count': genres_count, 'genres': serializer.data, 'page': page, 'pages': paginator.num_pages, })
 
 
 @api_view(['GET'])
@@ -81,7 +76,16 @@ def getTopComics(request):
 def getComic(request, pk):
     comic = Comic.objects.get(id=pk)
     serializer = ComicSerializer(comic, many=False)
-    return Response(serializer.data)
+    return Response({'comic': serializer.data})
+
+
+@api_view(['GET'])
+def getChapters(request, pk):
+    comic = Comic.objects.get(id=pk)
+    chapters = comic.chapter_set.all()
+    serializer = ComicSerializer(comic, many=False)
+    serializer2 = ChapterSerializer(chapters, many=True)
+    return Response({'comic': serializer.data, 'chapters': serializer2.data})
 
 
 @api_view(['POST'])

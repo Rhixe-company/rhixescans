@@ -210,4 +210,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 #AWS_STORAGE_BUCKET_NAME = 'proshop-bucket-demo'
 if os.getcwd() == '/app':
-    DEBUG = False
+    DEBUG = True

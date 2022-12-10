@@ -58,18 +58,6 @@ const Comicgrid = ({ comic }) => {
           ))}
         </div>
       </Card.Body>
-      <hr />
-      <Card.Text as="div">
-        <h1>Total Chapters: {comic.numChapters}</h1>
-      </Card.Text>
-      {comic.chapters?.map((chapter) => (
-        <li as="span" key={chapter?.id}>
-          <Link to={`/comics/chapter/${chapter.id}/`}>
-            <strong>{chapter?.name}</strong>
-          </Link>
-          <br />
-        </li>
-      ))}
     </Card>
   );
 };

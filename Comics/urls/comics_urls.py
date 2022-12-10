@@ -6,6 +6,7 @@ urlpatterns = [
     path('genres/', views.getGenres, name="genres"),
     path('top/', views.getTopComics, name='top-comics'),
     path('<str:pk>/', views.getComic, name="comic"),
+    path('<str:pk>/chapters/', views.getChapters, name="comic-chapters"),
     path('create/', views.createComic, name="comic-create"),
     path('upload/', views.uploadImage, name="image-upload"),
     path('update/<str:pk>/', views.updateComic, name="comic-update"),

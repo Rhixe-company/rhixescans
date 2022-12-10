@@ -43,7 +43,7 @@ def getChapters(request):
 def getChapter(request, pk):
     chapter = Chapter.objects.get(id=pk)
     serializer = ChapterSerializer(chapter, many=False)
-    return Response(serializer.data)
+    return Response({'chapter': serializer.data})
 
 
 @api_view(['POST'])

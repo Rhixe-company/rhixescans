@@ -16,8 +16,7 @@ import ChaptersEditScreen from "./screens/ChaptersEditScreen";
 import HomeScreen from "./screens/HomeScreen";
 import ChaptersScreen from "./screens/ChaptersScreen";
 import ComicsListScreen from "./screens/ComicsListScreen";
-import "./assets/main.css";
-import "./index.css";
+
 class App extends Component {
   render() {
     return (

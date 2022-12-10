@@ -19,6 +19,9 @@ import {
   COMICS_TOP_REQUEST,
   COMICS_TOP_SUCCESS,
   COMICS_TOP_FAIL,
+  COMIC_CHAPTERS_REQUEST,
+  COMIC_CHAPTERS_SUCCESS,
+  COMIC_CHAPTERS_FAIL,
 } from "../constants/comicsConstants";
 
 export const comicsListReducer = (state = { comics: [] }, action) => {
@@ -49,9 +52,25 @@ export const comicsDetailsReducer = (state = { comic: [] }, action) => {
       return { loading: true, ...state };
 
     case COMICS_DETAILS_SUCCESS:
-      return { loading: false, comic: action.payload };
+      return { loading: false, comic: action.payload.comic };
 
     case COMICS_DETAILS_FAIL:
+      return { loading: false, error: action.payload };
+
+    default:
+      return state;
+  }
+};
+
+export const comicChaptersReducer = (state = { chapters: [] }, action) => {
+  switch (action.type) {
+    case COMIC_CHAPTERS_REQUEST:
+      return { loading: true, ...state };
+
+    case COMIC_CHAPTERS_SUCCESS:
+      return { loading: false, chapters: action.payload.chapters };
+
+    case COMIC_CHAPTERS_FAIL:
       return { loading: false, error: action.payload };
 
     default:
