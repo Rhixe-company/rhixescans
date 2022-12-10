@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Rating from "../components/ui/Rating";
 import { Link } from "react-router-dom";
-import { Card, Container } from "react-bootstrap";
+import { Card, Container, Image } from "react-bootstrap";
 import Paginate from "../components/ui/Paginate";
 import ComicsCarousel from "../components/content/ComicsCarousel";
 import { listComics } from "../actions/comicsActions";
@@ -35,18 +35,22 @@ function HomeScreen({ history }) {
               <Card className="my-3 p-3 rounded">
                 <Card.Body className="px-6 py-4">
                   <Link to={`/comic/${comic.id}/`}>
-                    <Card.Title
-                      as="div"
-                      className="font-bold text-black-500 text-xl mb-2"
-                    >
-                      <strong>{comic.title}</strong>
+                    <Card.Title as="div">
+                      <h2 className="font-bold text-black-500 text-xl mb-2">
+                        {comic.title}
+                      </h2>
                     </Card.Title>
-                    <Card.Img src={comic.image} alt={comic.image_url} />
                   </Link>
-                  <small>
-                    <b>Status:</b>
-                    {comic.status}
-                  </small>
+                  <br />
+                  <Link to={`/comic/${comic.id}/`}>
+                    <Image
+                      fluid="true"
+                      className="d-block w-100"
+                      src={comic.image}
+                      alt={comic.image_url}
+                    />
+                  </Link>
+
                   <Card.Text as="div">
                     <div className="my-3">
                       <b>Rating:</b>
@@ -57,16 +61,24 @@ function HomeScreen({ history }) {
                         color={"#f8e825"}
                       />
                     </div>
-                    <p>
-                      <b>Author:</b>
-                      {comic.author}
-                    </p>
+                  </Card.Text>
+
+                  <Card.Text as="div">
+                    <b>Status:</b>
+                    {comic.status}
+                  </Card.Text>
+
+                  <Card.Text as="div">
+                    <b>Author:</b>
+                    {comic.author}
                   </Card.Text>
 
                   <Card.Text as="div">
                     <b>Category:</b>
                     <strong>{comic.category}</strong>
                   </Card.Text>
+                  <br />
+                  <h4>Genres:</h4>
                   <br />
                   {comic.genres.map((genre, index) => (
                     <Card.Text

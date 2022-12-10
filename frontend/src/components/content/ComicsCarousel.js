@@ -20,18 +20,18 @@ const ComicsCarousel = () => {
   ) : error ? (
     <Message variant="danger">{error}</Message>
   ) : (
-    <Carousel pause="hover" className="bg-dark">
+    <Carousel fade variant="dark" className="bg-dark">
       {comics.map((comic) => (
-        <Carousel.Item key={comic.id}>
+        <Carousel.Item interval={2000} key={comic.id}>
           <Link to={`/comic/${comic.id}`}>
             <Image
-              className="comics-img"
+              className="d-block w-100"
               src={comic.image}
-              alt={comic.image}
-              fluid
+              alt={comic.image_url}
+              fuild="true"
             />
             <Carousel.Caption className="carousel.caption">
-              <span>{comic.title}</span>
+              <h4>{comic.title}</h4>
             </Carousel.Caption>
           </Link>
         </Carousel.Item>
