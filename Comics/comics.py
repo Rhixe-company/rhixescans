@@ -77,8 +77,10 @@ class ComicsSpider(Spider):
             for page in posts:
                 pages = page['src']
 
-                obj1, created = Page.objects.get_or_create(
-                    images_url=pages, defaults={'images_url': pages, 'chapters': obj})
+                obj1, created = Page.objects.filter(
+                    Q(images_url__icontains=pages)
+
+                ).get_or_create(images_url=pages, defaults={'images_url': pages, 'chapters': obj})
                 obj.pages.add(obj1)
                 numpages = obj.page_set.all()
                 obj.numPages = len(numpages)
