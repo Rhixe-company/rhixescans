@@ -15,7 +15,7 @@ def getComics(request):
         Q(title__icontains=query) |
         Q(category__icontains=query) |
         Q(author__icontains=query)
-    ).order_by('-updated')
+    )
 
     page = request.GET.get('page')
     paginator = Paginator(comics, 20)
@@ -82,7 +82,7 @@ def getComic(request, pk):
 @api_view(['GET'])
 def getChapters(request, pk):
     comic = Comic.objects.get(id=pk)
-    chapters = comic.chapter_set.all().order_by('-updated')
+    chapters = comic.chapter_set.all()
     serializer = ComicSerializer(comic, many=False)
     serializer2 = ChapterSerializer(chapters, many=True)
     return Response({'comic': serializer.data, 'chapters': serializer2.data})
