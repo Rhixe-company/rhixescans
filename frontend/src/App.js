@@ -15,39 +15,42 @@ import ChaptersEditScreen from "./screens/ChaptersEditScreen";
 import HomeScreen from "./screens/HomeScreen";
 import ChaptersScreen from "./screens/ChaptersScreen";
 import ComicsListScreen from "./screens/ComicsListScreen";
-
+import { Provider } from "react-redux";
+import store from "./store";
 const App = () => {
   return (
-    <Router>
-      <Header />
-      <main className="py-3">
-        <Container>
-          <Route path="/comic/:id/" component={ComicScreen} />
-          <Route path="/comics/chapter/:id/" component={ChaptersScreen} />
-          <Route path="/login" component={LoginScreen} />
-          <Route path="/register" component={RegisterScreen} />
-          <Route path="/profile" component={ProfileScreen} />
-          <Route path="/admin/users" component={UserListScreen} />
-          <Route path="/admin/user/:id/edit" component={UserEditScreen} />
-          <Route path="/admin/comics" component={ComicsListScreen} />
-          <Route path="/admin/comic/:id/edit" component={ComicsEditScreen} />
-          <Route path="/admin/chapters" component={ChaptersListScreen} />
-          <Route
-            path="/admin/chapter/:id/edit"
-            component={ChaptersEditScreen}
-          />
-          <Route path="/search/:keyword" component={HomeScreen} exact />
-          <Route path="/page/:pageNumber" component={HomeScreen} exact />
-          <Route
-            path="/search/:keyword/page/:pageNumber"
-            component={HomeScreen}
-            exact
-          />
-          <Route path="/" component={HomeScreen} exact />
-        </Container>
-      </main>
-      <Footer />
-    </Router>
+    <Provider store={store}>
+      <Router>
+        <Header />
+        <main className="py-3">
+          <Container>
+            <Route path="/comic/:id/" component={ComicScreen} />
+            <Route path="/comics/chapter/:id/" component={ChaptersScreen} />
+            <Route path="/login" component={LoginScreen} />
+            <Route path="/register" component={RegisterScreen} />
+            <Route path="/profile" component={ProfileScreen} />
+            <Route path="/admin/users" component={UserListScreen} />
+            <Route path="/admin/user/:id/edit" component={UserEditScreen} />
+            <Route path="/admin/comics" component={ComicsListScreen} />
+            <Route path="/admin/comic/:id/edit" component={ComicsEditScreen} />
+            <Route path="/admin/chapters" component={ChaptersListScreen} />
+            <Route
+              path="/admin/chapter/:id/edit"
+              component={ChaptersEditScreen}
+            />
+            <Route path="/search/:keyword" component={HomeScreen} exact />
+            <Route path="/page/:pageNumber" component={HomeScreen} exact />
+            <Route
+              path="/search/:keyword/page/:pageNumber"
+              component={HomeScreen}
+              exact
+            />
+            <Route path="/" component={HomeScreen} exact />
+          </Container>
+        </main>
+        <Footer />
+      </Router>
+    </Provider>
   );
 };
 

@@ -55,6 +55,16 @@ const Comicgrid = ({ comic }) => {
             <b>Category:</b>
             <strong>{comic.category}</strong>
           </Card.Text>
+
+          <Card.Text as="div">
+            <b>Release Date:</b>
+            {new Date(comic.created).toLocaleString("en-US")}
+          </Card.Text>
+
+          <Card.Text as="div">
+            <b>Last Updated:</b>
+            {new Date(comic.updated).toLocaleString("en-US")}
+          </Card.Text>
           <br />
           <h4>Genres:</h4>
           <br />

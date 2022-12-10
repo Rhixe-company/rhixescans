@@ -8,7 +8,12 @@ const Comicgrid = ({ comic, genres }) => {
       <Card className="my-3 p-3 rounded">
         <Card.Body className="px-6 py-4">
           <Link to={`/comic/${comic.id}/`}>
-            <Image src={comic.image} alt={comic.image_url} />
+            <Image
+              src={comic.image}
+              alt={comic.image_url}
+              width="60"
+              height="60"
+            />
             <Card.Title
               as="div"
               className="font-bold text-black-500 text-xl mb-2"

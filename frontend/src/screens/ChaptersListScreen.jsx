@@ -44,7 +44,7 @@ const ChaptersListScreen = ({ history }) => {
   useEffect(() => {
     dispatch({ type: CHAPTERS_CREATE_RESET });
 
-    if (!userInfo.isAdmin) {
+    if (!userInfo || !userInfo.isAdmin) {
       history.push("/login");
     }
 

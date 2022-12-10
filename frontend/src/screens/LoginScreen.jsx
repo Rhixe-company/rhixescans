@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Form, Button, Row, Col } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
+import { FaSignInAlt } from "react-icons/fa";
 import Loader from "../components/ui/Loader";
 import Message from "../components/ui/Message";
 import FormContainer from "../components/ui/FormContainer";
@@ -31,9 +32,12 @@ function LoginScreen({ location, history }) {
 
   return (
     <FormContainer>
-      <h1>Sign In</h1>
       {error && <Message variant="danger">{error}</Message>}
       {loading && <Loader />}
+      <h1>
+        <FaSignInAlt /> Login
+      </h1>
+
       <Form onSubmit={submitHandler}>
         <Form.Group controlId="email">
           <Form.Label>Email Address</Form.Label>

@@ -7,7 +7,7 @@ import Loader from "../components/ui/Loader";
 import { Link } from "react-router-dom";
 import { Button } from "react-bootstrap";
 
-export const ComicScreen = ({ match }) => {
+export const ComicScreen = ({ history, match }) => {
   const comicId = match.params.id;
   const dispatch = useDispatch();
   const comicsDetails = useSelector((state) => state.comicsDetails);
@@ -17,9 +17,12 @@ export const ComicScreen = ({ match }) => {
   const comicChapters = useSelector((state) => state.comicChapters);
   const { chapters } = comicChapters;
   useEffect(() => {
+    if (!userInfo) {
+      history.push("/login");
+    }
     dispatch(listComicsDetails(comicId));
     dispatch(listComicChapters(comicId));
-  }, [dispatch, comicId]);
+  }, [history, userInfo, dispatch, comicId]);
   return (
     <div>
       {loading ? (
@@ -28,30 +31,30 @@ export const ComicScreen = ({ match }) => {
         <Message variant="danger">{error}</Message>
       ) : (
         <div>
-          {userInfo ? (
+          <Link to="/">
+            <Button>Go Back Home</Button>
+          </Link>
+          <Comicgrid comic={comic} />
+          <br />
+          {chapters.length > 0 ? (
             <div>
-              <Link to="/">
-                <Button>Go Back Home</Button>
-              </Link>
-              <Comicgrid comic={comic} />
-
-              <div>
-                Total Chapters: {comic.numChapters}
-                <br />
-              </div>
+              Total Chapters: {comic.numChapters}
               <hr />
               {chapters?.map((chapter) => (
-                <Link key={chapter?.id} to={`/comics/chapter/${chapter.id}/`}>
-                  <Button variant="outline-dark" size="sm">
-                    {chapter?.name}
-                  </Button>
-                </Link>
+                <ul>
+                  <li key={chapter?.id}>
+                    <Link to={`/comics/chapter/${chapter.id}/`}>
+                      <h3>{chapter?.name}</h3>
+                    </Link>
+                    <div>
+                      {new Date(chapter.created).toLocaleString("en-US")}
+                    </div>
+                  </li>
+                </ul>
               ))}
             </div>
           ) : (
-            <Link to="/login">
-              <Button>Please Login To Read Comic</Button>
-            </Link>
+            <h3>No Chapters Created</h3>
           )}
         </div>
       )}

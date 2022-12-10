@@ -41,8 +41,8 @@ const ComicsListScreen = ({ history }) => {
   useEffect(() => {
     dispatch({ type: COMICS_CREATE_RESET });
 
-    if (!userInfo.isAdmin) {
-      history.push("#/login");
+    if (!userInfo || !userInfo.isAdmin) {
+      history.push("/login");
     }
 
     if (successCreate) {

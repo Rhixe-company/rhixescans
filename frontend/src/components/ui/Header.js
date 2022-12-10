@@ -3,7 +3,10 @@ import { LinkContainer } from "react-router-bootstrap";
 import { Navbar, Nav, Container, NavDropdown } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../actions/userActions";
+import { Redirect } from "react-router-dom";
+import { FaSignInAlt, FaSignOutAlt, FaUser } from "react-icons/fa";
 import SearchBox from "../../components/ui/SearchBox";
+
 import logo from "../../img/logo.png";
 
 const Header = () => {
@@ -14,14 +17,14 @@ const Header = () => {
 
   const logoutHandler = () => {
     dispatch(logout());
+    Redirect("/");
   };
   return (
     <header>
       <Navbar bg="dark" variant="dark" expand="lg" collapseOnSelect>
         <Container>
-          <LinkContainer to="/#">
+          <LinkContainer to="/">
             <Navbar.Brand>
-              <h5>Rhixescans</h5>
               <img
                 src={logo}
                 alt="Rhixescans"
@@ -31,6 +34,7 @@ const Header = () => {
               />
             </Navbar.Brand>
           </LinkContainer>
+
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <SearchBox />
@@ -42,19 +46,19 @@ const Header = () => {
                   </LinkContainer>
 
                   <NavDropdown.Item onClick={logoutHandler}>
-                    Logout
+                    <FaSignOutAlt /> Logout
                   </NavDropdown.Item>
                 </NavDropdown>
               ) : (
                 <div>
                   <LinkContainer to="/login">
                     <Nav.Link>
-                      <i className="fas fa-user"></i>Login
+                      <FaSignInAlt /> Login
                     </Nav.Link>
                   </LinkContainer>
                   <LinkContainer to="/register">
                     <Nav.Link>
-                      <i className="fas fa-user"></i>Register
+                      <FaUser /> Register
                     </Nav.Link>
                   </LinkContainer>
                 </div>

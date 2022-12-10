@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Form, Button, Row, Col } from "react-bootstrap";
+import { FaUser } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import Loader from "../components/ui/Loader";
 import Message from "../components/ui/Message";
@@ -39,10 +40,13 @@ function RegisterScreen({ location, history }) {
 
   return (
     <FormContainer>
-      <h1>Sign In</h1>
       {message && <Message variant="danger">{message}</Message>}
       {error && <Message variant="danger">{error}</Message>}
       {loading && <Loader />}
+      <h1>
+        <FaUser /> Register
+      </h1>
+      <p>Please create an account</p>
       <Form onSubmit={submitHandler}>
         <Form.Group controlId="name">
           <Form.Label>Name</Form.Label>
