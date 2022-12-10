@@ -11,11 +11,11 @@ s = HTMLSession()
 
 
 def comics_images_location(instance, filename):
-    return '{}/{}'.format(str(instance.title).replace(" ", "_").replace(":", " ").replace("/", "").replace("\\", ""), filename)
+    return '{}/{}'.format(str(instance.slug).replace(" ", "_").replace(":", " ").replace("/", "").replace("\\", ""), filename)
 
 
 def comics_chapters_images_location(instance, filename):
-    return '{}/{}/{}'.format(str(instance.chapters.comics.title).replace(" ", "_").replace(":", " ").replace("/", "").replace("\\", ""),  instance.chapters.name, filename)
+    return '{}/{}/{}'.format(str(instance.chapters.comics.slug).replace(" ", "_").replace(":", " ").replace("/", "").replace("\\", ""),  instance.chapters.name, filename)
 
 
 STATUS_CHOICES = [
@@ -59,6 +59,8 @@ class Genre(models.Model):
 class Comic(models.Model):
     user = models.ManyToManyField(User,  blank=True)
     title = models.CharField(max_length=2000, unique=True, null=False)
+    slug = models.SlugField(max_length=2000, unique=True,
+                            blank=False, null=True)
     description = models.TextField(blank=True)
     image = models.ImageField(
         upload_to=comics_images_location, blank=True)
