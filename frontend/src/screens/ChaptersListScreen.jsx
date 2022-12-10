@@ -87,53 +87,51 @@ const ChaptersListScreen = ({ history }) => {
         <Message variant="danger">{error}</Message>
       ) : (
         <div>
+          <ChapterForm createChapterHandler={createChapterHandler} />
           <strong>{chapters_count} chapters available</strong>
           <div>
             <Table striped bordered hover size="sm" responsive="sm">
               <thead>
                 <tr>
-                  <th>Id</th>
                   <th>Name</th>
+                  <th>Pages</th>
                   <th></th>
                 </tr>
               </thead>
 
               <tbody>
                 {chapters.map((chapter) => (
-                  <tr key={chapter.id}>
-                    <td>
-                      <Link to={`/comics/chapter/${chapter.id}/`}>
-                        <span>{chapter.id}</span>
-                      </Link>
-                    </td>
-                    <td>
-                      <Link to={`/comics/chapter/${chapter.id}/`}>
-                        <span>{chapter.name}</span>
-                      </Link>
-                    </td>
+                  <>
+                    <tr key={chapter.id}>
+                      <td>
+                        <Link to={`/comics/chapter/${chapter.id}/`}>
+                          <span>{chapter.name}</span>
+                        </Link>
+                      </td>
+                      <td>{chapter.numPages}</td>
 
-                    <td>
-                      <LinkContainer to={`/admin/chapter/${chapter.id}/edit`}>
-                        <Button variant="light" className="btn-sm">
-                          <i className="fas fa-edit">Edit</i>
+                      <td>
+                        <LinkContainer to={`/admin/chapter/${chapter.id}/edit`}>
+                          <Button variant="light" className="btn-sm">
+                            <i className="fas fa-edit">Edit</i>
+                          </Button>
+                        </LinkContainer>
+
+                        <Button
+                          variant="danger"
+                          className="btn-sm"
+                          onClick={() => deleteHandler(chapter.id)}
+                        >
+                          <i className="fas fa-trash">Delete</i>
                         </Button>
-                      </LinkContainer>
-
-                      <Button
-                        variant="danger"
-                        className="btn-sm"
-                        onClick={() => deleteHandler(chapter.id)}
-                      >
-                        <i className="fas fa-trash">Delete</i>
-                      </Button>
-                    </td>
-                  </tr>
+                      </td>
+                    </tr>
+                  </>
                 ))}
               </tbody>
             </Table>
             <Paginat pages={pages} page={page} isAdmin={true} />
           </div>
-          <ChapterForm createChapterHandler={createChapterHandler} />
         </div>
       )}
     </Container>

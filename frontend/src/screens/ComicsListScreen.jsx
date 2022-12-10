@@ -84,16 +84,17 @@ const ComicsListScreen = ({ history }) => {
         <Message variant="danger">{error}</Message>
       ) : (
         <div>
+          <ComicForm createComicHandler={createComicHandler} />
           <strong>{comics_count} comics available</strong>
           <Table striped bordered hover size="sm" responsive="sm">
             <thead>
               <tr>
-                <th>ID</th>
                 <th>TITLE</th>
                 <th>IMAGE</th>
                 <th>CATEGORY</th>
                 <th>RATING</th>
                 <th>STATUS</th>
+                <th>AUTHOR</th>
                 <th />
                 <th />
               </tr>
@@ -104,17 +105,17 @@ const ComicsListScreen = ({ history }) => {
                 <>
                   <tr key={comic.id}>
                     <td>
-                      <Link to={`/comic/${comic.id}/`}>{comic.id}</Link>
-                    </td>
-                    <td>
                       <Link to={`/comic/${comic.id}/`}>{comic.title}</Link>
                     </td>
                     <td>
-                      <Image src={comic.image} alt={comic.image_url} fluid />
+                      <Link to={`/comic/${comic.id}/`}>
+                        <Image src={comic.image} alt={comic.image_url} />
+                      </Link>
                     </td>
                     <td>{comic.rating}</td>
                     <td>{comic.category}</td>
                     <td>{comic.status}</td>
+                    <td>{comic.author}</td>
                     <td>
                       <LinkContainer to={`/admin/comic/${comic.id}/edit`}>
                         <Button variant="light" className="btn-sm">
@@ -137,9 +138,6 @@ const ComicsListScreen = ({ history }) => {
             </tbody>
           </Table>
           <Paginate pages={pages} page={page} isAdmin={true} />
-          <div>
-            <ComicForm createComicHandler={createComicHandler} />
-          </div>
         </div>
       )}
     </Container>

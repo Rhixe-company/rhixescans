@@ -1,7 +1,8 @@
 import React, { useEffect } from "react";
 import { connect, useDispatch, useSelector } from "react-redux";
 import { listChaptersDetails } from "../actions/chaptersActions";
-import { listComicsDetails } from "../actions/comicsActions";
+import { listComicChapters } from "../actions/comicsActions";
+
 import Message from "../components/ui/Message";
 import Loader from "../components/ui/Loader";
 import { Link } from "react-router-dom";
@@ -15,13 +16,12 @@ export const ChaptersScreen = ({ match }) => {
   const { chapter, error, loading } = chaptersDetails;
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
-
-  const comicsDetails = useSelector((state) => state.comicsDetails);
-  const { comic } = comicsDetails;
+  const comicChapters = useSelector((state) => state.comicChapters);
+  const { chapters, isLoading } = comicChapters;
 
   useEffect(() => {
     dispatch(listChaptersDetails(chapterId));
-    dispatch(listComicsDetails(chapter?.comics));
+    dispatch(listComicChapters(chapter?.comics));
   }, [dispatch, chapterId, chapter?.comics]);
   return (
     <div>
@@ -34,9 +34,9 @@ export const ChaptersScreen = ({ match }) => {
           {userInfo ? (
             <Container>
               <div>
-                <Link to={`/comic/${chapter.comics}/`}>
-                  <h1>{chapter?.name}</h1>
-                </Link>
+                <Button variant="dark">
+                  <Link to={`/comic/${chapter.comics}/`}>{chapter.name}</Link>
+                </Button>
 
                 {chapter.pages?.map((page) => (
                   <InfiniteScroll
@@ -51,12 +51,25 @@ export const ChaptersScreen = ({ match }) => {
                     />
                   </InfiniteScroll>
                 ))}
-              </div>
-              <Link to={`/comic/${chapter.comics}/`}>
-                <Button>
-                  <span>{comic?.title}</span>
+                <Button variant="dark">
+                  <Link to={`/comic/${chapter.comics}/`}>Go Back</Link>
                 </Button>
-              </Link>
+              </div>
+
+              {isLoading ? (
+                <Loader />
+              ) : (
+                <div>
+                  {chapters?.map((object) => (
+                    <Button variant="outline-dark" size="sm" key={object?.id}>
+                      <Link to={`/comics/chapter/${object.id}/`}>
+                        {object.name}
+                      </Link>
+                      <hr />
+                    </Button>
+                  ))}
+                </div>
+              )}
             </Container>
           ) : (
             <Link to="/login">
@@ -71,10 +84,10 @@ export const ChaptersScreen = ({ match }) => {
 
 const mapStateToProps = (state) => ({
   chapter: state.chaptersDetails.chapter,
-  comic: state.comicsDetails.comic,
+  chapters: state.comicChapters.chapters,
 });
 
 export default connect(mapStateToProps, {
-  listComicsDetails,
   listChaptersDetails,
+  listComicChapters,
 })(ChaptersScreen);

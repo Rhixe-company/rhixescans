@@ -5,7 +5,7 @@ import Comicgrid from "../components/content/Comicgrid";
 import Message from "../components/ui/Message";
 import Loader from "../components/ui/Loader";
 import { Link } from "react-router-dom";
-import { Button, Container } from "react-bootstrap";
+import { Button } from "react-bootstrap";
 
 export const ComicScreen = ({ match }) => {
   const comicId = match.params.id;
@@ -21,41 +21,41 @@ export const ComicScreen = ({ match }) => {
     dispatch(listComicChapters(comicId));
   }, [dispatch, comicId]);
   return (
-    <Container>
-      <div>
-        {loading ? (
-          <Loader />
-        ) : error ? (
-          <Message variant="danger">{error}</Message>
-        ) : (
-          <div>
-            {userInfo ? (
-              <div>
-                <Link to="/">
-                  <Button>Go Back Home</Button>
-                </Link>
-                <Comicgrid comic={comic} key={comic.id} />
-                <>
-                  <h1>Total Chapters: {comic.numChapters}</h1>
-                  {chapters?.map((chapter) => (
-                    <li as="span" key={chapter?.id}>
-                      <Link to={`/comics/chapter/${chapter.id}/`}>
-                        <strong>{chapter?.name}</strong>
-                      </Link>
-                      <br />
-                    </li>
-                  ))}
-                </>
-              </div>
-            ) : (
-              <Link to="/login">
-                <Button>Please Login To Read Comic</Button>
+    <div>
+      {loading ? (
+        <Loader />
+      ) : error ? (
+        <Message variant="danger">{error}</Message>
+      ) : (
+        <div>
+          {userInfo ? (
+            <div>
+              <Link to="/">
+                <Button>Go Back Home</Button>
               </Link>
-            )}
-          </div>
-        )}
-      </div>
-    </Container>
+              <Comicgrid comic={comic} />
+
+              <div>
+                Total Chapters: {comic.numChapters}
+                <br />
+              </div>
+              <hr />
+              {chapters?.map((chapter) => (
+                <Link key={chapter?.id} to={`/comics/chapter/${chapter.id}/`}>
+                  <Button variant="outline-dark" size="sm">
+                    {chapter?.name}
+                  </Button>
+                </Link>
+              ))}
+            </div>
+          ) : (
+            <Link to="/login">
+              <Button>Please Login To Read Comic</Button>
+            </Link>
+          )}
+        </div>
+      )}
+    </div>
   );
 };
 
