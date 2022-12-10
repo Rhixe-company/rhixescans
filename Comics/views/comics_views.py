@@ -82,7 +82,7 @@ def getComic(request, pk):
 @api_view(['GET'])
 def getChapters(request, pk):
     comic = Comic.objects.get(id=pk)
-    chapters = comic.chapter_set.all()
+    chapters = comic.chapter_set.all().order_by('-updated')
     serializer = ComicSerializer(comic, many=False)
     serializer2 = ChapterSerializer(chapters, many=True)
     return Response({'comic': serializer.data, 'chapters': serializer2.data})
