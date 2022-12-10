@@ -48,8 +48,8 @@ class ComicsSpider(scrapy.Spider):
             except:
                 print('Genres not Added')
                 pass
-        chapter_page_links = response.css('ul.clstyle li a::attr(href)')
-        yield from response.follow_all(chapter_page_links, self.parse_chapters)
+        for link in response.css('ul.clstyle li a::attr(href)'):
+            yield response.follow(link.get(), callback=self.parse_chapters)
 
     def parse_chapters(self, response):
         title = response.css(
