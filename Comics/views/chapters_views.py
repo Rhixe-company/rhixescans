@@ -15,7 +15,7 @@ def getChapters(request):
         'keyword') != None else ''
 
     chapters = Chapter.objects.filter(
-        name__icontains=query).order_by('-updated')
+        name__icontains=query)
     chapters_count = chapters.count()
     page = request.GET.get('page')
     paginator = Paginator(chapters, 1000)
