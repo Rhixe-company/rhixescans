@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'rest_framework',
 
     'corsheaders',
-    'downloader',
+    'scraper',
     'crispy_forms',
     'django_filters',
     'ckeditor',
