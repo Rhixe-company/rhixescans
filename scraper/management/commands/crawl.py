@@ -1,7 +1,4 @@
 from django.core.management.base import BaseCommand
-
-#from Comics.comics import ComicsSpider
-#from Comics.chapters import ChaptersSpider
 from scrapy.crawler import CrawlerRunner
 from scrapy.utils.project import get_project_settings
 from scrapy.utils.log import configure_logging
