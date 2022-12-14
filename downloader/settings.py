@@ -10,7 +10,7 @@
 import django
 import os
 import sys
-sys.path.append('/home/bot/Desktop/dev/projects/rhixescans.com')
+sys.path.append('/var/www/rhixecompany')
 
 os.environ['DJANGO_SETTINGS_MODULE'] = 'home.settings'
 django.setup()
