@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from datetime import timezone
 from django.core import files
 from requests_html import HTMLSession
-
+from django.utils.translation import gettext_lazy as _
 # Create your models here.
 
 s = HTMLSession()
@@ -24,14 +24,6 @@ STATUS_CHOICES = [
     ('Dropped', 'Dropped'),
     ('Coming Soon', 'Coming Soon'),
     ('Hiatus', 'Hiatus'),
-]
-
-CATEGORY_CHOICES = [
-    ('Manga', 'Manga'),
-    ('Manhua', 'Manhua'),
-    ('Manhwa', 'Manhwa'),
-    ('Comic', 'Comic'),
-    ('Novel', 'Novel'),
 ]
 
 RATING_CHOICES = [
@@ -57,6 +49,13 @@ class Genre(models.Model):
 
 
 class Comic(models.Model):
+    class Category(models.TextChoices):
+        MANHUA = 'MU', _('Manhua')
+        MANHWA = 'MW', _('Manhwa')
+        MANGA = 'MA', _('Manga')
+        COMIC = 'CC', _('Comic')
+        NOVEL = 'NV', _('Novel')
+
     user = models.ManyToManyField(User,  blank=True)
     title = models.CharField(max_length=2000, unique=True, null=False)
     slug = models.SlugField(max_length=2000, unique=True,
@@ -71,7 +70,7 @@ class Comic(models.Model):
         max_length=100, choices=STATUS_CHOICES)
     author = models.CharField(max_length=1000, blank=True)
     category = models.CharField(
-        max_length=1000, default='Manhwa', choices=CATEGORY_CHOICES)
+        max_length=2, choices=Category.choices, default=Category.MANHWA)
     numChapters = models.IntegerField(default=0, null=True, blank=True)
     genres = models.ManyToManyField(
         Genre, blank=True)
@@ -99,6 +98,12 @@ class Comic(models.Model):
                             save=True)
         else:
             return super().save(*args, **kwargs)
+
+    def is_upperclass(self):
+        return self.category in {
+            self.Category.MANHWA,
+            self.Category.MANHUA,
+        }
 
 
 class Chapter(models.Model):
