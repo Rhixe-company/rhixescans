@@ -54,6 +54,6 @@ class ChaptersSpider(Spider):
                 chapters = comic.chapter_set.all()
                 comic.numChapters = len(chapters)
                 comic.save()
-                yield (title, name, pages)
+                yield print(title, name, pages)
         else:
             pass
