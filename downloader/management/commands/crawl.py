@@ -4,7 +4,7 @@ from scrapy.settings import Settings
 #from Comics.comics import ComicsSpider
 #from Comics.chapters import ChaptersSpider
 from downloader import settings as my_settings
-from downloader.spiders.comics import ComicsSpider
+from Comics.comics import ComicsSpider
 
 
 class Command(BaseCommand):
