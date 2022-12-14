@@ -15,7 +15,7 @@ def getComics(request):
         Q(title__icontains=query) |
         Q(category__icontains=query) |
         Q(author__icontains=query)
-    ).order_by('-updated')
+    )
 
     page = request.GET.get('page')
     paginator = Paginator(comics, 20)
