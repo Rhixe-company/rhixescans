@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Card, Image, Button } from "react-bootstrap";
+import { Card, Button } from "react-bootstrap";
 
 import Rating from "../ui/Rating";
 const Comicgrid = ({ comic, chapters }) => {
@@ -18,8 +18,8 @@ const Comicgrid = ({ comic, chapters }) => {
         </Link>
         <Card.Text as="div">
           <Link to={`/comic/${comic.id}/`}>
-            <Image
-              fluid
+            <Card.Img
+              fluid="true"
               className="d-block w-50"
               src={comic.image}
               alt={comic.image}

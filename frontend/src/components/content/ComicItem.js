@@ -1,7 +1,7 @@
 import React from "react";
 import Rating from "../ui/Rating";
 import { Link } from "react-router-dom";
-import { Card, Image } from "react-bootstrap";
+import { Card } from "react-bootstrap";
 const ComicItem = ({ comic }) => {
   return (
     <div>
@@ -18,8 +18,8 @@ const ComicItem = ({ comic }) => {
 
           <Card.Text as="div">
             <Link to={`/comic/${comic.id}/`}>
-              <Image
-                fluid
+              <Card.Img
+                fluid="true"
                 className="d-block w-70"
                 src={comic.image}
                 alt={comic.image}

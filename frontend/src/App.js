@@ -13,7 +13,7 @@ import ComicsEditScreen from "./screens/ComicsEditScreen";
 import ChaptersListScreen from "./screens/ChaptersListScreen";
 import ChaptersEditScreen from "./screens/ChaptersEditScreen";
 import HomeScreen from "./screens/HomeScreen";
-import ChaptersScreen from "./screens/ChaptersScreen";
+import ChapterScreen from "./screens/ChapterScreen";
 import ComicsListScreen from "./screens/ComicsListScreen";
 import { Provider } from "react-redux";
 import store from "./store";
@@ -25,7 +25,7 @@ const App = () => {
         <main className="py-3">
           <Container>
             <Route path="/comic/:id/" component={ComicScreen} />
-            <Route path="/comics/chapter/:id/" component={ChaptersScreen} />
+            <Route path="/comics/chapter/:id/" component={ChapterScreen} />
             <Route path="/login" component={LoginScreen} />
             <Route path="/register" component={RegisterScreen} />
             <Route path="/profile" component={ProfileScreen} />
