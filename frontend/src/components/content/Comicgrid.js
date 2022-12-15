@@ -1,10 +1,13 @@
 import { Link } from "react-router-dom";
-import { Card, Image } from "react-bootstrap";
+import { Card, Image, Button } from "react-bootstrap";
 
 import Rating from "../ui/Rating";
-const Comicgrid = ({ comic }) => {
+const Comicgrid = ({ comic, chapters }) => {
   return (
     <Card key={comic.id} className="my-3 p-3 rounded">
+      <Link to="/">
+        <Button>Go Back</Button>
+      </Link>
       <Card.Body className="px-6 py-4">
         <Link to={`/comic/${comic.id}/`}>
           <Card.Title as="div">
@@ -13,22 +16,15 @@ const Comicgrid = ({ comic }) => {
             </h2>
           </Card.Title>
         </Link>
-        <br />
-        <Link to={`/comic/${comic.id}/`}>
-          <Image
-            fluid="true"
-            className="d-block w-100"
-            src={comic.image}
-            alt={comic.image_url}
-          />
-        </Link>
-
         <Card.Text as="div">
-          <b>Description:</b>
-          <p>{comic.description}</p>
-        </Card.Text>
-
-        <Card.Text as="div">
+          <Link to={`/comic/${comic.id}/`}>
+            <Image
+              fluid
+              className="d-block w-50"
+              src={comic.image}
+              alt={comic.image}
+            />
+          </Link>
           <div className="my-3">
             <b>Rating:</b>
 
@@ -41,18 +37,31 @@ const Comicgrid = ({ comic }) => {
         </Card.Text>
 
         <Card.Text as="div">
+          Description:
+          <p>{comic.description}</p>
+        </Card.Text>
+
+        <Card.Text as="div">
           <b>Status:</b>
           {comic.status}
         </Card.Text>
 
         <Card.Text as="div">
-          <b>Author:</b>
-          {comic.author}
+          <div className="my-3">
+            <b>Artist:</b>
+            {comic.artist}
+          </div>
+        </Card.Text>
+        <Card.Text as="div">
+          <div className="my-3">
+            <b>Author:</b>
+            {comic.author}
+          </div>
         </Card.Text>
 
         <Card.Text as="div">
           <b>Category:</b>
-          <strong>{comic.category}</strong>
+          <span>{comic.category}</span>
         </Card.Text>
 
         <Card.Text as="div">
@@ -65,18 +74,36 @@ const Comicgrid = ({ comic }) => {
           {new Date(comic.updated).toLocaleString("en-US")}
         </Card.Text>
         <br />
-        <h4>Genres:</h4>
+        <b>Genres</b>
         <br />
         {comic.genres?.map((genre) => (
           <Card.Text
-            as="span"
+            as="div"
             key={genre.id}
             className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2"
           >
-            <strong>{genre.name}</strong>
+            <span>{genre.name}</span>
           </Card.Text>
         ))}
       </Card.Body>
+      <br />
+      {chapters.length > 0 ? (
+        <div>
+          <b>Total Chapters: {comic.numChapters}</b>
+
+          {chapters?.map((chapter) => (
+            <div key={chapter.id}>
+              <Link to={`/comics/chapter/${chapter.id}/`}>
+                <span>{chapter.name}</span>
+              </Link>
+              <br />
+              {new Date(chapter.updated).toLocaleString("en-US")}
+            </div>
+          ))}
+        </div>
+      ) : (
+        <b>No Chapters Created</b>
+      )}
     </Card>
   );
 };
