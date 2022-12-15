@@ -65,6 +65,7 @@ SPIDER_MIDDLEWARES = {
 }
 
 DELTAFETCH_ENABLED = True
+DELTAFETCH_RESET = True
 # Enable or disable extensions
 # See https://docs.scrapy.org/en/latest/topics/extensions.html
 # EXTENSIONS = {

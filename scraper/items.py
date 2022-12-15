@@ -2,17 +2,13 @@
 #
 # See documentation in:
 # https://docs.scrapy.org/en/latest/topics/items.html
-from scrapy_djangoitem import DjangoItem, Field
-from Comics.models import *
+
 from w3lib.html import remove_tags
 from itemloaders.processors import MapCompose, TakeFirst
+from scrapy import Item, Field
 
 
-class ComicItem(DjangoItem):
-    django_model = Comic
-
-
-class NewComicItem(ComicItem):
+class NewComicItem(Item):
     title = Field(input_processor=MapCompose(
         remove_tags), output_processor=TakeFirst())
     image_src = Field(input_processor=MapCompose(

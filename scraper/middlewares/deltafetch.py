@@ -20,6 +20,7 @@ class DeltaFetch(object):
     This is a spider middleware to ignore requests to pages containing items
     seen in previous crawls of the same spider, thus producing a "delta crawl"
     containing only new items.
+
     This also speeds up the crawl, by reducing the number of requests that need
     to be crawled, and processed (typically, item requests are the most cpu
     intensive).
