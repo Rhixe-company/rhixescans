@@ -61,7 +61,7 @@ ROBOTSTXT_OBEY = True
 #    'scraper.middlewares.ScraperDownloaderMiddleware': 543,
 # }
 SPIDER_MIDDLEWARES = {
-    'scraper.middlewares.deltafetch.DeltaFetch': 100,
+    'scrapy_deltafetch.DeltaFetch': 100,
 }
 
 DELTAFETCH_ENABLED = True
