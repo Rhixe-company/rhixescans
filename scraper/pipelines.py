@@ -21,6 +21,7 @@ class ComicsPipeline:
                 Q(title__icontains=adapter['title']) |
                 Q(slug__icontains=adapter['slug'])
             ).get_or_create(image_src=adapter['image_src'], slug=adapter['slug'], rating=adapter['rating'], status=adapter['status'], description=adapter['description'], category=adapter['category'], author=adapter['author'], artist=adapter['artist'], defaults={'title': adapter['title'], 'slug': adapter['slug']})
+
             obj1, created = Genre.objects.filter(
                 Q(name=adapter['genres'])
             ).get_or_create(
