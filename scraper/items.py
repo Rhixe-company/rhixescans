@@ -19,6 +19,8 @@ class NewComicItem(Item):
         remove_tags), output_processor=TakeFirst())
     author = Field(input_processor=MapCompose(
         remove_tags), output_processor=TakeFirst())
+    artist = Field(input_processor=MapCompose(
+        remove_tags), output_processor=TakeFirst())
     slug = Field(input_processor=MapCompose(
         remove_tags), output_processor=TakeFirst())
     status = Field(input_processor=MapCompose(

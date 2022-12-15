@@ -20,27 +20,25 @@ class ComicsSpider(scrapy.Spider):
         yield from response.follow_all(next_page, self.parse)
 
     def parse_webtoon(self, response):
-        item = NewComicItem()
-        item['slug'] = response.css('div.bixbox ol li a ::attr(href)')[
-            1].get().split("/")[-2]
-        item['title'] = response.css(
-            'h1.entry-title::text').get().strip()
-        item['image_src'] = response.css('div.thumb img::attr(src)').get()
-        item['rating'] = response.css(
-            'div.num::text').get().strip()
-        item['status'] = response.css(
-            'div.imptdt i::text').get().strip()
-        item['description'] = [description.strip() for description in response.css(
-            'div.entry-content p::text').getall()]
-        item['author'] = response.css(
-            'div.flex-wrap div.fmed span::text')[1].get().strip()
-        item['category'] = response.css(
-            'div.imptdt a::text').get().strip()
-        g = response.css("span.mgen a::text").getall()
-        for genre in g:
-            genres = genre
-            item['genres'] = genres
-            yield item
+        for items in response.css('div#content'):
+            item = NewComicItem()
+            item['slug'] = items.css('div.bixbox ol li a::attr(href)')[
+                1].get().split('/')[-2]
+            item['title'] = items.css('h1.entry-title::text').get().strip()
+            item['image_src'] = items.css('div.thumb img::attr(src)').get()
+            item['rating'] = float(items.css('div.num::text').get().strip())
+            item['status'] = items.css('div.imptdt i::text').get().strip()
+            item['description'] = [description.strip() for description in items.css(
+                'div.entry-content p::text').getall()]
+            item['author'] = items.css(
+                'div.flex-wrap span::text')[1].get().strip()
+            item['artist'] = items.css(
+                'div.flex-wrap span::text')[2].get().strip()
+            item['category'] = items.css('div.imptdt a::text').get().strip()
+            g = items.css("span.mgen a::text").getall()
+            for genre in g:
+                item['genres'] = genre
+                yield item
         for link in response.css('ul.clstyle li a::attr(href)'):
             yield response.follow(link.get(), callback=self.parse_chapters)
 
