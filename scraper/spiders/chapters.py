@@ -50,11 +50,10 @@ class ChaptersSpider(Spider):
 
                 ).get_or_create(images_url=pages, defaults={'images_url': pages, 'chapters': obj})
                 obj.pages.add(obj1)
-                numpages = obj.page_set.all()
-                obj.numPages = len(numpages)
+
+                obj.numPages = obj.page_set.all().count()
                 obj.save()
-                chapters = comic.chapter_set.all()
-                comic.numChapters = len(chapters)
+                comic.numChapters = comic.chapter_set.all().count()
                 comic.save()
 
         else:
