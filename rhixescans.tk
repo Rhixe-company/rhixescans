@@ -1,0 +1,51 @@
+server {
+    listen 80;
+	listen [::]:80;
+    	
+    root /var/www/rhixescans.tk/frontend/build;
+    index index.html 
+    
+    server_name rhixescans.tk www.rhixescans.tk home.rhixescans.tk;
+    location = /favicon.ico { access_log off; log_not_found off; }
+    
+
+	location /static/ {
+	    	try_files $uri $uri/ =404;
+	        	   root /var/www/rhixescans.tk/frontend/build;
+	 }
+    
+    location /static/comics/ {
+    	try_files $uri $uri/ =404;
+    	   root /var/www/rhixescans.tk;
+    }
+
+	location /static/rest_framework/ {
+		try_files $uri $uri/ =404;
+	    	   root /var/www/rhixescans.tk;
+	}
+    
+    location /static/admin/ {
+    	try_files $uri $uri/ =404;
+        	   root /var/www/rhixescans.tk;
+    }
+    	
+    location /static/media/ {
+    	try_files $uri $uri/ =404;
+    }
+    
+    location / {
+    	
+        include proxy_params;
+        proxy_pass http://unix:/run/rhixescans.sock;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_cache_bypass $http_upgrade;
+    }
+
+
+
+
+}
+
+
