@@ -7,6 +7,7 @@ import { Container } from "react-bootstrap";
 import Message from "../components/ui/Message";
 import Loader from "../components/ui/Loader";
 import ChapterPage from "../components/content/ChapterPage";
+import ChaptersGrid from "../components/content/ChaptersGrid";
 
 export const ChapterScreen = ({ history, match }) => {
   const chapterId = match.params.id;
@@ -27,11 +28,17 @@ export const ChapterScreen = ({ history, match }) => {
         dispatch(listChaptersDetails(chapterId));
       }
     }
-  }, [dispatch, chapterId, history, userInfo, chapter.name, chapter.id]);
-
-  const chaptersHandler = () => {
     dispatch(listComicChapters(comicId));
-  };
+  }, [
+    dispatch,
+    chapterId,
+    history,
+    userInfo,
+    comicId,
+    chapter.name,
+    chapter.id,
+  ]);
+
   return (
     <div>
       {loading ? (
@@ -40,11 +47,10 @@ export const ChapterScreen = ({ history, match }) => {
         <Message variant="danger">{error}</Message>
       ) : (
         <Container>
-          <ChapterPage
-            chapter={chapter}
-            chapters={chapters}
-            chaptersHandler={chaptersHandler}
-          />
+          <ChapterPage chapter={chapter} />
+          <div>
+            <ChaptersGrid chapters={chapters} />
+          </div>
         </Container>
       )}
     </div>

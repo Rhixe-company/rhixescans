@@ -29,3 +29,14 @@ class NewComicItem(Item):
         remove_tags), output_processor=TakeFirst())
     genres = Field(input_processor=MapCompose(
         remove_tags), output_processor=TakeFirst())
+
+
+class NewChapterItem(Item):
+    title = Field(input_processor=MapCompose(
+        remove_tags), output_processor=TakeFirst())
+    slug = Field(input_processor=MapCompose(
+        remove_tags), output_processor=TakeFirst())
+    name = Field(input_processor=MapCompose(
+        remove_tags), output_processor=TakeFirst())
+    pages = Field(input_processor=MapCompose(
+        remove_tags))

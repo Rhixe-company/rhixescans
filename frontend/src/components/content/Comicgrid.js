@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Card, Button } from "react-bootstrap";
+import { ListGroup, Card, Button } from "react-bootstrap";
 
 import Rating from "../ui/Rating";
 const Comicgrid = ({ comic, chapters }) => {
@@ -92,13 +92,13 @@ const Comicgrid = ({ comic, chapters }) => {
           <b>Total Chapters: {comic.numChapters}</b>
 
           {chapters?.map((chapter) => (
-            <div key={chapter.id}>
-              <Link to={`/comics/chapter/${chapter.id}/`}>
-                <span>{chapter.name}</span>
-              </Link>
-              <br />
-              {new Date(chapter.updated).toLocaleString("en-US")}
-            </div>
+            <ListGroup key={chapter.id}>
+              <ListGroup.Item>
+                <Link to={`/comics/chapter/${chapter.id}/`}>
+                  <span>{chapter.name}</span>
+                </Link>
+              </ListGroup.Item>
+            </ListGroup>
           ))}
         </div>
       ) : (

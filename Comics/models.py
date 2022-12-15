@@ -79,10 +79,10 @@ class Comic(models.Model):
     created = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        ordering = ['-updated']
+        ordering = ['-updated', 'created']
 
     def __str__(self):
-        return str(self.title) + 'I' + str(self.description)[0:200]
+        return str(self.title) + '-' + str(self.description)[0:200]
 
     @property
     def created_dynamic(self):

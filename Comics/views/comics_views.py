@@ -16,7 +16,7 @@ def getComics(request):
     )
 
     page = request.GET.get('page')
-    paginator = Paginator(comics, 20)
+    paginator = Paginator(comics, 24)
     comics_count = comics.count()
     try:
         comics = paginator.page(page)
