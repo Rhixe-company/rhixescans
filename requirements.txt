@@ -31,6 +31,7 @@ django-storages==1.13.1
 djangorestframework==3.14.0
 djangorestframework-simplejwt==5.2.2
 entrypoints==0.4
+exceptiongroup==1.0.4
 executing==1.2.0
 fake-useragent==0.1.14
 fastjsonschema==2.16.2
@@ -43,6 +44,7 @@ hyperlink==21.0.0
 idna==3.4
 importlib-metadata==5.0.0
 incremental==22.10.0
+iniconfig==1.1.1
 ipykernel==6.17.1
 ipython==8.6.0
 ipython-genutils==0.2.0
@@ -64,6 +66,7 @@ lxml==4.9.1
 MarkupSafe==2.1.1
 matplotlib-inline==0.1.6
 mistune==2.0.4
+mock==4.0.3
 nbclassic==0.4.8
 nbclient==0.7.0
 nbconvert==7.2.5
@@ -80,6 +83,7 @@ pexpect==4.8.0
 pickleshare==0.7.5
 Pillow==9.3.0
 platformdirs==2.5.4
+pluggy==1.0.0
 prometheus-client==0.15.0
 prompt-toolkit==3.0.33
 Protego==0.2.1
@@ -87,6 +91,7 @@ psutil==5.9.4
 psycopg2==2.9.5
 ptyprocess==0.7.0
 pure-eval==0.2.2
+py-cpuinfo==9.0.0
 pyasn1==0.4.8
 pyasn1-modules==0.2.8
 pycodestyle==2.9.1
@@ -100,6 +105,8 @@ pyparsing==3.0.9
 pyppeteer==1.0.2
 pyquery==1.4.3
 pyrsistent==0.19.2
+pytest==7.2.0
+pytest-benchmark==4.0.0
 python-dateutil==2.8.2
 pytz==2022.6
 pyzmq==24.0.1
@@ -112,8 +119,10 @@ requests-html==0.10.0
 rfc3986==1.5.0
 rsa==4.9
 Scrapy==2.7.1
+scrapy-deltafetch==2.0.1
 scrapy-djangoitem==1.1.1
 scrapy-splash==0.8.0
+scrapylib==1.7.1
 Send2Trash==1.8.0
 service-identity==21.1.0
 six==1.16.0
