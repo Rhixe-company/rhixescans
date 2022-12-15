@@ -116,7 +116,7 @@ class ComicsManager(Comic, ExtraManagers):
     objects = NewManager()
 
     class Meta:
-        ordering = ['title']
+        ordering = ['updated']
         proxy = True
 
     def do_something(self):
