@@ -3,7 +3,7 @@ from django_filters import CharFilter
 
 from django import forms
 
-from .models import *
+from ..Comics.models import *
 
 
 class ComicFilter(django_filters.FilterSet):

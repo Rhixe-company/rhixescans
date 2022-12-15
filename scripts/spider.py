@@ -1,5 +1,5 @@
 from scrapy.spiders import Spider
-from .models import Comic, Chapter, Genre, Page
+from ..Comics.models import Comic, Chapter, Genre, Page
 from django.db.models import Q
 from bs4 import BeautifulSoup
 from scrapy.crawler import CrawlerProcess

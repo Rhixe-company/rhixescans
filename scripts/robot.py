@@ -2,7 +2,7 @@ from scrapy.spiders import Spider
 from scrapy.crawler import CrawlerProcess
 from scrapy.utils.project import get_project_settings
 import scrapy
-from .models import Comic, Chapter, Genre, Page
+from ..Comics.models import Comic, Chapter, Genre, Page
 from django.db.models import Q
 
 
@@ -33,8 +33,8 @@ class ComicSpider(Spider):
         category = response.css(
             'div.imptdt a::text').get().strip()
         obj, created = Comic.objects.filter(
-                        Q(title=title)
-                    ).get_or_create(image_url=image_url, rating=rating, status=status, description=description, category=category, author=author, defaults={'title': title})
+            Q(title=title)
+        ).get_or_create(image_url=image_url, rating=rating, status=status, description=description, category=category, author=author, defaults={'title': title})
         g = response.css("span.mgen a::text").getall()
         for genre in g:
             genres = genre

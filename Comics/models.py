@@ -49,18 +49,14 @@ class Genre(models.Model):
 
 
 class Comic(models.Model):
-    class Category(models.TextChoices):
-        MANHUA = 'MU', _('Manhua')
-        MANHWA = 'MW', _('Manhwa')
-        MANGA = 'MA', _('Manga')
-        COMIC = 'CC', _('Comic')
-        NOVEL = 'NV', _('Novel')
 
     user = models.ManyToManyField(User,  blank=True)
     title = models.CharField(max_length=2000, unique=True, null=False)
     slug = models.SlugField(max_length=2000, unique=True,
                             blank=False, null=True)
     description = models.TextField(blank=True)
+    CategoryType = models.TextChoices('CategoryType', 'Manhua Manhwa Manga')
+
     image = models.ImageField(
         upload_to=comics_images_location, blank=True)
     image_src = models.URLField(blank=False, null=True)
@@ -71,7 +67,7 @@ class Comic(models.Model):
     author = models.CharField(max_length=1000, blank=True)
     artist = models.CharField(max_length=1000, blank=True)
     category = models.CharField(
-        max_length=100, choices=Category.choices, default=Category.MANHWA)
+        max_length=10, choices=CategoryType.choices, )
     numChapters = models.IntegerField(default=0, null=True, blank=True)
     genres = models.ManyToManyField(
         Genre, blank=True)
@@ -82,7 +78,7 @@ class Comic(models.Model):
         ordering = ['updated', '-created']
 
     def __str__(self):
-        return str(self.title) + '-' + str(self.description)[0:200]
+        return '%s %s' % (self.title, self.description)
 
     @property
     def created_dynamic(self):
@@ -103,11 +99,28 @@ class Comic(models.Model):
         else:
             return super().save(*args, **kwargs)
 
-    def is_upperclass(self):
-        return self.category in {
-            self.Category.MANHWA,
-            self.Category.MANHUA,
-        }
+
+class NewManager(models.Manager):
+    release_date = models.DateField()
+
+
+class ExtraManagers(models.Model):
+    secondary = NewManager()
+
+    class Meta:
+        abstract = True
+
+
+class ComicsManager(Comic, ExtraManagers):
+
+    objects = NewManager()
+
+    class Meta:
+        ordering = ['title']
+        proxy = True
+
+    def do_something(self):
+        pass
 
 
 class Chapter(models.Model):
