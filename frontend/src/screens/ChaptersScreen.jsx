@@ -8,7 +8,7 @@ import Loader from "../components/ui/Loader";
 import { Link } from "react-router-dom";
 import { Button, Container, Image } from "react-bootstrap";
 import InfiniteScroll from "react-infinite-scroll-component";
-
+import ChaptersGrid from "../components/content/ChaptersGrid";
 export const ChaptersScreen = ({ history, match }) => {
   const chapterId = match.params.id;
   const dispatch = useDispatch();
@@ -24,22 +24,25 @@ export const ChaptersScreen = ({ history, match }) => {
       history.push("/login");
     }
     dispatch(listChaptersDetails(chapterId));
-    dispatch(listComicChapters(chapter?.comics));
-  }, [dispatch, history, userInfo, chapterId, chapter?.comics]);
+  }, [dispatch, history, userInfo, chapterId]);
+  const chaptersHandler = (id) => {
+    dispatch(listComicChapters(id));
+  };
+
   return (
     <div>
       {isLoading && <Loader />}
       {isError && <Message variant="danger">{isError}</Message>}
-      <Button>
-        <Link to={`/comic/${chapter.comics}/`}>Go Back</Link>
-      </Button>
+
       {loading ? (
         <Loader />
       ) : error ? (
         <Message variant="danger">{error}</Message>
       ) : (
         <Container>
-          {chapter.name}
+          <Button variant="secondary">
+            <Link to={`/comic/${chapter.comics}/`}>{chapter.name}</Link>
+          </Button>
 
           {chapter.pages?.map((page) => (
             <InfiniteScroll dataLength={page} key={page.id}>
@@ -47,18 +50,18 @@ export const ChaptersScreen = ({ history, match }) => {
             </InfiniteScroll>
           ))}
           <Link to={`/comic/${chapter.comics}/`}>
-            <Button size="sm">{chapter.name}</Button>
+            <Button variant="secondary" size="sm">
+              {chapter.name}
+            </Button>
           </Link>
           <div>
-            {chapters?.map((object) => (
-              <ul>
-                <li key={object?.id}>
-                  <Link to={`/comics/chapter/${object.id}/`}>
-                    <h3>{object?.name}</h3>
-                  </Link>
-                </li>
-              </ul>
-            ))}
+            <Button
+              variant="primary"
+              onClick={() => chaptersHandler(chapter.comics)}
+            >
+              Get Chapters
+            </Button>
+            <ChaptersGrid chapters={chapters} />
           </div>
         </Container>
       )}

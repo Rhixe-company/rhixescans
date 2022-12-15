@@ -5,7 +5,7 @@ import Comicgrid from "../components/content/Comicgrid";
 import Message from "../components/ui/Message";
 import Loader from "../components/ui/Loader";
 import { Link } from "react-router-dom";
-import { Button } from "react-bootstrap";
+import { Container, Button } from "react-bootstrap";
 
 export const ComicScreen = ({ history, match }) => {
   const comicId = match.params.id;
@@ -24,7 +24,7 @@ export const ComicScreen = ({ history, match }) => {
     dispatch(listComicChapters(comicId));
   }, [history, userInfo, dispatch, comicId]);
   return (
-    <div>
+    <Container>
       {loading ? (
         <Loader />
       ) : error ? (
@@ -41,13 +41,13 @@ export const ComicScreen = ({ history, match }) => {
               Total Chapters: {comic.numChapters}
               <hr />
               {chapters?.map((chapter) => (
-                <ul>
-                  <li key={chapter?.id}>
+                <ul key={chapter.id}>
+                  <li>
                     <Link to={`/comics/chapter/${chapter.id}/`}>
-                      <h3>{chapter?.name}</h3>
+                      <h3>{chapter.name}</h3>
                     </Link>
                     <div>
-                      {new Date(chapter.created).toLocaleString("en-US")}
+                      {new Date(chapter.updated).toLocaleString("en-US")}
                     </div>
                   </li>
                 </ul>
@@ -58,7 +58,7 @@ export const ComicScreen = ({ history, match }) => {
           )}
         </div>
       )}
-    </div>
+    </Container>
   );
 };
 
