@@ -63,14 +63,14 @@ class Comic(models.Model):
     description = models.TextField(blank=True)
     image = models.ImageField(
         upload_to=comics_images_location, blank=True)
-    image_url = models.URLField(blank=False, null=False)
+    image_src = models.URLField(blank=False, null=True)
     rating = models.DecimalField(
         max_digits=9, decimal_places=1, blank=False, null=False)
     status = models.CharField(
         max_length=100, choices=STATUS_CHOICES)
     author = models.CharField(max_length=1000, blank=True)
     category = models.CharField(
-        max_length=2, choices=Category.choices, default=Category.MANHWA)
+        max_length=100, choices=Category.choices, default=Category.MANHWA)
     numChapters = models.IntegerField(default=0, null=True, blank=True)
     genres = models.ManyToManyField(
         Genre, blank=True)
@@ -90,13 +90,13 @@ class Comic(models.Model):
 
     def save(self, *args, **kwargs):
 
-        if self.image == '' and self.image_url != '':
+        if self.image == '' and self.image_src != '':
 
-            resp = s.get(self.image_url,  stream=True)
+            resp = s.get(self.image_src,  stream=True)
             pb = BytesIO()
             pb.write(resp.content)
             pb.flush()
-            file_name = self.image_url.split("/")[-1]
+            file_name = self.image_src.split("/")[-1]
             self.image.save(file_name, files.File(pb),
                             save=True)
         else:

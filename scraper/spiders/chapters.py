@@ -44,8 +44,10 @@ class ChaptersSpider(Spider):
                 "div.rdminimal img")
             for page in posts:
                 pages = page['src']
+
                 obj1, created = Page.objects.filter(
                     Q(images_url__icontains=pages)
+
                 ).get_or_create(images_url=pages, defaults={'images_url': pages, 'chapters': obj})
                 obj.pages.add(obj1)
                 numpages = obj.page_set.all()
@@ -54,6 +56,6 @@ class ChaptersSpider(Spider):
                 chapters = comic.chapter_set.all()
                 comic.numChapters = len(chapters)
                 comic.save()
-                yield print(title, name, pages)
+
         else:
             pass

@@ -1,8 +1,8 @@
 import scrapy
 from scrapy.crawler import CrawlerProcess
 from scrapy.spiders import Spider
-from scrapy.utils.project import get_project_settings
-from .models import Comic, Genre, Chapter, Page
+
+from Comics.models import Comic, Genre, Chapter, Page
 from django.db.models import Q
 from bs4 import BeautifulSoup
 
@@ -26,7 +26,7 @@ class ComicsSpider(Spider):
             1].get().split("/")[-2]
         title = response.css(
             'h1.entry-title::text').get().strip()
-        image_url = response.css('div.thumb img::attr(src)').get()
+        image = response.css('div.thumb img::attr(src)').get()
         rating = response.css(
             'div.num::text').get().strip()
         status = response.css(
@@ -40,7 +40,7 @@ class ComicsSpider(Spider):
         obj, created = Comic.objects.filter(
             Q(title__icontains=title) |
             Q(slug__icontains=slug)
-        ).get_or_create(image_url=image_url, rating=rating, status=status, description=description, category=category, author=author, title=title, slug=slug, defaults={'title': title, 'slug': slug})
+        ).get_or_create(image=image, rating=rating, status=status, description=description, category=category, author=author, title=title, slug=slug, defaults={'title': title, 'slug': slug})
         g = response.css("span.mgen a::text").getall()
         for genre in g:
             genres = str(genre)
@@ -93,7 +93,8 @@ class ComicsSpider(Spider):
             pass
 
 
-settings = get_project_settings()
-process = CrawlerProcess(settings)
+process = CrawlerProcess(settings={
+
+})
 process.crawl(ComicsSpider)
 process.start()

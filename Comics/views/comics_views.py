@@ -12,9 +12,7 @@ def getComics(request):
     query = request.GET.get('keyword') if request.GET.get(
         'keyword') != None else ''
     comics = Comic.objects.filter(
-        Q(title__icontains=query) |
-        Q(category__icontains=query) |
-        Q(author__icontains=query)
+        Q(title__icontains=query)
     )
 
     page = request.GET.get('page')

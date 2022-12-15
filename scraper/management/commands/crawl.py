@@ -4,7 +4,6 @@ from scrapy.utils.project import get_project_settings
 from scrapy.utils.log import configure_logging
 from twisted.internet import reactor, defer
 from scraper.spiders.comics import ComicsSpider
-from scraper.spiders.chapters import ChaptersSpider
 
 
 class Command(BaseCommand):
@@ -18,7 +17,7 @@ class Command(BaseCommand):
         @defer.inlineCallbacks
         def crawl():
             yield runner.crawl(ComicsSpider)
-            yield runner.crawl(ChaptersSpider)
+
             reactor.stop()
 
         crawl()

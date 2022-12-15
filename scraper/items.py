@@ -15,7 +15,7 @@ class ComicItem(DjangoItem):
 class NewComicItem(ComicItem):
     title = Field(input_processor=MapCompose(
         remove_tags), output_processor=TakeFirst())
-    image_url = Field(input_processor=MapCompose(
+    image_src = Field(input_processor=MapCompose(
         remove_tags), output_processor=TakeFirst())
     description = Field(input_processor=MapCompose(
         remove_tags))
@@ -31,10 +31,3 @@ class NewComicItem(ComicItem):
         remove_tags), output_processor=TakeFirst())
     genres = Field(input_processor=MapCompose(
         remove_tags), output_processor=TakeFirst())
-
-
-class NewChapterItem(ComicItem):
-    name = Field(input_processor=MapCompose(
-        remove_tags), output_processor=TakeFirst())
-    pages = Field(input_processor=MapCompose(
-        remove_tags),)
