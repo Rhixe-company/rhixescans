@@ -1,20 +1,17 @@
 [Unit]
-Description=Comics Web Server
+Description=rhixescans daemon
 Requires=rhixescans.socket
 After=network.target
 
 [Service]
-ExecStart=/var/www/rhixescans.tk/env/bin/gunicorn \
+User=root
+Group=www-data
+WorkingDirectory=/var/www/rhixescans.tk
+    ExecStart=/var/www/rhixescans.tk/env/bin/gunicorn \
     --access-logfile - \
     --workers 10 \
     --bind unix:/run/rhixescans.sock \
     home.wsgi:application
-
-WorkingDirectory=/var/www/rhixescans.tk
-User=root
-Group=www-data
-
-Restart=always
-
+    
 [Install]
 WantedBy=multi-user.target
