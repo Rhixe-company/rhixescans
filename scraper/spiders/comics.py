@@ -25,7 +25,7 @@ class ComicsSpider(scrapy.Spider):
             item['slug'] = items.css('div.bixbox ol li a::attr(href)')[
                 1].get().split('/')[-2]
             item['title'] = items.css('h1.entry-title::text').get().strip()
-            item['image_src'] = items.css('div.thumb img::attr(src)').get()
+            item['image_url'] = items.css('div.thumb img::attr(src)').get()
             item['rating'] = float(items.css('div.num::text').get().strip())
             item['status'] = items.css('div.imptdt i::text').get().strip()
             item['description'] = [description.strip() for description in items.css(
@@ -35,11 +35,12 @@ class ComicsSpider(scrapy.Spider):
             item['artist'] = items.css(
                 'div.flex-wrap span::text')[2].get().strip()
             item['category'] = items.css('div.imptdt a::text').get().strip()
+            item['release_date'] = items.css(
+                'div.flex-wrap span time::text').get().strip()
             g = items.css("span.mgen a::text").getall()
             for genre in g:
                 item['genres'] = genre
                 yield item
-
         for link in response.css('ul.clstyle li a::attr(href)'):
             yield response.follow(link.get(), callback=self.parse_chapters)
 

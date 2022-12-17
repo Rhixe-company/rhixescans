@@ -59,7 +59,7 @@ class Comic(models.Model):
 
     image = models.ImageField(
         upload_to=comics_images_location, blank=True)
-    image_src = models.URLField(blank=False, null=True)
+    image_url = models.URLField(blank=False, null=True)
     rating = models.DecimalField(
         max_digits=9, decimal_places=1, blank=False, null=False)
     status = models.CharField(
@@ -71,14 +71,15 @@ class Comic(models.Model):
     numChapters = models.IntegerField(default=0, null=True, blank=True)
     genres = models.ManyToManyField(
         Genre, blank=True)
+    release_date = models.CharField(max_length=100, null=True)
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        ordering = ['updated', '-created']
+        ordering = ['updated', '-title']
 
     def __str__(self):
-        return '%s %s' % (self.title, self.description)
+        return '%s %s %s' % (self.title, self.image, self.description)
 
     @property
     def created_dynamic(self):
@@ -87,13 +88,13 @@ class Comic(models.Model):
 
     def save(self, *args, **kwargs):
 
-        if self.image == '' and self.image_src != '':
+        if self.image == '' and self.image_url != '':
 
-            resp = s.get(self.image_src,  stream=True)
+            resp = s.get(self.image_url,  stream=True)
             pb = BytesIO()
             pb.write(resp.content)
             pb.flush()
-            file_name = self.image_src.split("/")[-1]
+            file_name = self.image_url.split("/")[-1]
             self.image.save(file_name, files.File(pb),
                             save=True)
         else:
@@ -101,7 +102,7 @@ class Comic(models.Model):
 
 
 class NewManager(models.Manager):
-    release_date = models.DateField()
+    pass
 
 
 class ExtraManagers(models.Model):
@@ -136,7 +137,7 @@ class Chapter(models.Model):
         ordering = ['-id']
 
     def __str__(self):
-        return self.name
+        return '%s %s' % (self.name, self.numPages)
 
     @property
     def created_dynamic(self):
@@ -154,7 +155,7 @@ class Page(models.Model):
         ordering = ['id']
 
     def __str__(self):
-        return str(self.images) + 'Link:'+str(self.images_url)
+        return '%s %s' % (self.images, self.images_url)
 
     def save(self, *args, **kwargs):
 

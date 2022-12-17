@@ -11,8 +11,9 @@ from scrapy import Item, Field
 class NewComicItem(Item):
     title = Field(input_processor=MapCompose(
         remove_tags), output_processor=TakeFirst())
-    image_src = Field(input_processor=MapCompose(
+    image_url = Field(input_processor=MapCompose(
         remove_tags), output_processor=TakeFirst())
+    image = Field()
     description = Field(input_processor=MapCompose(
         remove_tags))
     rating = Field(input_processor=MapCompose(
@@ -28,6 +29,8 @@ class NewComicItem(Item):
     category = Field(input_processor=MapCompose(
         remove_tags), output_processor=TakeFirst())
     genres = Field(input_processor=MapCompose(
+        remove_tags), output_processor=TakeFirst())
+    release_date = Field(input_processor=MapCompose(
         remove_tags), output_processor=TakeFirst())
 
 
