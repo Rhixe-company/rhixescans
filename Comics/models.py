@@ -71,7 +71,7 @@ class Comic(models.Model):
     numChapters = models.IntegerField(default=0, null=True, blank=True)
     genres = models.ManyToManyField(
         Genre, blank=True)
-    release_date = models.CharField(max_length=100, null=True)
+    release_date = models.CharField(max_length=100, blank=True, null=False)
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
 
