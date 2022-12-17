@@ -20,7 +20,8 @@ SECRET_KEY = 'django-insecure-4(b!ri*$ep@zit-g_066-ox3ysi*mu2@px@0fz2mn@0=&f*hau
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['rhixescans.tk','www.rhixescans.tk']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost',
+                 'rhixescans.tk', 'www.rhixescans.tk']
 
 
 # Application definition
@@ -170,7 +171,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATICFILES_DIRS = [
-#    BASE_DIR / 'static',
+    #    BASE_DIR / 'static',
     BASE_DIR / 'frontend/build/static'
 ]
 
