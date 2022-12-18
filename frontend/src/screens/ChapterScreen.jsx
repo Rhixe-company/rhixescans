@@ -77,7 +77,6 @@ export const ChapterScreen = ({ match, history }) => {
           postsPerPage={postsPerPage}
           totalPosts={comic?.chapters.length}
           paginate={paginate}
-          chapterId={chapterId}
         />
       </div>
     </Container>
