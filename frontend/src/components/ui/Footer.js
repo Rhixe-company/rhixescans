@@ -3,11 +3,11 @@ import { Container } from "react-bootstrap";
 
 const Footer = () => {
   return (
-    <footer>
-      <Container>
+    <Container className="footer">
+      <footer>
         <p>Copyright &copy; Rhixescans</p>
-      </Container>
-    </footer>
+      </footer>
+    </Container>
   );
 };
 

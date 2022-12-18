@@ -2,73 +2,57 @@ import React from "react";
 import Rating from "../ui/Rating";
 import { Link } from "react-router-dom";
 import { Card } from "react-bootstrap";
+import { Container } from "react-bootstrap";
 const ComicItem = ({ comic }) => {
   return (
-    <div>
+    <Container className="max-w-sm rounded overflow-hidden shadow-lg">
       <Card className="my-3 p-3 rounded">
         <Card.Body className="px-6 py-4">
           <Link to={`/comic/${comic.id}/`}>
-            <Card.Title
-              className="font-bold text-black-500 text-xl mb-2"
-              as="div"
-            >
-              <h3>{comic.title}</h3>
+            <Card.Img
+              fluid="true"
+              className="w-full"
+              src={comic.image}
+              alt={comic.image_url}
+            />
+          </Link>
+          <Link className="px-6 py-4" to={`/comic/${comic.id}/`}>
+            <Card.Title className="font-bold text-purple-500 text-xl" as="div">
+              {comic.title}
             </Card.Title>
           </Link>
-
-          <Card.Text as="div">
-            <Link to={`/comic/${comic.id}/`}>
-              <Card.Img
-                fluid="true"
-                className="d-block w-70"
-                src={comic.image}
-                alt={comic.image}
-              />
-            </Link>
-            <div className="my-3">
+          <Card.Text as="ul">
+            <li>
               <Rating
                 value={comic.rating}
                 text={` ${comic.rating} `}
                 color={"#f8e825"}
               />
-              <br />
-              <b>Release Date:</b>
-              {comic.release_date}
-            </div>
-          </Card.Text>
-          <Card.Text as="div">
-            <div className="my-3">
-              <b>Status:</b>
+            </li>
+            <li>
+              <strong>Status:</strong>
               {comic.status}
-            </div>
-          </Card.Text>
-
-          <Card.Text as="div">
-            <div className="my-3">
-              <b>Category:</b>
+            </li>
+            <li>
+              <strong>Category:</strong>
               {comic.category}
-            </div>
+            </li>
           </Card.Text>
 
-          <Card.Text as="div">
-            <div className="my-3">
-              <b>Updated:</b>
-              {new Date(comic.updated).toLocaleString("en-US")}
-            </div>
-          </Card.Text>
-
-          {comic.genres?.map((genre) => (
-            <Card.Text
-              as="div"
-              key={genre.id}
-              className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2"
-            >
-              <span>{genre.name}</span>
-            </Card.Text>
-          ))}
+          <div className="px-6 py-4">
+            {comic.genres?.map((genre) => (
+              <Card.Text
+                className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2"
+                as="span"
+                key={genre.id}
+              >
+                {genre.name}
+              </Card.Text>
+            ))}
+          </div>
         </Card.Body>
       </Card>
-    </div>
+    </Container>
   );
 };
 

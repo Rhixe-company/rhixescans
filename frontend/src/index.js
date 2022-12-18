@@ -1,7 +1,7 @@
 import React from "react";
 
 import { createRoot } from "react-dom/client";
-import "./bootstrap.min.css";
+
 import "./assets/main.css";
 import "./index.css";
 import App from "./App";
