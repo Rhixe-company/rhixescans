@@ -49,7 +49,11 @@ export const chaptersDetailsReducer = (state = { chapter: [] }, action) => {
       return { loading: true, ...state };
 
     case CHAPTERS_DETAILS_SUCCESS:
-      return { loading: false, chapter: action.payload.chapter };
+      return {
+        loading: false,
+        chapter: action.payload.chapter,
+        comic: action.payload.comic,
+      };
 
     case CHAPTERS_DETAILS_FAIL:
       return { loading: false, error: action.payload };

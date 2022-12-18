@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { ListGroup, Card, Button } from "react-bootstrap";
-
+import Loader from "../ui/Loader";
 import Rating from "../ui/Rating";
 const Comicgrid = ({ comic, chapters }) => {
   return (
@@ -86,7 +86,7 @@ const Comicgrid = ({ comic, chapters }) => {
         ))}
       </Card.Body>
       <br />
-      {chapters.length > 0 ? (
+      {chapters?.length > 0 ? (
         <div>
           <b>Total Chapters: {comic.numChapters}</b>
 
@@ -101,7 +101,10 @@ const Comicgrid = ({ comic, chapters }) => {
           ))}
         </div>
       ) : (
-        <b>No Chapters Created</b>
+        <div>
+          loading ...
+          <Loader />
+        </div>
       )}
     </Card>
   );

@@ -79,7 +79,7 @@ class Comic(models.Model):
         ordering = ['-id', '-title']
 
     def __str__(self):
-        return '%s %s %s' % (self.title, self.image, self.description)
+        return self.title
 
     @property
     def created_dynamic(self):

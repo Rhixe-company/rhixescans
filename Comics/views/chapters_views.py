@@ -42,8 +42,11 @@ def getChapters(request):
 @api_view(['GET'])
 def getChapter(request, pk):
     chapter = Chapter.objects.get(id=pk)
+    comicId = chapter.comics
+    comic = Comic.objects.get(title=comicId)
     serializer = ChapterSerializer(chapter, many=False)
-    return Response({'chapter': serializer.data})
+    serializer1 = ComicSerializer(comic, many=False)
+    return Response({'chapter': serializer.data, 'comic': serializer1.data})
 
 
 @api_view(['POST'])

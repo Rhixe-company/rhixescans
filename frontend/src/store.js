@@ -18,7 +18,6 @@ import {
   comicCreateReducer,
   comicUpdateReducer,
   comicsTopRatedReducer,
-  comicChaptersReducer,
 } from "./reducers/comicsReducers";
 
 import {
@@ -33,7 +32,7 @@ import {
 const reducer = combineReducers({
   comicsList: comicsListReducer,
   comicsDetails: comicsDetailsReducer,
-  comicChapters: comicChaptersReducer,
+
   comicDelete: comicDeleteReducer,
   comicCreate: comicCreateReducer,
   comicUpdate: comicUpdateReducer,

@@ -65,7 +65,7 @@ def getGenres(request):
 
 @api_view(['GET'])
 def getTopComics(request):
-    comics = Comic.objects.filter(rating__gte=9.9).order_by('title')[:15]
+    comics = Comic.objects.filter(rating__gte=10.0).order_by('title')
     serializer = ComicSerializer(comics, many=True)
     return Response(serializer.data)
 
@@ -73,17 +73,10 @@ def getTopComics(request):
 @api_view(['GET'])
 def getComic(request, pk):
     comic = Comic.objects.get(id=pk)
-    serializer = ComicSerializer(comic, many=False)
-    return Response({'comic': serializer.data})
-
-
-@api_view(['GET'])
-def getChapters(request, pk):
-    comic = Comic.objects.get(id=pk)
     chapters = comic.chapter_set.all()
     serializer = ComicSerializer(comic, many=False)
-    serializer2 = ChapterSerializer(chapters, many=True)
-    return Response({'comic': serializer.data, 'chapters': serializer2.data})
+    serializer1 = ChapterSerializer(chapters, many=True)
+    return Response({'comic': serializer.data, 'chapters': serializer1.data})
 
 
 @api_view(['POST'])
