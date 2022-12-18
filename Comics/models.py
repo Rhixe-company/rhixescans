@@ -58,7 +58,7 @@ class Comic(models.Model):
     CategoryType = models.TextChoices('CategoryType', 'Manhua Manhwa Manga')
 
     image = models.ImageField(
-        upload_to=comics_images_location, blank=True, default='/placeholder.png')
+        upload_to=comics_images_location, blank=False)
     image_url = models.URLField(blank=True, null=False)
     rating = models.DecimalField(
         max_digits=9, decimal_places=1, blank=False, null=False)
