@@ -1,4 +1,3 @@
-import { Container } from "react-bootstrap";
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { listChaptersDetails } from "../actions/chaptersActions";
@@ -43,43 +42,41 @@ export const ChapterScreen = ({ match, history }) => {
   // Chage page
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
   return (
-    <Container>
-      <div className="container mx-auto">
-        <div>
-          {loading ? (
-            <Loader />
-          ) : error ? (
-            <Message variant="danger">{error}</Message>
-          ) : (
-            <div>
-              <Link to={`/comic/${comic?.id}/`}>{comic?.title}</Link>
+    <div>
+      <div>
+        {loading ? (
+          <Loader />
+        ) : error ? (
+          <Message variant="danger">{error}</Message>
+        ) : (
+          <div>
+            <Link to={`/comic/${comic?.id}/`}>{comic?.title}</Link>
 
-              <div className="container mx-auto">
-                <Link to={`/comic/${chapter.comics}/`}>
-                  <Button variant="secondary">{chapter.name}</Button>
-                </Link>
-                {pages?.map((page, index) => (
-                  <Pages page={page} key={index} />
-                ))}
-              </div>
-              <Link to={`/comic/${chapter?.comics}/`}>{chapter?.name}</Link>
+            <div className="container mx-auto">
+              <Link to={`/comic/${chapter.comics}/`}>
+                <Button variant="secondary">{chapter.name}</Button>
+              </Link>
+              {pages?.map((page, index) => (
+                <Pages page={page} key={index} />
+              ))}
             </div>
-          )}
-        </div>
-        <ul className="list-group mb-4">
-          {currentPosts?.map((post) => (
-            <li key={post.id} className="list-group-item">
-              <Link to={`/comics/chapter/${post.id}/`}>{post.name}</Link>
-            </li>
-          ))}
-        </ul>
-        <Pagination
-          postsPerPage={postsPerPage}
-          totalPosts={comic?.chapters?.length}
-          paginate={paginate}
-        />
+            <Link to={`/comic/${chapter?.comics}/`}>{chapter?.name}</Link>
+          </div>
+        )}
       </div>
-    </Container>
+      <ul className="list-group mb-4">
+        {currentPosts?.map((post) => (
+          <li key={post.id} className="list-group-item">
+            <Link to={`/comics/chapter/${post.id}/`}>{post.name}</Link>
+          </li>
+        ))}
+      </ul>
+      <Pagination
+        postsPerPage={postsPerPage}
+        totalPosts={comic?.chapters?.length}
+        paginate={paginate}
+      />
+    </div>
   );
 };
 

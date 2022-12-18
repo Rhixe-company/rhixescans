@@ -3,7 +3,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 const Pages = ({ page }) => {
   return (
     <InfiniteScroll dataLength={page}>
-      <Image src={page.images} alt={page.images} />
+      <Image className="w-full" src={page.images} alt={page.images} />
     </InfiniteScroll>
   );
 };
