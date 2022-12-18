@@ -13,7 +13,7 @@ const Pagination = ({ postsPerPage, totalPosts, paginate, chapterId }) => {
           <li key={number} className="page-item">
             <LinkContainer
               onClick={() => paginate(number)}
-              to={`/comics/chapter/${chapterId}`}
+              to={`#/comics/chapter/${chapterId}`}
               className="page-link"
             >
               {number}
