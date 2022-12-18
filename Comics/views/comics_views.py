@@ -13,7 +13,7 @@ def getComics(request):
         'keyword') != None else ''
     comics = Comic.objects.filter(
         Q(title__icontains=query)
-    )
+    ).order_by('-updated')
 
     page = request.GET.get('page')
     paginator = Paginator(comics, 24)
@@ -65,7 +65,7 @@ def getGenres(request):
 
 @api_view(['GET'])
 def getTopComics(request):
-    comics = Comic.objects.filter(rating__gte=10.0).order_by('-title')
+    comics = Comic.objects.filter(rating__gte=9.9).order_by('title')[:15]
     serializer = ComicSerializer(comics, many=True)
     return Response(serializer.data)
 

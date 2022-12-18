@@ -32,8 +32,8 @@ const ComicItem = ({ comic }) => {
                 color={"#f8e825"}
               />
               <br />
-              <b>Artist:</b>
-              {comic.artist}
+              <b>Release Date:</b>
+              {comic.release_date}
             </div>
           </Card.Text>
           <Card.Text as="div">
@@ -45,20 +45,18 @@ const ComicItem = ({ comic }) => {
 
           <Card.Text as="div">
             <div className="my-3">
-              Category:
+              <b>Category:</b>
               {comic.category}
             </div>
           </Card.Text>
 
           <Card.Text as="div">
             <div className="my-3">
-              <b>Last Updated:</b>
+              <b>Updated:</b>
               {new Date(comic.updated).toLocaleString("en-US")}
             </div>
           </Card.Text>
 
-          <b>Genres:</b>
-          <br />
           {comic.genres?.map((genre) => (
             <Card.Text
               as="div"

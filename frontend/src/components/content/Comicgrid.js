@@ -63,19 +63,18 @@ const Comicgrid = ({ comic, chapters }) => {
           <b>Category:</b>
           <span>{comic.category}</span>
         </Card.Text>
-
         <Card.Text as="div">
-          <b>Release Date:</b>
-          {new Date(comic.created).toLocaleString("en-US")}
+          <div className="my-3">
+            <b>Release Date:</b>
+            {comic.release_date}
+          </div>
         </Card.Text>
 
         <Card.Text as="div">
           <b>Last Updated:</b>
           {new Date(comic.updated).toLocaleString("en-US")}
         </Card.Text>
-        <br />
-        <b>Genres</b>
-        <br />
+
         {comic.genres?.map((genre) => (
           <Card.Text
             as="div"

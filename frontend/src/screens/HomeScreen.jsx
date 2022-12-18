@@ -25,16 +25,18 @@ function HomeScreen({ history }) {
         <Message variant="danger">{error}</Message>
       ) : (
         <Container className="container mx-auto">
-          {!keyword && <ComicsCarousel />}
-          <br />
-          <strong>{comics_count} comics available</strong>
-          {comics.map((comic) => (
-            <div key={comic.id}>
-              <ComicItem comic={comic} />
-            </div>
-          ))}
+          <section>
+            {!keyword && <ComicsCarousel />}
+            <h3>Recent Comics</h3>
+            {comics.map((comic) => (
+              <div key={comic.id}>
+                <ComicItem comic={comic} />
+              </div>
+            ))}
+          </section>
 
           <Paginate page={page} pages={pages} keyword={keyword} />
+          <b>{comics_count} comics available</b>
         </Container>
       )}
     </section>
