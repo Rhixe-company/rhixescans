@@ -31,6 +31,14 @@ const ComicItem = ({ comic }) => {
               />
             </li>
             <li>
+              <strong>Last Updated:</strong>
+              {new Date(comic.updated).toLocaleString("en-us")}
+            </li>
+            <li>
+              <strong>Artist:</strong>
+              {comic.artist}
+            </li>
+            <li>
               <strong>Status:</strong>
               {comic.status}
             </li>
