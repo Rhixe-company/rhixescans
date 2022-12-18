@@ -20,17 +20,17 @@ export const ChapterScreen = ({ match, history }) => {
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
   const [currentPage, setCurrentPage] = useState(1);
-  const [postsPerPage] = useState(20);
+  const [postsPerPage] = useState(50);
 
   useEffect(() => {
     if (!userInfo) {
       history.push("/login");
     } else {
-      if (!chapter.comics) {
+      if (!chapter?.comics) {
       }
       dispatch(listChaptersDetails(chapterId));
     }
-  }, [userInfo, history, dispatch, chapterId, chapter.comics]);
+  }, [userInfo, history, dispatch, chapterId, chapter?.comics]);
   const pages = chapter?.pages;
 
   // Get current posts
@@ -62,7 +62,7 @@ export const ChapterScreen = ({ match, history }) => {
                   <Pages page={page} key={index} />
                 ))}
               </div>
-              <Link to={`/comic/${comic?.id}/`}>{comic?.title}</Link>
+              <Link to={`/comic/${chapter?.comics}/`}>{chapter?.name}</Link>
             </div>
           )}
         </div>
@@ -75,7 +75,7 @@ export const ChapterScreen = ({ match, history }) => {
         </ul>
         <Pagination
           postsPerPage={postsPerPage}
-          totalPosts={comic?.chapters.length}
+          totalPosts={comic?.chapters?.length}
           paginate={paginate}
         />
       </div>

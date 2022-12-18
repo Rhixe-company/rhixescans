@@ -1,7 +1,6 @@
 import React from "react";
-import { LinkContainer } from "react-router-bootstrap";
 
-const Pagination = ({ postsPerPage, totalPosts, paginate }) => {
+const Pagination = ({ postsPerPage, totalPosts, paginate, chapterId }) => {
   const pageNumbers = [];
   for (let i = 1; i <= Math.ceil(totalPosts / postsPerPage); i++) {
     pageNumbers.push(i);
@@ -11,13 +10,13 @@ const Pagination = ({ postsPerPage, totalPosts, paginate }) => {
       <ul className="pagination">
         {pageNumbers.map((number) => (
           <li key={number} className="page-item">
-            <LinkContainer
+            <a
               onClick={() => paginate(number)}
-              to={`#/comics/chapter/`}
+              href="#/comics/chapter/"
               className="page-link"
             >
               {number}
-            </LinkContainer>
+            </a>
           </li>
         ))}
       </ul>
