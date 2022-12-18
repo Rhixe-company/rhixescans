@@ -29,7 +29,7 @@ function HomeScreen({ history }) {
 
           <small>{comics_count} comics available</small>
           <div className="container mx-auto">
-            <div className="grid grid-cols-3 gap-1">
+            <div className="grid grid-cols-1 gap-1">
               {comics.map((comic) => (
                 <ComicItem key={comic.id} comic={comic} />
               ))}
