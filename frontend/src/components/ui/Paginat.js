@@ -12,7 +12,7 @@ const Paginat = ({ postsPerPage, totalPosts, paginate }) => {
           <li key={number} className="page-item">
             <a
               onClick={() => paginate(number)}
-              href="!#/admin/chapters"
+              href="/admin/chapters"
               className="page-link"
             >
               {number}

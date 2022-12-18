@@ -20,7 +20,7 @@ export const ChapterScreen = ({ match, history }) => {
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
   const [currentPage, setCurrentPage] = useState(1);
-  const [postsPerPage] = useState(10);
+  const [postsPerPage] = useState(20);
 
   useEffect(() => {
     if (!userInfo) {
@@ -77,6 +77,7 @@ export const ChapterScreen = ({ match, history }) => {
           postsPerPage={postsPerPage}
           totalPosts={comic?.chapters.length}
           paginate={paginate}
+          chapterId={chapterId}
         />
       </div>
     </Container>

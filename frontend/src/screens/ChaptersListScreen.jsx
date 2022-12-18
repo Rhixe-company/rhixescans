@@ -17,7 +17,7 @@ import { CHAPTERS_CREATE_RESET } from "../constants/chaptersConstants";
 const ChaptersListScreen = ({ history }) => {
   const dispatch = useDispatch();
   const [currentPage, setCurrentPage] = useState(1);
-  const [postsPerPage] = useState(2);
+  const [postsPerPage] = useState(100);
 
   const chaptersList = useSelector((state) => state.chaptersList);
   const { loading, error, chapters, chapters_count } = chaptersList;
