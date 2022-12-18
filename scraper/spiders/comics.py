@@ -1,8 +1,5 @@
 import scrapy
 from ..items import *
-from Comics.models import ComicsManager, Chapter, Page
-from django.db.models import Q
-from bs4 import BeautifulSoup
 
 
 class ComicsSpider(scrapy.Spider):
@@ -41,39 +38,3 @@ class ComicsSpider(scrapy.Spider):
             for genre in g:
                 item['genres'] = genre
                 yield item
-        for link in response.css('ul.clstyle li a::attr(href)'):
-            yield response.follow(link.get(), callback=self.parse_chapters)
-
-    def parse_chapters(self, response):
-        slug = response.css('div.bixbox ol li a ::attr(href)')[
-            1].get().split("/")[-2]
-        title = response.css(
-            "div.allc a::text").get().strip()
-        name = response.css(
-            "h1.entry-title::text").get().strip()
-        comic = ComicsManager.objects.filter(Q(title__icontains=title) |
-                                             Q(slug__icontains=slug)).get(title=title, slug=slug)
-        # 1 -  Comic exists
-        if comic:
-            obj, created = Chapter.objects.filter(
-                Q(name=name)
-            ).get_or_create(comics=comic, name=name, defaults={'name': name})
-            soup = BeautifulSoup(response.text, features='lxml')
-            posts = soup.select(
-                "div.rdminimal img")
-            for page in posts:
-                pages = page['src']
-
-                obj1, created = Page.objects.filter(
-                    Q(images_url__icontains=pages)
-
-                ).get_or_create(images_url=pages, defaults={'images_url': pages, 'chapters': obj})
-                obj.pages.add(obj1)
-
-                obj.numPages = obj.page_set.all().count()
-                obj.save()
-                comic.numChapters = comic.chapter_set.all().count()
-                comic.save()
-
-        else:
-            pass
