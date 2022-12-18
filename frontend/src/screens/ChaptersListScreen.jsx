@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { LinkContainer } from "react-router-bootstrap";
 import { Button, Table, Container } from "react-bootstrap";
 import { Link } from "react-router-dom";
@@ -16,10 +16,11 @@ import { CHAPTERS_CREATE_RESET } from "../constants/chaptersConstants";
 
 const ChaptersListScreen = ({ history }) => {
   const dispatch = useDispatch();
+  const [currentPage, setCurrentPage] = useState(1);
+  const [postsPerPage] = useState(2);
 
   const chaptersList = useSelector((state) => state.chaptersList);
-  const { loading, error, chapters, pages, page, chapters_count } =
-    chaptersList;
+  const { loading, error, chapters, chapters_count } = chaptersList;
 
   const chapterDelete = useSelector((state) => state.chapterDelete);
   const {
@@ -73,6 +74,13 @@ const ChaptersListScreen = ({ history }) => {
     dispatch(createChapter());
   };
 
+  // Get current posts
+  const indexOfLastPost = currentPage * postsPerPage;
+  const indexOfFirstPost = indexOfLastPost - postsPerPage;
+  const currentPosts = chapters.slice(indexOfFirstPost, indexOfLastPost);
+  // Chage page
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
   return (
     <Container>
       {loadingDelete && <Loader />}
@@ -100,7 +108,7 @@ const ChaptersListScreen = ({ history }) => {
               </thead>
 
               <tbody>
-                {chapters.map((chapter) => (
+                {currentPosts.map((chapter) => (
                   <>
                     <tr key={chapter.id}>
                       <td>
@@ -130,7 +138,11 @@ const ChaptersListScreen = ({ history }) => {
                 ))}
               </tbody>
             </Table>
-            <Paginat pages={pages} page={page} isAdmin={true} />
+            <Paginat
+              postsPerPage={postsPerPage}
+              totalPosts={chapters.length}
+              paginate={paginate}
+            />
           </div>
         </div>
       )}

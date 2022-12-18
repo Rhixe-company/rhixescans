@@ -11,10 +11,9 @@ import { Container } from "react-bootstrap";
 export const ComicScreen = ({ history, match }) => {
   const comicId = match.params.id;
   const dispatch = useDispatch();
-  const comicsDetails = useSelector((state) => state.comicsDetails);
-  const { comic, chapters, error, loading } = comicsDetails;
-  const userLogin = useSelector((state) => state.userLogin);
-  const { userInfo } = userLogin;
+
+  const { comic, error, loading } = useSelector((state) => state.comicsDetails);
+  const { userInfo } = useSelector((state) => state.userLogin);
 
   useEffect(() => {
     if (!userInfo) {
@@ -30,7 +29,7 @@ export const ComicScreen = ({ history, match }) => {
         <Message variant="danger">{error}</Message>
       ) : (
         <Container>
-          <Comicgrid comic={comic} chapters={chapters} />
+          <Comicgrid comic={comic} />
         </Container>
       )}
     </section>
@@ -42,7 +41,6 @@ ComicScreen.propTypes = {
 };
 const mapStateToProps = (state) => ({
   comic: state.comicsDetails.comic,
-  chapters: state.comicsDetails.chapters,
 });
 
 export default connect(mapStateToProps, {

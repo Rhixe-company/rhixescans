@@ -1,6 +1,6 @@
 import React from "react";
 
-const Paginat = ({ postsPerPage, totalPosts, paginate }) => {
+const Pagination = ({ postsPerPage, totalPosts, paginate }) => {
   const pageNumbers = [];
   for (let i = 1; i <= Math.ceil(totalPosts / postsPerPage); i++) {
     pageNumbers.push(i);
@@ -12,7 +12,7 @@ const Paginat = ({ postsPerPage, totalPosts, paginate }) => {
           <li key={number} className="page-item">
             <a
               onClick={() => paginate(number)}
-              href="!#/admin/chapters"
+              href="!#/"
               className="page-link"
             >
               {number}
@@ -24,4 +24,4 @@ const Paginat = ({ postsPerPage, totalPosts, paginate }) => {
   );
 };
 
-export default Paginat;
+export default Pagination;

@@ -15,11 +15,10 @@ import ChaptersEditScreen from "./screens/ChaptersEditScreen";
 import HomeScreen from "./screens/HomeScreen";
 import ChapterScreen from "./screens/ChapterScreen";
 import ComicsListScreen from "./screens/ComicsListScreen";
-import { Provider } from "react-redux";
-import store from "./store";
+
 const App = () => {
   return (
-    <Provider store={store}>
+    <>
       <Router>
         <Header />
         <main className="py-3">
@@ -45,12 +44,13 @@ const App = () => {
               component={HomeScreen}
               exact
             />
+
             <Route path="/" component={HomeScreen} exact />
           </Container>
         </main>
         <Footer />
       </Router>
-    </Provider>
+    </>
   );
 };
 

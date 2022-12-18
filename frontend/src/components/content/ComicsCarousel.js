@@ -21,7 +21,6 @@ const ComicsCarousel = () => {
     <Message variant="danger">{error}</Message>
   ) : (
     <section>
-      <h1 className="text-3xl">Top Comics</h1>
       <Carousel fade variant="dark" className="bg-dark">
         {comics.map((comic) => (
           <Carousel.Item interval={2000} key={comic.id}>

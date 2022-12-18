@@ -1,73 +1,21 @@
-import React, { useState } from "react";
-import { Form, Button } from "react-bootstrap";
-import FormContainer from "../ui/FormContainer";
-const ComicForm = ({ createComicHandler }) => {
-  const [title, setTitle] = useState("");
-  const [rating, setRating] = useState(0);
-  const [image, setImage] = useState("");
+import React from "react";
+import { Button } from "react-bootstrap";
 
-  const [description, setDescription] = useState("");
-  const [status, setStatus] = useState("");
+import { useDispatch } from "react-redux";
+import { createComic } from "../../features/comics/comicSlice";
+const ComicForm = () => {
+  const dispatch = useDispatch();
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+    dispatch(createComic());
+  };
 
   return (
     <div>
-      <FormContainer>
-        <Form onSubmit={createComicHandler}>
-          <Form.Group controlId="name">
-            <Form.Label>Title</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Enter title"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-            ></Form.Control>
-          </Form.Group>
-
-          <Form.Group controlId="rating">
-            <Form.Label>Rating</Form.Label>
-            <Form.Control
-              type="number"
-              placeholder="Enter rating"
-              value={rating}
-              onChange={(e) => setRating(e.target.value)}
-            ></Form.Control>
-          </Form.Group>
-
-          <Form.Group controlId="image">
-            <Form.Label>Image</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Enter image"
-              value={image}
-              onChange={(e) => setImage(e.target.value)}
-            ></Form.Control>
-          </Form.Group>
-
-          <Form.Group controlId="description">
-            <Form.Label>Description</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Enter description"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-            ></Form.Control>
-          </Form.Group>
-
-          <Form.Group controlId="status">
-            <Form.Label>Status</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Enter status"
-              value={status}
-              onChange={(e) => setStatus(e.target.value)}
-            ></Form.Control>
-          </Form.Group>
-
-          <Button type="submit" variant="primary">
-            Submit
-          </Button>
-        </Form>
-      </FormContainer>
+      <Button className="my-3" onClick={onSubmit}>
+        <i className="fas fa-plus"></i> Create Comic
+      </Button>
     </div>
   );
 };

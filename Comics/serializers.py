@@ -7,13 +7,13 @@ from users.serializers import UserSerializer
 class PageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Page
-        fields = '__all__'
+        fields = ['images']
 
 
 class GenreSerializer(serializers.ModelSerializer):
     class Meta:
         model = Genre
-        fields = '__all__'
+        fields = ['name']
 
 
 class ChapterSerializer(serializers.ModelSerializer):
@@ -30,7 +30,7 @@ class ChapterSerializer(serializers.ModelSerializer):
 
 
 class ComicSerializer(serializers.ModelSerializer):
-    users = serializers.SerializerMethodField(read_only=True)
+    readers = serializers.SerializerMethodField(read_only=True)
     genres = serializers.SerializerMethodField(read_only=True)
     chapters = serializers.SerializerMethodField(read_only=True)
 
@@ -43,9 +43,9 @@ class ComicSerializer(serializers.ModelSerializer):
         serializer = GenreSerializer(genres, many=True)
         return serializer.data
 
-    def get_users(self, obj):
-        users = obj.user.all()
-        serializer = UserSerializer(users, many=True)
+    def get_readers(self, obj):
+        readers = obj.reader.all()
+        serializer = UserSerializer(readers, many=True)
         return serializer.data
 
     def get_chapters(self, obj):

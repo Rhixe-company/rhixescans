@@ -1,10 +1,10 @@
 import { Container } from "react-bootstrap";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { listChaptersDetails } from "../actions/chaptersActions";
 
+import Pagination from "../components/Pagination";
 import Pages from "../components/content/Pages";
-import PagesPagination from "../components/content/PagesPagination";
 import { connect, useDispatch, useSelector } from "react-redux";
 import Message from "../components/ui/Message";
 import Loader from "../components/ui/Loader";
@@ -19,6 +19,8 @@ export const ChapterScreen = ({ match, history }) => {
 
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
+  const [currentPage, setCurrentPage] = useState(1);
+  const [postsPerPage] = useState(10);
 
   useEffect(() => {
     if (!userInfo) {
@@ -29,7 +31,17 @@ export const ChapterScreen = ({ match, history }) => {
       dispatch(listChaptersDetails(chapterId));
     }
   }, [userInfo, history, dispatch, chapterId, chapter.comics]);
+  const pages = chapter?.pages;
 
+  // Get current posts
+  const indexOfLastPost = currentPage * postsPerPage;
+  const indexOfFirstPost = indexOfLastPost - postsPerPage;
+  const currentPosts = comic?.chapters?.slice(
+    indexOfFirstPost,
+    indexOfLastPost
+  );
+  // Chage page
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
   return (
     <Container>
       <div className="container mx-auto">
@@ -46,17 +58,26 @@ export const ChapterScreen = ({ match, history }) => {
                 <Link to={`/comic/${chapter.comics}/`}>
                   <Button variant="secondary">{chapter.name}</Button>
                 </Link>
-                {chapter.pages?.map((page) => (
-                  <Pages page={page} key={page.id} />
+                {pages?.map((page, index) => (
+                  <Pages page={page} key={index} />
                 ))}
               </div>
               <Link to={`/comic/${comic?.id}/`}>{comic?.title}</Link>
-              {comic?.chapters?.map((chapter) => (
-                <PagesPagination chapter={chapter} key={chapter.id} />
-              ))}
             </div>
           )}
         </div>
+        <ul className="list-group mb-4">
+          {currentPosts?.map((post) => (
+            <li key={post.id} className="list-group-item">
+              <Link to={`/comics/chapter/${post.id}/`}>{post.name}</Link>
+            </li>
+          ))}
+        </ul>
+        <Pagination
+          postsPerPage={postsPerPage}
+          totalPosts={comic?.chapters.length}
+          paginate={paginate}
+        />
       </div>
     </Container>
   );

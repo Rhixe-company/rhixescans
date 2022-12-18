@@ -2,7 +2,9 @@ import { Link } from "react-router-dom";
 import { ListGroup, Card, Button } from "react-bootstrap";
 import Loader from "../ui/Loader";
 import Rating from "../ui/Rating";
-const Comicgrid = ({ comic, chapters }) => {
+const Comicgrid = ({ comic }) => {
+  const genres = comic.genres;
+  const chapters = comic.chapters;
   return (
     <Card key={comic.id} className="my-3 p-3 rounded">
       <Link to="/">
@@ -75,10 +77,10 @@ const Comicgrid = ({ comic, chapters }) => {
           {new Date(comic.updated).toLocaleString("en-US")}
         </Card.Text>
 
-        {comic.genres?.map((genre) => (
+        {genres?.map((genre, index) => (
           <Card.Text
             as="div"
-            key={genre.id}
+            key={index}
             className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2"
           >
             <span>{genre.name}</span>

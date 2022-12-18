@@ -49,25 +49,25 @@ class Genre(models.Model):
 
 
 class Comic(models.Model):
-
-    user = models.ManyToManyField(User,  blank=True)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    reader = models.ManyToManyField(User,  blank=True, related_name='readers')
     title = models.CharField(max_length=2000, unique=True, null=False)
     slug = models.SlugField(max_length=2000, unique=True,
-                            blank=False, null=True)
+                            blank=True, null=True)
     description = models.TextField(blank=True)
     CategoryType = models.TextChoices('CategoryType', 'Manhua Manhwa Manga')
 
     image = models.ImageField(
-        upload_to=comics_images_location, blank=True)
-    image_url = models.URLField(blank=False, null=True)
+        upload_to=comics_images_location, blank=True, default='/placeholder.png')
+    image_url = models.URLField(blank=True, null=False)
     rating = models.DecimalField(
         max_digits=9, decimal_places=1, blank=False, null=False)
     status = models.CharField(
-        max_length=100, choices=STATUS_CHOICES)
+        max_length=100, choices=STATUS_CHOICES, blank=True)
     author = models.CharField(max_length=1000, blank=True)
     artist = models.CharField(max_length=1000, blank=True)
     category = models.CharField(
-        max_length=10, choices=CategoryType.choices, )
+        max_length=10, choices=CategoryType.choices, blank=True)
     numChapters = models.IntegerField(default=0, null=True, blank=True)
     genres = models.ManyToManyField(
         Genre, blank=True)

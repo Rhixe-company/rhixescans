@@ -1,5 +1,5 @@
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAdminUser
+from rest_framework.permissions import IsAdminUser, AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from Comics.models import *
@@ -8,6 +8,7 @@ from django.db.models import Q
 
 
 @api_view(['GET'])
+@permission_classes([AllowAny])
 def getComics(request):
     query = request.GET.get('keyword') if request.GET.get(
         'keyword') != None else ''
@@ -39,6 +40,7 @@ def getComics(request):
 
 
 @api_view(['GET'])
+@permission_classes([AllowAny])
 def getGenres(request):
     query = request.GET.get('keyword') if request.GET.get(
         'keyword') != None else ''
@@ -64,6 +66,7 @@ def getGenres(request):
 
 
 @api_view(['GET'])
+@permission_classes([AllowAny])
 def getTopComics(request):
     comics = Comic.objects.filter(rating__gte=10.0).order_by('title')
     serializer = ComicSerializer(comics, many=True)
@@ -71,12 +74,13 @@ def getTopComics(request):
 
 
 @api_view(['GET'])
+@permission_classes([AllowAny])
 def getComic(request, pk):
     comic = Comic.objects.get(id=pk)
-    chapters = comic.chapter_set.all()
+
     serializer = ComicSerializer(comic, many=False)
-    serializer1 = ChapterSerializer(chapters, many=True)
-    return Response({'comic': serializer.data, 'chapters': serializer1.data})
+
+    return Response({'comic': serializer.data})
 
 
 @api_view(['POST'])
@@ -84,14 +88,11 @@ def getComic(request, pk):
 def createComic(request):
     comic = Comic.objects.create(
         user=request.user,
-        title=request.POST.get('title'),
-        description=request.POST.get('description'),
-        image_url=request.POST.get('image_url'),
-        rating=request.POST.get('rating'),
-        author=request.POST.get('author'),
-        status=request.POST.get('status'),
+        title='Sample Name',
+        description='Sample Name',
+        rating=0.0,
     )
-    comic.genres.add(request.POST.get('genres'))
+
     serializer = ComicSerializer(comic, many=False)
     return Response(serializer.data)
 
@@ -125,6 +126,7 @@ def deleteComic(request, pk):
 
 
 @api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def uploadImage(request):
     data = request.data
 

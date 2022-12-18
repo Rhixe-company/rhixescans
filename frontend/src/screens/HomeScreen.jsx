@@ -18,25 +18,27 @@ function HomeScreen({ history }) {
     dispatch(listComics(keyword));
   }, [dispatch, keyword]);
   return (
-    <Container>
+    <section>
       {loading ? (
         <Loader />
       ) : error ? (
         <Message variant="danger">{error}</Message>
       ) : (
-        <section>
+        <Container>
           {!keyword && <ComicsCarousel />}
 
           <small>{comics_count} comics available</small>
-          {comics.map((comic) => (
-            <div key={comic.id}>
-              <ComicItem comic={comic} />
+          <div className="container mx-auto">
+            <div className="grid grid-cols-3 gap-1">
+              {comics.map((comic) => (
+                <ComicItem key={comic.id} comic={comic} />
+              ))}
             </div>
-          ))}
+          </div>
           <Paginate page={page} pages={pages} keyword={keyword} />
-        </section>
+        </Container>
       )}
-    </Container>
+    </section>
   );
 }
 
