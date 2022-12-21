@@ -15,7 +15,7 @@ import ChaptersEditScreen from "./screens/ChaptersEditScreen";
 import ProfileScreen from "./screens/ProfileScreen";
 import UserListScreen from "./screens/UserListScreen";
 import UserEditScreen from "./screens/UserEditScreen";
-import "bootstrap/dist/css/bootstrap.min.css";
+
 const App = () => {
   return (
     <>

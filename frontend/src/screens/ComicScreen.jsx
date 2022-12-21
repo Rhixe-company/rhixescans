@@ -131,10 +131,7 @@ export const ComicScreen = ({ history, match }) => {
                   ))}
                 </div>
               ) : (
-                <div>
-                  loading ...
-                  <Loader />
-                </div>
+                <div>No Chapter Found</div>
               )}
             </Col>
           </Row>

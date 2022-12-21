@@ -24,13 +24,20 @@ import {
   GENRES_FAIL,
 } from "../constants/comicsConstants";
 
-export const comicsListReducer = (state = { comics: [] }, action) => {
+const initialState = {
+  comics: [],
+  comic: {},
+  genres: [],
+};
+
+export const comicsListReducer = (state = initialState, action) => {
   switch (action.type) {
     case COMICS_LIST_REQUEST:
-      return { loading: true, comics: [] };
+      return { ...state, loading: true, comics: [] };
 
     case COMICS_LIST_SUCCESS:
       return {
+        ...state,
         loading: false,
         comics: action.payload.comics,
         comics_count: action.payload.comics_count,
@@ -39,27 +46,28 @@ export const comicsListReducer = (state = { comics: [] }, action) => {
       };
 
     case COMICS_LIST_FAIL:
-      return { loading: false, error: action.payload };
+      return { ...state, loading: false, error: action.payload };
 
     default:
       return state;
   }
 };
 
-export const comicsDetailsReducer = (state = { comic: [] }, action) => {
+export const comicsDetailsReducer = (state = initialState, action) => {
   switch (action.type) {
     case COMICS_DETAILS_REQUEST:
-      return { loading: true, ...state };
+      return { loading: true, comic: {}, ...state };
 
     case COMICS_DETAILS_SUCCESS:
       return {
+        ...state,
         loading: false,
         comic: action.payload.comic,
         chapters: action.payload.chapters,
       };
 
     case COMICS_DETAILS_FAIL:
-      return { loading: false, error: action.payload };
+      return { ...state, loading: false, error: action.payload };
 
     default:
       return state;
@@ -120,13 +128,13 @@ export const comicUpdateReducer = (state = { comic: {} }, action) => {
   }
 };
 
-export const comicsTopRatedReducer = (state = { comics: [] }, action) => {
+export const comicsTopRatedReducer = (state = initialState, action) => {
   switch (action.type) {
     case COMICS_TOP_REQUEST:
-      return { loading: true, comics: [] };
+      return { ...state, loading: true, comics: [] };
 
     case COMICS_TOP_SUCCESS:
-      return { loading: false, comics: action.payload };
+      return { ...state, loading: false, comics: action.payload };
 
     case COMICS_TOP_FAIL:
       return { loading: false, error: action.payload };
@@ -136,13 +144,13 @@ export const comicsTopRatedReducer = (state = { comics: [] }, action) => {
   }
 };
 
-export const GenresListReducer = (state = { genres: [] }, action) => {
+export const GenresListReducer = (state = initialState, action) => {
   switch (action.type) {
     case GENRES_REQUEST:
-      return { loading: true, genres: [] };
+      return { ...state, loading: true, genres: [] };
 
     case GENRES_SUCCESS:
-      return { loading: false, genres: action.payload };
+      return { ...state, loading: false, genres: action.payload };
 
     case GENRES_FAIL:
       return { loading: false, error: action.payload };
