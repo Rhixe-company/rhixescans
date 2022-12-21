@@ -2,7 +2,8 @@ from django.shortcuts import render
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
-
+from Comics.models import Comic
+from Comics.serializers import ComicSerializer
 from django.contrib.auth.models import User
 from users.serializers import UserSerializer, UserSerializerWithToken
 # Create your views here.
@@ -85,8 +86,10 @@ def getUsers(request):
 @permission_classes([IsAdminUser])
 def getUserById(request, pk):
     user = User.objects.get(id=pk)
+    comics = user.comic_set.all()
     serializer = UserSerializer(user, many=False)
-    return Response(serializer.data)
+    serializer1 = ComicSerializer(comics, many=True)
+    return Response({'user': serializer.data, 'comics': serializer1.data})
 
 
 @api_view(['PUT'])

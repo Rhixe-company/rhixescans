@@ -21,17 +21,17 @@ export const ChapterScreen = ({ match, history }) => {
   const { chapters } = useSelector((state) => state.comicsDetails);
   const [currentPage, setCurrentPage] = useState(1);
   const [postsPerPage] = useState(50);
-
+  const comicId = chapter?.comics;
   useEffect(() => {
     if (!userInfo) {
       history.push("/login");
     } else {
-      if (!chapter?.comics) {
-      }
       dispatch(listChaptersDetails(chapterId));
-      dispatch(listComicsDetails(chapter?.comics));
+      if (comicId) {
+        dispatch(listComicsDetails(comicId));
+      }
     }
-  }, [userInfo, history, dispatch, chapterId, chapter?.comics]);
+  }, [userInfo, history, dispatch, chapterId, comicId]);
   const pages = chapter?.pages;
 
   // Get current posts
@@ -42,7 +42,7 @@ export const ChapterScreen = ({ match, history }) => {
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
   return (
     <Row>
-      <Link to={`/comic/${comic?.id}/`} className="btn btn-light my-3">
+      <Link to={`/comic/${comic?.id}/`} className="btn btn-dark my-3">
         Go Back
       </Link>
 

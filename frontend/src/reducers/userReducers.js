@@ -71,7 +71,11 @@ export const userDetailsReducer = (state = { user: {} }, action) => {
       return { ...state, loading: true };
 
     case USER_DETAILS_SUCCESS:
-      return { loading: false, user: action.payload };
+      return {
+        loading: false,
+        user: action.payload,
+        comics: action.payload.comics,
+      };
 
     case USER_DETAILS_FAIL:
       return { loading: false, error: action.payload };
@@ -90,7 +94,7 @@ export const userUpdateProfileReducer = (state = {}, action) => {
       return { loading: true };
 
     case USER_UPDATE_PROFILE_SUCCESS:
-      return { loading: false, success: true, userInfo: action.payload };
+      return { loading: false, success: true, userInfo: action.payload.user };
 
     case USER_UPDATE_PROFILE_FAIL:
       return { loading: false, error: action.payload };
@@ -147,7 +151,7 @@ export const userUpdateReducer = (state = { user: {} }, action) => {
       return { loading: false, success: true };
 
     case USER_UPDATE_FAIL:
-      return { loading: false, error: action.payload };
+      return { loading: false, error: action.payload.user };
 
     case USER_UPDATE_RESET:
       return { user: {} };

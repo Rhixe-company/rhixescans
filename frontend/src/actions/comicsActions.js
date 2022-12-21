@@ -18,15 +18,29 @@ import {
   COMICS_TOP_REQUEST,
   COMICS_TOP_SUCCESS,
   COMICS_TOP_FAIL,
+  GENRES_REQUEST,
+  GENRES_SUCCESS,
+  GENRES_FAIL,
 } from "../constants/comicsConstants";
 
 export const listComics =
   (keyword = "") =>
-  async (dispatch) => {
+  async (dispatch, getState) => {
     try {
       dispatch({ type: COMICS_LIST_REQUEST });
 
-      const { data } = await axios.get(`/api/comics${keyword}`);
+      const {
+        userLogin: { userInfo },
+      } = getState();
+
+      const config = {
+        headers: {
+          "Content-type": "application/json",
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      };
+
+      const { data } = await axios.get(`/api/comics${keyword}`, config);
 
       dispatch({
         type: COMICS_LIST_SUCCESS,
@@ -43,11 +57,22 @@ export const listComics =
     }
   };
 
-export const listTopComics = () => async (dispatch) => {
+export const listTopComics = () => async (dispatch, getState) => {
   try {
     dispatch({ type: COMICS_TOP_REQUEST });
 
-    const { data } = await axios.get(`/api/comics/top/`);
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const { data } = await axios.get(`/api/comics/top/`, config);
 
     dispatch({
       type: COMICS_TOP_SUCCESS,
@@ -64,11 +89,22 @@ export const listTopComics = () => async (dispatch) => {
   }
 };
 
-export const listComicsDetails = (id) => async (dispatch) => {
+export const listComicsDetails = (id) => async (dispatch, getState) => {
   try {
     dispatch({ type: COMICS_DETAILS_REQUEST });
 
-    const { data } = await axios.get(`/api/comics/${id}`);
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const { data } = await axios.get(`/api/comics/${id}`, config);
 
     dispatch({
       type: COMICS_DETAILS_SUCCESS,
@@ -102,9 +138,8 @@ export const deleteComic = (id) => async (dispatch, getState) => {
       },
     };
 
-    // eslint-disable-next-line no-unused-vars
     const { data } = await axios.delete(`/api/comics/delete/${id}/`, config);
-
+    console.log(data);
     dispatch({
       type: COMICS_DELETE_SUCCESS,
     });
@@ -186,6 +221,38 @@ export const updateComic = (comic) => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: COMICS_UPDATE_FAIL,
+      payload:
+        error.response && error.response.data.detail
+          ? error.response.data.detail
+          : error.message,
+    });
+  }
+};
+
+export const listGenres = () => async (dispatch, getState) => {
+  try {
+    dispatch({ type: GENRES_REQUEST });
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const { data } = await axios.get(`/api/comics/genres/`, config);
+
+    dispatch({
+      type: GENRES_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: GENRES_FAIL,
       payload:
         error.response && error.response.data.detail
           ? error.response.data.detail

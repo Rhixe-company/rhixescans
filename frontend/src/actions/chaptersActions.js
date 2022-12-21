@@ -49,11 +49,22 @@ export const listChapters = () => async (dispatch, getState) => {
   }
 };
 
-export const listChaptersDetails = (id) => async (dispatch) => {
+export const listChaptersDetails = (id) => async (dispatch, getState) => {
   try {
     dispatch({ type: CHAPTERS_DETAILS_REQUEST });
 
-    const { data } = await axios.get(`/api/chapters/${id}/`);
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const { data } = await axios.get(`/api/chapters/${id}/`, config);
 
     dispatch({
       type: CHAPTERS_DETAILS_SUCCESS,
@@ -87,9 +98,8 @@ export const deleteChapter = (id) => async (dispatch, getState) => {
       },
     };
 
-    // eslint-disable-next-line no-unused-vars
     const { data } = await axios.delete(`/api/chapters/delete/${id}/`, config);
-
+    console.log(data);
     dispatch({
       type: CHAPTERS_DELETE_SUCCESS,
     });

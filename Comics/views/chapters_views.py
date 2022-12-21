@@ -10,6 +10,7 @@ from Comics.serializers import *
 
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def getChapters(request):
     query = request.GET.get('keyword') if request.GET.get(
         'keyword') != None else ''
@@ -17,29 +18,14 @@ def getChapters(request):
     chapters = Chapter.objects.filter(
         name__icontains=query).order_by('-updated')
     chapters_count = chapters.count()
-    page = request.GET.get('page')
-    paginator = Paginator(chapters, 1000)
-
-    try:
-        chapters = paginator.page(page)
-    except PageNotAnInteger:
-        chapters = paginator.page(1)
-    except EmptyPage:
-        chapters = paginator.page(paginator.num_pages)
-
-    if page == None:
-        page = 1
-
-    page = int(page)
-    print('Page:', page)
 
     serializer = ChapterSerializer(chapters, many=True)
-    context = {'chapters_count': chapters_count, 'chapters': serializer.data,
-               'page': page, 'pages': paginator.num_pages}
+    context = {'chapters_count': chapters_count, 'chapters': serializer.data}
     return Response(context)
 
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def getChapter(request, pk):
     chapter = Chapter.objects.get(id=pk)
     comicId = chapter.comics

@@ -19,6 +19,9 @@ import {
   COMICS_TOP_REQUEST,
   COMICS_TOP_SUCCESS,
   COMICS_TOP_FAIL,
+  GENRES_REQUEST,
+  GENRES_SUCCESS,
+  GENRES_FAIL,
 } from "../constants/comicsConstants";
 
 export const comicsListReducer = (state = { comics: [] }, action) => {
@@ -126,6 +129,22 @@ export const comicsTopRatedReducer = (state = { comics: [] }, action) => {
       return { loading: false, comics: action.payload };
 
     case COMICS_TOP_FAIL:
+      return { loading: false, error: action.payload };
+
+    default:
+      return state;
+  }
+};
+
+export const GenresListReducer = (state = { genres: [] }, action) => {
+  switch (action.type) {
+    case GENRES_REQUEST:
+      return { loading: true, genres: [] };
+
+    case GENRES_SUCCESS:
+      return { loading: false, genres: action.payload };
+
+    case GENRES_FAIL:
       return { loading: false, error: action.payload };
 
     default:

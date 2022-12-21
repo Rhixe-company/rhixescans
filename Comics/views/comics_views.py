@@ -8,7 +8,7 @@ from django.db.models import Q
 
 
 @api_view(['GET'])
-@permission_classes([AllowAny])
+@permission_classes([IsAuthenticated])
 def getComics(request):
     query = request.GET.get('keyword') if request.GET.get(
         'keyword') != None else ''
@@ -40,33 +40,15 @@ def getComics(request):
 
 
 @api_view(['GET'])
-@permission_classes([AllowAny])
+@permission_classes([IsAuthenticated])
 def getGenres(request):
-    query = request.GET.get('keyword') if request.GET.get(
-        'keyword') != None else ''
-    genres = Genre.objects.filter(
-        Q(name__icontains=query)
-
-    )
-    page = request.GET.get('page')
-    paginator = Paginator(genres, 100)
-    genres_count = genres.count()
-    try:
-        genres = paginator.page(page)
-    except PageNotAnInteger:
-        genres = paginator.page(1)
-    except EmptyPage:
-        genres = paginator.page(paginator.num_pages)
-    if page == None:
-        page = 1
-    page = int(page)
-    print('Page:', page)
+    genres = Genre.objects.all()
     serializer = GenreSerializer(genres, many=True)
-    return Response({'genres_count': genres_count, 'genres': serializer.data, 'page': page, 'pages': paginator.num_pages, })
+    return Response(serializer.data)
 
 
 @api_view(['GET'])
-@permission_classes([AllowAny])
+@permission_classes([IsAuthenticated])
 def getTopComics(request):
     comics = Comic.objects.filter(rating__gte=10.0).order_by('title')
     serializer = ComicSerializer(comics, many=True)
@@ -74,7 +56,7 @@ def getTopComics(request):
 
 
 @api_view(['GET'])
-@permission_classes([AllowAny])
+@permission_classes([IsAuthenticated])
 def getComic(request, pk):
     comic = Comic.objects.get(id=pk)
     chapters = comic.chapter_set.all()
