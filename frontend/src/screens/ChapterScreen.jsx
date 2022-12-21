@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { listChaptersDetails } from "../actions/chaptersActions";
-
+import { listComicsDetails } from "../actions/comicsActions";
 import Pagination from "../components/Pagination";
 import Pages from "../components/content/Pages";
 import { connect, useDispatch, useSelector } from "react-redux";
@@ -18,6 +18,7 @@ export const ChapterScreen = ({ match, history }) => {
 
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
+  const { chapters } = useSelector((state) => state.comicsDetails);
   const [currentPage, setCurrentPage] = useState(1);
   const [postsPerPage] = useState(50);
 
@@ -28,6 +29,7 @@ export const ChapterScreen = ({ match, history }) => {
       if (!chapter?.comics) {
       }
       dispatch(listChaptersDetails(chapterId));
+      dispatch(listComicsDetails(chapter?.comics));
     }
   }, [userInfo, history, dispatch, chapterId, chapter?.comics]);
   const pages = chapter?.pages;
@@ -35,10 +37,7 @@ export const ChapterScreen = ({ match, history }) => {
   // Get current posts
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
-  const currentPosts = comic?.chapters?.slice(
-    indexOfFirstPost,
-    indexOfLastPost
-  );
+  const currentPosts = chapters?.slice(indexOfFirstPost, indexOfLastPost);
   // Chage page
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
   return (

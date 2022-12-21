@@ -77,10 +77,10 @@ def getTopComics(request):
 @permission_classes([AllowAny])
 def getComic(request, pk):
     comic = Comic.objects.get(id=pk)
-
+    chapters = comic.chapter_set.all()
     serializer = ComicSerializer(comic, many=False)
-
-    return Response({'comic': serializer.data})
+    serializer1 = ChapterSerializer(chapters, many=True)
+    return Response({'comic': serializer.data, 'chapters': serializer1.data})
 
 
 @api_view(['POST'])

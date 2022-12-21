@@ -12,10 +12,12 @@ export const ComicScreen = ({ history, match }) => {
   const comicId = match.params.id;
   const dispatch = useDispatch();
 
-  const { comic, error, loading } = useSelector((state) => state.comicsDetails);
+  const { comic, error, loading, chapters } = useSelector(
+    (state) => state.comicsDetails
+  );
   const { userInfo } = useSelector((state) => state.userLogin);
   const genres = comic.genres;
-  const chapters = comic.chapters;
+
   useEffect(() => {
     if (!userInfo) {
       history.push("/login");
