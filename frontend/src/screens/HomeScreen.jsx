@@ -4,13 +4,13 @@ import ComicItem from "../components/content/ComicItem";
 import Paginate from "../components/ui/Paginate";
 import ComicsCarousel from "../components/content/ComicsCarousel";
 import { listComics } from "../actions/comicsActions";
+import { Row, Col } from "react-bootstrap";
 import Message from "../components/ui/Message";
 import Loader from "../components/ui/Loader";
-import { Container } from "react-bootstrap";
 function HomeScreen({ history }) {
   const dispatch = useDispatch();
   const comicsList = useSelector((state) => state.comicsList);
-  const { comics, page, pages, comics_count, error, loading } = comicsList;
+  const { comics, page, pages, error, loading } = comicsList;
 
   let keyword = history.location.search;
 
@@ -18,27 +18,27 @@ function HomeScreen({ history }) {
     dispatch(listComics(keyword));
   }, [dispatch, keyword]);
   return (
-    <section>
+    <div>
+      {!keyword && <ComicsCarousel />}
+      <h1>Lastest Comics</h1>
+
       {loading ? (
         <Loader />
       ) : error ? (
         <Message variant="danger">{error}</Message>
       ) : (
-        <Container>
-          {!keyword && <ComicsCarousel />}
-
-          <small>{comics_count} comics available</small>
-          <div className="container mx-auto">
-            <div className="grid grid-cols-1 gap-1">
-              {comics.map((comic) => (
-                <ComicItem key={comic.id} comic={comic} />
-              ))}
-            </div>
-          </div>
+        <div>
+          <Row>
+            {comics.map((comic) => (
+              <Col key={comic.id} sm={12} md={6} lg={4} xl={3}>
+                <ComicItem comic={comic} />
+              </Col>
+            ))}
+          </Row>
           <Paginate page={page} pages={pages} keyword={keyword} />
-        </Container>
+        </div>
       )}
-    </section>
+    </div>
   );
 }
 

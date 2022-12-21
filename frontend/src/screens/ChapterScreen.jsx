@@ -8,7 +8,7 @@ import { connect, useDispatch, useSelector } from "react-redux";
 import Message from "../components/ui/Message";
 import Loader from "../components/ui/Loader";
 import { Link } from "react-router-dom";
-import { Button } from "react-bootstrap";
+import { Button, Col, ListGroup, Row } from "react-bootstrap";
 export const ChapterScreen = ({ match, history }) => {
   const chapterId = match.params.id;
 
@@ -42,41 +42,47 @@ export const ChapterScreen = ({ match, history }) => {
   // Chage page
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
   return (
-    <div>
+    <Row>
+      <Link to={`/comic/${comic?.id}/`} className="btn btn-light my-3">
+        Go Back
+      </Link>
+
       <div>
         {loading ? (
           <Loader />
         ) : error ? (
           <Message variant="danger">{error}</Message>
         ) : (
-          <div>
-            <Link to={`/comic/${comic?.id}/`}>{comic?.title}</Link>
+          <Col>
+            <div>
+              {chapter.name}
 
-            <div className="container mx-auto">
-              <Link to={`/comic/${chapter.comics}/`}>
-                <Button variant="secondary">{chapter.name}</Button>
-              </Link>
-              {pages?.map((page, index) => (
-                <Pages page={page} key={index} />
+              {pages?.map((page) => (
+                <Pages page={page} key={page.id} />
               ))}
             </div>
-            <Link to={`/comic/${chapter?.comics}/`}>{chapter?.name}</Link>
-          </div>
+
+            <Link to={`/comic/${chapter?.comics}/`}>
+              <Button variant="primary"> {chapter?.name}</Button>
+            </Link>
+          </Col>
         )}
-      </div>
-      <ul className="list-group mb-4">
         {currentPosts?.map((post) => (
-          <li key={post.id} className="list-group-item">
-            <Link to={`/comics/chapter/${post.id}/`}>{post.name}</Link>
-          </li>
+          <ListGroup key={post.id} className="list-group-item">
+            <ListGroup.Item>
+              <Link to={`/comics/chapter/${post.id}/`}>
+                <span>{post.name}</span>
+              </Link>
+            </ListGroup.Item>
+          </ListGroup>
         ))}
-      </ul>
-      <Pagination
-        postsPerPage={postsPerPage}
-        totalPosts={comic?.chapters?.length}
-        paginate={paginate}
-      />
-    </div>
+        <Pagination
+          postsPerPage={postsPerPage}
+          totalPosts={comic?.chapters?.length}
+          paginate={paginate}
+        />
+      </div>
+    </Row>
   );
 };
 
