@@ -3,12 +3,13 @@ import PropTypes from "prop-types";
 import { listChaptersDetails } from "../actions/chaptersActions";
 import { listComicsDetails } from "../actions/comicsActions";
 import Pagination from "../components/Pagination";
-import Pages from "../components/content/Pages";
+import InfiniteScroll from "react-infinite-scroll-component";
+
 import { connect, useDispatch, useSelector } from "react-redux";
 import Message from "../components/ui/Message";
 import Loader from "../components/ui/Loader";
 import { Link } from "react-router-dom";
-import { Button, Col, ListGroup, Row } from "react-bootstrap";
+import { Container, Button, Col, ListGroup, Row, Image } from "react-bootstrap";
 export const ChapterScreen = ({ match, history }) => {
   const chapterId = match.params.id;
 
@@ -18,9 +19,11 @@ export const ChapterScreen = ({ match, history }) => {
 
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
+
   const { chapters } = useSelector((state) => state.comicsDetails);
+
   const [currentPage, setCurrentPage] = useState(1);
-  const [postsPerPage] = useState(50);
+  const [postsPerPage] = useState(20);
   const comicId = chapter?.comics;
   useEffect(() => {
     if (!userInfo) {
@@ -32,6 +35,7 @@ export const ChapterScreen = ({ match, history }) => {
       }
     }
   }, [userInfo, history, dispatch, chapterId, comicId]);
+
   const pages = chapter?.pages;
 
   // Get current posts
@@ -40,32 +44,44 @@ export const ChapterScreen = ({ match, history }) => {
   const currentPosts = chapters?.slice(indexOfFirstPost, indexOfLastPost);
   // Chage page
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
   return (
-    <Row>
+    <div>
       <Link to={`/comic/${comic?.id}/`} className="btn btn-dark my-3">
         Go Back
       </Link>
 
-      <div>
+      <Container fluid>
         {loading ? (
           <Loader />
         ) : error ? (
           <Message variant="danger">{error}</Message>
         ) : (
-          <Col>
-            <div>
+          <Row>
+            <Col>
               {chapter.name}
 
-              {pages?.map((page) => (
-                <Pages page={page} key={page.id} />
+              {pages?.map((page, index) => (
+                <InfiniteScroll
+                  key={index}
+                  dataLength={chapter.pages.length}
+                  loader={<Loader />}
+                >
+                  <Image
+                    className="w-full"
+                    src={page.images}
+                    alt={page.images}
+                  />
+                </InfiniteScroll>
               ))}
-            </div>
+            </Col>
 
             <Link to={`/comic/${chapter?.comics}/`}>
               <Button variant="primary"> {chapter?.name}</Button>
             </Link>
-          </Col>
+          </Row>
         )}
+
         {currentPosts?.map((post) => (
           <ListGroup key={post.id} className="list-group-item">
             <ListGroup.Item>
@@ -77,11 +93,12 @@ export const ChapterScreen = ({ match, history }) => {
         ))}
         <Pagination
           postsPerPage={postsPerPage}
-          totalPosts={comic?.chapters?.length}
+          totalPosts={chapters?.length}
+          chapterId={chapterId}
           paginate={paginate}
         />
-      </div>
-    </Row>
+      </Container>
+    </div>
   );
 };
 

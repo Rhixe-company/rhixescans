@@ -4,7 +4,7 @@ import ComicItem from "../components/content/ComicItem";
 import Paginate from "../components/ui/Paginate";
 import ComicsCarousel from "../components/content/ComicsCarousel";
 import { listComics, listGenres } from "../actions/comicsActions";
-import { Row, Col } from "react-bootstrap";
+import { Container, Row, Col } from "react-bootstrap";
 import Message from "../components/ui/Message";
 import Loader from "../components/ui/Loader";
 function HomeScreen({ history }) {
@@ -30,19 +30,23 @@ function HomeScreen({ history }) {
       ) : error ? (
         <Message variant="danger">{error}</Message>
       ) : (
-        <Row>
-          <h1>Lastest Comics</h1>
-          {comics.map((comic) => (
-            <Col key={comic.id} sm={12} md={6} lg={4} xl={3}>
-              <ComicItem comic={comic} />
-            </Col>
-          ))}
+        <Container fluid>
+          <Row>
+            {genres.map((genre) => (
+              <Col key={genre.id}>
+                <h5>{genre.name}</h5>
+              </Col>
+            ))}
+            <h1>Lastest Comics</h1>
+            {comics.map((comic) => (
+              <Col key={comic.id} sm={12} md={6} lg={4} xl={3}>
+                <ComicItem comic={comic} />
+              </Col>
+            ))}
 
-          <Paginate page={page} pages={pages} keyword={keyword} />
-          {genres.map((genre) => (
-            <Col key={genre.id}>{genre.name}</Col>
-          ))}
-        </Row>
+            <Paginate page={page} pages={pages} keyword={keyword} />
+          </Row>
+        </Container>
       )}
     </div>
   );
