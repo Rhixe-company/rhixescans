@@ -17,7 +17,7 @@ class ComicsPipeline:
 
         adapter = ItemAdapter(item)
         if adapter.get('rating'):
-            obj, created = ComicsManager.objects.filter(
+            obj, created = Comic.objects.filter(
                 Q(title__icontains=adapter['title']) |
                 Q(slug__icontains=adapter['slug'])
             ).get_or_create(image_url=adapter['image_url'], slug=adapter['slug'], rating=adapter['rating'], status=adapter['status'], description=adapter['description'], category=adapter['category'], author=adapter['author'], release_date=adapter['release_date'], artist=adapter['artist'], defaults={'title': adapter['title'], 'slug': adapter['slug']})
@@ -40,9 +40,9 @@ class ChaptersPipeline:
 
         adapter = ItemAdapter(item)
         if adapter.get('name'):
-            comic = ComicsManager.objects.filter(Q(title__icontains=adapter['title']) |
-                                                 Q(slug__icontains=adapter['slug'])).get(
-                                                     title=adapter['title'], slug=adapter['slug'])
+            comic = Comic.objects.filter(Q(title__icontains=adapter['title']) |
+                                         Q(slug__icontains=adapter['slug'])).get(
+                title=adapter['title'], slug=adapter['slug'])
             obj, created = Chapter.objects.filter(
                 Q(name=adapter['name'])
             ).get_or_create(comics=comic, name=adapter['name'], defaults={'name': adapter['name']})
