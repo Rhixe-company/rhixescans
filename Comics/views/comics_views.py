@@ -8,7 +8,7 @@ from django.db.models import Q
 
 
 @api_view(['GET'])
-@permission_classes([IsAuthenticated])
+@permission_classes([AllowAny])
 def getComics(request):
     query = request.GET.get('keyword') if request.GET.get(
         'keyword') != None else ''
