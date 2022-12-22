@@ -1,51 +1,62 @@
 import React, { useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import ComicForm from "../components/content/ComicForm";
+import { useDispatch, useSelector } from "react-redux";
+import ComicItem from "../components/content/ComicItem";
+import Paginate from "../components/ui/Paginate";
+import ComicsCarousel from "../components/content/ComicsCarousel";
+import { listComics, listGenres } from "../actions/comicsActions";
+import { Container, Row, Col } from "react-bootstrap";
+import Message from "../components/ui/Message";
+import { COMICS_LIST_RESET } from "../constants/comicsConstants";
 import Loader from "../components/ui/Loader";
-import { getComics, reset } from "../features/comics/comicSlice";
-import ComicItem from "../components/ComicItem";
-const Home = ({ history }) => {
+function HomeScreen({ history }) {
   const dispatch = useDispatch();
-  const { userInfo } = useSelector((state) => state.userLogin);
-  const { comics, count, page, pages, isError, isLoading, message } =
-    useSelector((state) => state.comics);
+  const comicsList = useSelector((state) => state.comicsList);
+  const { comics, page, pages, error, loading } = comicsList;
+
+  const genresList = useSelector((state) => state.genresList);
+  const { genres } = genresList;
+
+  let keyword = history.location.search;
+
   useEffect(() => {
-    if (isError) {
-      console.log(message);
-    }
-    if (!userInfo) {
-      history.push("/login");
-    }
-    dispatch(getComics());
-    return () => {
-      dispatch(reset());
-    };
-  }, [dispatch, history, isError, message, userInfo]);
-  if (isLoading) {
-    return <Loader />;
-  }
+    dispatch(listComics(keyword));
+    dispatch(listGenres());
+    dispatch({ type: COMICS_LIST_RESET });
+  }, [dispatch, keyword]);
   return (
-    <>
-      <section className="heading">
-        <h1>Welcome {userInfo && userInfo.name}</h1>
-        <p>{count} comics available</p>
-
-        <ComicForm />
-      </section>
-
-      <section className="content">
-        {comics.length > 0 ? (
-          <div className="comics">
-            {comics.map((comic) => (
-              <ComicItem key={comic.id} comic={comic} />
-            ))}
-          </div>
+    <Container>
+      <Row>
+        {!keyword && <ComicsCarousel />}
+        <br />
+        {loading ? (
+          <Loader />
+        ) : error ? (
+          <Message variant="danger">{error}</Message>
         ) : (
-          <h3>You Have No Comics</h3>
-        )}
-      </section>
-    </>
-  );
-};
+          <div className="grid">
+            <div>
+              <b>Genres</b>
+              {genres.map((genre) => (
+                <Col key={genre.id}>
+                  <small>{genre.name}</small>
+                </Col>
+              ))}
+            </div>
+            <div>
+              <b>Lastest Comics</b>
+              {comics.map((comic) => (
+                <Col key={comic.id} sm={12} md={6} lg={4} xl={3}>
+                  <ComicItem comic={comic} />
+                </Col>
+              ))}
 
-export default Home;
+              <Paginate page={page} pages={pages} keyword={keyword} />
+            </div>
+          </div>
+        )}
+      </Row>
+    </Container>
+  );
+}
+
+export default HomeScreen;

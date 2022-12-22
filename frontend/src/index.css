@@ -45,7 +45,7 @@ h2 {
 
 .carousel img {
   display: block;
-  height: 450px;
+  height: 400px;
   padding: 30px;
   margin: 40px;
   border-radius: 50%;
@@ -59,4 +59,8 @@ h2 {
   .carousel-caption h2 {
     font-size: 2.5vw;
   }
+}
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 3fr;
 }

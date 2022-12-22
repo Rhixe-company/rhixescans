@@ -3,7 +3,7 @@ import { connect, useDispatch, useSelector } from "react-redux";
 import PropTypes from "prop-types";
 import { listComicsDetails } from "../actions/comicsActions";
 import Rating from "../components/ui/Rating";
-import { Row, Col, Image, ListGroup, Card } from "react-bootstrap";
+import { Button, Row, Col, Image, ListGroup, Card } from "react-bootstrap";
 import Message from "../components/ui/Message";
 import Loader from "../components/ui/Loader";
 import { Link } from "react-router-dom";
@@ -26,6 +26,9 @@ export const ComicScreen = ({ history, match }) => {
     dispatch(listComicsDetails(comicId));
     dispatch({ type: COMICS_DETAILS_RESET });
   }, [history, userInfo, dispatch, comicId]);
+  const addToBookmarkHandler = () => {
+    history.push(`/bookmark/${match.params.id}`);
+  };
   return (
     <div>
       <Link to="/" className="btn btn-light my-3">
@@ -42,8 +45,14 @@ export const ComicScreen = ({ history, match }) => {
               <Link to={`/comic/${comic.id}/`}>
                 <Image fluid="true" src={comic.image} alt={comic.image} />
               </Link>
-            </Col>
-            <Col md={6}>
+              <Button
+                onClick={addToBookmarkHandler}
+                className="btn-block"
+                disabled={comic.id === 0}
+                type="button"
+              >
+                Add to Bookmark
+              </Button>
               <Card key={comic.id} className="my-3 p-3 rounded">
                 <Card.Body className="px-6 py-4">
                   <Link to={`/comic/${comic.id}/`}>

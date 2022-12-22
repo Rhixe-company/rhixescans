@@ -15,7 +15,7 @@ import ChaptersEditScreen from "./screens/ChaptersEditScreen";
 import ProfileScreen from "./screens/ProfileScreen";
 import UserListScreen from "./screens/UserListScreen";
 import UserEditScreen from "./screens/UserEditScreen";
-
+import BookmarkScreen from "./screens/BookmarkScreen";
 const App = () => {
   return (
     <>
@@ -38,6 +38,7 @@ const App = () => {
               path="/admin/chapter/:id/edit"
               component={ChaptersEditScreen}
             />
+            <Route path="/bookmark/:id?" component={BookmarkScreen} />
           </Container>
         </main>
         <Footer />

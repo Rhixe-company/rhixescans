@@ -13,7 +13,7 @@ from scrapy.exceptions import DropItem
 
 class ComicsPipeline:
 
-    async def process_item(self, item, spider):
+    def process_item(self, item, spider):
 
         adapter = ItemAdapter(item)
         if adapter.get('rating'):
@@ -28,6 +28,34 @@ class ComicsPipeline:
                 name=adapter['genres'], defaults={'name': adapter['genres']})
             obj.genres.add(obj1)
             obj.save()
+
+            return item
+        else:
+            raise DropItem(f"Missing attribute in {item}")
+
+
+class ChaptersPipeline:
+
+    def process_item(self, item, spider):
+
+        adapter = ItemAdapter(item)
+        if adapter.get('name'):
+            comic = ComicsManager.objects.filter(Q(title__icontains=adapter['title']) |
+                                                 Q(slug__icontains=adapter['slug'])).get(
+                                                     title=adapter['title'], slug=adapter['slug'])
+            obj, created = Chapter.objects.filter(
+                Q(name=adapter['name'])
+            ).get_or_create(comics=comic, name=adapter['name'], defaults={'name': adapter['name']})
+            obj1, created = Page.objects.filter(
+                Q(images_url__icontains=adapter['pages'])
+
+            ).get_or_create(images_url=adapter['pages'], defaults={'images_url': adapter['pages'], 'chapters': obj})
+            obj.pages.add(obj1)
+
+            obj.numPages = obj.page_set.all().count()
+            obj.save()
+            comic.numChapters = comic.chapter_set.all().count()
+            comic.save()
 
             return item
         else:

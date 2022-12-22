@@ -34,11 +34,14 @@ const Header = () => {
               />
             </Navbar.Brand>
           </LinkContainer>
-          <SearchBox />
 
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
+            <SearchBox />
             <Nav className="ml-auto">
+              <LinkContainer to="/bookmark">
+                <Nav.Link>Bookmark</Nav.Link>
+              </LinkContainer>
               {userInfo ? (
                 <NavDropdown title={userInfo.name} id="username">
                   <LinkContainer to="/profile">

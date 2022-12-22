@@ -6,6 +6,7 @@
 from w3lib.html import remove_tags
 from itemloaders.processors import MapCompose, TakeFirst
 from scrapy import Item, Field
+import scrapy
 
 
 class NewComicItem(Item):
@@ -35,9 +36,9 @@ class NewComicItem(Item):
 
 
 class NewChapterItem(Item):
-    title = Field(input_processor=MapCompose(
-        remove_tags), output_processor=TakeFirst())
     slug = Field(input_processor=MapCompose(
+        remove_tags), output_processor=TakeFirst())
+    title = Field(input_processor=MapCompose(
         remove_tags), output_processor=TakeFirst())
     name = Field(input_processor=MapCompose(
         remove_tags), output_processor=TakeFirst())

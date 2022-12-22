@@ -13,9 +13,6 @@ function HomeScreen({ history }) {
   const comicsList = useSelector((state) => state.comicsList);
   const { comics, page, pages, error, loading } = comicsList;
 
-  const genresList = useSelector((state) => state.genresList);
-  const { genres } = genresList;
-
   let keyword = history.location.search;
 
   useEffect(() => {
@@ -24,17 +21,17 @@ function HomeScreen({ history }) {
     dispatch({ type: COMICS_LIST_RESET });
   }, [dispatch, keyword]);
   return (
-    <div>
-      {!keyword && <ComicsCarousel />}
-      <hr />
-      {loading ? (
-        <Loader />
-      ) : error ? (
-        <Message variant="danger">{error}</Message>
-      ) : (
-        <Container fluid>
-          <Row>
-            <h1>Lastest Comics</h1>
+    <Container>
+      <Row>
+        {!keyword && <ComicsCarousel />}
+        <br />
+        {loading ? (
+          <Loader />
+        ) : error ? (
+          <Message variant="danger">{error}</Message>
+        ) : (
+          <div>
+            <b>Lastest Comics</b>
             {comics.map((comic) => (
               <Col key={comic.id} sm={12} md={6} lg={4} xl={3}>
                 <ComicItem comic={comic} />
@@ -42,17 +39,10 @@ function HomeScreen({ history }) {
             ))}
 
             <Paginate page={page} pages={pages} keyword={keyword} />
-          </Row>
-          <Row>
-            {genres.map((genre) => (
-              <Col key={genre.id}>
-                <h5>{genre.name}</h5>
-              </Col>
-            ))}
-          </Row>
-        </Container>
-      )}
-    </div>
+          </div>
+        )}
+      </Row>
+    </Container>
   );
 }
 
