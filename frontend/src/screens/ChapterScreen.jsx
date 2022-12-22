@@ -27,6 +27,7 @@ export const ChapterScreen = ({ match, history }) => {
   const [postsPerPage] = useState(20);
   const comicId = chapter?.comics;
   useEffect(() => {
+    dispatch({ type: CHAPTERS_DETAILS_RESET });
     if (!userInfo) {
       history.push("/login");
     } else {
@@ -36,7 +37,6 @@ export const ChapterScreen = ({ match, history }) => {
         dispatch(listComicsDetails(comicId));
       }
     }
-    dispatch({ type: CHAPTERS_DETAILS_RESET });
   }, [userInfo, history, dispatch, chapterId, comicId]);
 
   const pages = chapter?.pages;
