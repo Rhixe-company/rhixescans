@@ -71,9 +71,8 @@ ROBOTSTXT_OBEY = False
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
 
-
-    'scraper.pipelines.ChaptersPipeline': 1,
     'scraper.pipelines.ComicsPipeline': 400,
+    'scraper.pipelines.ChaptersPipeline': 300,
 }
 
 

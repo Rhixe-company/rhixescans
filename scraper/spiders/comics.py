@@ -40,5 +40,3 @@ class ComicsSpider(Spider):
             for genre in g:
                 item['genres'] = genre
                 yield item
-        for link in response.css('div.bsx a::attr(href)'):
-            yield response.follow(link.get(), callback=self.parse_webtoon)
