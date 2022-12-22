@@ -1,7 +1,6 @@
 import scrapy
 from scrapy.spiders import Spider
-from Comics.models import *
-from django.db.models import Q
+from ..items import *
 from bs4 import BeautifulSoup
 
 
@@ -26,35 +25,16 @@ class ChaptersSpider(Spider):
             yield response.follow(link.get(), callback=self.parse_chapters)
 
     def parse_chapters(self, response):
-        slug = response.css('div.bixbox ol li a ::attr(href)')[
+        item = NewChapterItem()
+        item['slug'] = response.css('div.bixbox ol li a ::attr(href)')[
             1].get().split("/")[-2]
-        title = response.css(
+        item['title'] = response.css(
             "div.allc a::text").get().strip()
-        name = response.css(
-            "h1.entry-title::text").get().strip()
-        comic = ComicsManager.objects.filter(Q(title__icontains=title) |
-                                             Q(slug__icontains=slug)).get(title=title, slug=slug)
-        # 1 -  Comic exists
-        if comic:
-            obj, created = Chapter.objects.filter(
-                Q(name=name)
-            ).get_or_create(comics=comic, name=name, defaults={'name': name})
-            soup = BeautifulSoup(response.text, features='lxml')
-            posts = soup.select(
-                "div.rdminimal img")
-            for page in posts:
-                pages = page['src']
+        item['name'] = response.css("h1.entry-title::text").get().strip()
+        soup = BeautifulSoup(response.text, features='lxml')
+        posts = soup.select(
+            "div.rdminimal img")
+        for page in posts:
+            item['pages'] = page['src']
 
-                obj1, created = Page.objects.filter(
-                    Q(images_url__icontains=pages)
-
-                ).get_or_create(images_url=pages, defaults={'images_url': pages, 'chapters': obj})
-                obj.pages.add(obj1)
-
-                obj.numPages = obj.page_set.all().count()
-                obj.save()
-                comic.numChapters = comic.chapter_set.all().count()
-                comic.save()
-
-        else:
-            pass
+            yield item
