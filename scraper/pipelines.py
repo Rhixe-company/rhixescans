@@ -58,5 +58,3 @@ class ChaptersPipeline:
             comic.save()
 
             return item
-        else:
-            raise DropItem(f"Missing attribute in {item}")
