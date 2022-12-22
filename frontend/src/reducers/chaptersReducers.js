@@ -67,7 +67,7 @@ export const chaptersDetailsReducer = (state = initialState, action) => {
       return { loading: false, error: action.payload };
 
     case CHAPTERS_DETAILS_RESET:
-      return { chapter: {}, comic: {} };
+      return { ...state, chapter: {}, comic: {} };
 
     default:
       return state;

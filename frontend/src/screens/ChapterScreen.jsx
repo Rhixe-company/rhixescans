@@ -27,7 +27,6 @@ export const ChapterScreen = ({ match, history }) => {
   const [postsPerPage] = useState(20);
   const comicId = chapter?.comics;
   useEffect(() => {
-    dispatch({ type: CHAPTERS_DETAILS_RESET });
     if (!userInfo) {
       history.push("/login");
     } else {
@@ -47,6 +46,9 @@ export const ChapterScreen = ({ match, history }) => {
   const currentPosts = chapters?.slice(indexOfFirstPost, indexOfLastPost);
   // Chage page
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  const pageHandler = () => {
+    dispatch({ type: CHAPTERS_DETAILS_RESET });
+  };
 
   return (
     <div>
@@ -89,7 +91,7 @@ export const ChapterScreen = ({ match, history }) => {
           <ListGroup key={post.id} className="list-group-item">
             <ListGroup.Item>
               <Link to={`/comics/chapter/${post.id}/`}>
-                <span>{post.name}</span>
+                <span onClick={() => pageHandler()}>{post.name}</span>
               </Link>
             </ListGroup.Item>
           </ListGroup>
