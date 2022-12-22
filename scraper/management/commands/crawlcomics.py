@@ -17,8 +17,8 @@ class Command(BaseCommand):
 
         @defer.inlineCallbacks
         def crawl():
+            yield runner.crawl(ComicsSpider)
 
-            yield runner.crawl(ChaptersSpider)
             reactor.stop()
 
         crawl()
