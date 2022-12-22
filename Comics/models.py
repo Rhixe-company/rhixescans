@@ -15,7 +15,7 @@ def comics_images_location(instance, filename):
 
 
 def comics_chapters_images_location(instance, filename):
-    return '{}/{}/{}'.format(str(instance.chapters.comics.slug).replace(" ", "_").replace(":", " ").replace("/", "").replace("\\", ""),  instance.chapters.name, filename)
+    return '{}/{}/{}'.format(str(instance.chapters.comics.slug).replace(" ", "_").replace(":", " ").replace("/", "").replace("\\", ""),  instance.chapters.id, filename)
 
 
 STATUS_CHOICES = [
