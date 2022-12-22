@@ -40,3 +40,20 @@ class ComicsSpider(Spider):
             for genre in g:
                 item['genres'] = genre
                 yield item
+        for link in response.css('ul.clstyle li a::attr(href)'):
+            yield response.follow(link.get(), callback=self.parse_chapters)
+
+    def parse_chapters(self, response):
+        item = NewChapterItem()
+        item['slug'] = response.css('div.bixbox ol li a ::attr(href)')[
+            1].get().split("/")[-2]
+        item['title'] = response.css(
+            "div.allc a::text").get().strip()
+        item['name'] = response.css("h1.entry-title::text").get().strip()
+        soup = BeautifulSoup(response.text, features='lxml')
+        posts = soup.select(
+            "div.rdminimal img")
+        for page in posts:
+            item['pages'] = page['src']
+
+            yield item

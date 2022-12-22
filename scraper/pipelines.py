@@ -28,26 +28,19 @@ class ComicsPipeline:
                 name=adapter['genres'], defaults={'name': adapter['genres']})
             obj.genres.add(obj1)
             obj.save()
-
-            return item
-        if adapter.get('name'):
-            comic = Comic.objects.filter(Q(title__icontains=adapter['title']) |
-                                         Q(slug__icontains=adapter['slug'])).get(
-                title=adapter['title'], slug=adapter['slug'])
-            obj, created = Chapter.objects.filter(
+            obj2, created = obj.chapter_set.filter(
                 Q(name=adapter['name'])
-            ).get_or_create(comics=comic, name=adapter['name'], defaults={'name': adapter['name']})
-            obj1, created = Page.objects.filter(
+            ).get_or_create(comics=obj, name=adapter['name'], defaults={'name': adapter['name']})
+            obj3, created = Page.objects.filter(
                 Q(images_url__icontains=adapter['pages'])
 
-            ).get_or_create(images_url=adapter['pages'], defaults={'images_url': adapter['pages'], 'chapters': obj})
-            obj.pages.add(obj1)
+            ).get_or_create(images_url=adapter['pages'], defaults={'images_url': adapter['pages'], 'chapters': obj2})
+            obj2.pages.add(obj3)
 
-            obj.numPages = obj.page_set.all().count()
-            obj.save()
-            comic.numChapters = comic.chapter_set.all().count()
-            comic.save()
+            obj2.numPages = obj2.page_set.all().count()
+            obj2.save()
 
             return item
+
         else:
             raise DropItem(f"Missing attribute in {item}")
