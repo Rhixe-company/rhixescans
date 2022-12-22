@@ -16,7 +16,7 @@ def getChapters(request):
         'keyword') != None else ''
 
     chapters = Chapter.objects.filter(
-        name__icontains=query).order_by('-updated')
+        name__icontains=query).order_by('-updated')[:2000]
     chapters_count = chapters.count()
 
     serializer = ChapterSerializer(chapters, many=True)
