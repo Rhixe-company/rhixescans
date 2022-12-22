@@ -34,9 +34,9 @@ export const ChapterScreen = ({ match, history }) => {
 
       if (comicId) {
         dispatch(listComicsDetails(comicId));
-        dispatch({ type: CHAPTERS_DETAILS_RESET });
       }
     }
+    dispatch({ type: CHAPTERS_DETAILS_RESET });
   }, [userInfo, history, dispatch, chapterId, comicId]);
 
   const pages = chapter?.pages;
