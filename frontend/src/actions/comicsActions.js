@@ -25,22 +25,11 @@ import {
 
 export const listComics =
   (keyword = "") =>
-  async (dispatch, getState) => {
+  async (dispatch) => {
     try {
       dispatch({ type: COMICS_LIST_REQUEST });
 
-      const {
-        userLogin: { userInfo },
-      } = getState();
-
-      const config = {
-        headers: {
-          "Content-type": "application/json",
-          Authorization: `Bearer ${userInfo.token}`,
-        },
-      };
-
-      const { data } = await axios.get(`/api/comics${keyword}`, config);
+      const { data } = await axios.get(`/api/comics${keyword}`);
 
       dispatch({
         type: COMICS_LIST_SUCCESS,
