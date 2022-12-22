@@ -72,7 +72,7 @@ ROBOTSTXT_OBEY = False
 ITEM_PIPELINES = {
 
     'scraper.pipelines.ComicsPipeline': 400,
-    'scraper.pipelines.ChaptersPipeline': 300,
+    # 'scraper.pipelines.ChaptersPipeline': 300,
 }
 
 
