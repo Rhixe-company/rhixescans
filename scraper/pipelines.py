@@ -30,15 +30,6 @@ class ComicsPipeline:
             obj.save()
 
             return item
-        else:
-            raise DropItem(f"Missing attribute in {item}")
-
-
-class ChaptersPipeline:
-
-    def process_item(self, item, spider):
-
-        adapter = ItemAdapter(item)
         if adapter.get('name'):
             comic = Comic.objects.filter(Q(title__icontains=adapter['title']) |
                                          Q(slug__icontains=adapter['slug'])).get(
@@ -58,3 +49,5 @@ class ChaptersPipeline:
             comic.save()
 
             return item
+        else:
+            raise DropItem(f"Missing attribute in {item}")
