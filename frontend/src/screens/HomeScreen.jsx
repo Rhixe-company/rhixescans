@@ -22,7 +22,7 @@ function HomeScreen({ history }) {
   }, [dispatch, keyword]);
   return (
     <Container>
-      <Row>
+      <div>
         {!keyword && <ComicsCarousel />}
         <br />
         {loading ? (
@@ -30,7 +30,7 @@ function HomeScreen({ history }) {
         ) : error ? (
           <Message variant="danger">{error}</Message>
         ) : (
-          <div>
+          <Row>
             <b>Lastest Comics</b>
             {comics.map((comic) => (
               <Col key={comic.id} sm={12} md={6} lg={4} xl={3}>
@@ -39,9 +39,9 @@ function HomeScreen({ history }) {
             ))}
 
             <Paginate page={page} pages={pages} keyword={keyword} />
-          </div>
+          </Row>
         )}
-      </Row>
+      </div>
     </Container>
   );
 }
