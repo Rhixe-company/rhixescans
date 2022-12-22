@@ -6,6 +6,7 @@ import ComicsCarousel from "../components/content/ComicsCarousel";
 import { listComics, listGenres } from "../actions/comicsActions";
 import { Container, Row, Col } from "react-bootstrap";
 import Message from "../components/ui/Message";
+import { COMICS_LIST_RESET } from "../constants/comicsConstants";
 import Loader from "../components/ui/Loader";
 function HomeScreen({ history }) {
   const dispatch = useDispatch();
@@ -20,6 +21,7 @@ function HomeScreen({ history }) {
   useEffect(() => {
     dispatch(listComics(keyword));
     dispatch(listGenres());
+    dispatch({ type: COMICS_LIST_RESET });
   }, [dispatch, keyword]);
   return (
     <div>

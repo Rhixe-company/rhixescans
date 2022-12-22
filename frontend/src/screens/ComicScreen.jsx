@@ -7,6 +7,7 @@ import { Row, Col, Image, ListGroup, Card } from "react-bootstrap";
 import Message from "../components/ui/Message";
 import Loader from "../components/ui/Loader";
 import { Link } from "react-router-dom";
+import { COMICS_DETAILS_RESET } from "../constants/comicsConstants";
 
 export const ComicScreen = ({ history, match }) => {
   const comicId = match.params.id;
@@ -23,6 +24,7 @@ export const ComicScreen = ({ history, match }) => {
       history.push("/login");
     }
     dispatch(listComicsDetails(comicId));
+    dispatch({ type: COMICS_DETAILS_RESET });
   }, [history, userInfo, dispatch, comicId]);
   return (
     <div>

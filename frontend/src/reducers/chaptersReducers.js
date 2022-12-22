@@ -5,6 +5,7 @@ import {
   CHAPTERS_DETAILS_REQUEST,
   CHAPTERS_DETAILS_SUCCESS,
   CHAPTERS_DETAILS_FAIL,
+  CHAPTERS_DETAILS_RESET,
   CHAPTERS_DELETE_REQUEST,
   CHAPTERS_DELETE_SUCCESS,
   CHAPTERS_DELETE_FAIL,
@@ -21,13 +22,19 @@ import {
   CHAPTERS_TOP_FAIL,
 } from "../constants/chaptersConstants";
 
-export const chaptersListReducer = (state = { chapters: [] }, action) => {
+const initialState = {
+  chapters: [],
+  chapter: {},
+};
+
+export const chaptersListReducer = (state = initialState, action) => {
   switch (action.type) {
     case CHAPTERS_LIST_REQUEST:
-      return { loading: true, chapters: [] };
+      return { ...state, loading: true, chapters: [] };
 
     case CHAPTERS_LIST_SUCCESS:
       return {
+        ...state,
         loading: false,
         chapters: action.payload.chapters,
         chapters_count: action.payload.chapters_count,
@@ -43,13 +50,14 @@ export const chaptersListReducer = (state = { chapters: [] }, action) => {
   }
 };
 
-export const chaptersDetailsReducer = (state = { chapter: [] }, action) => {
+export const chaptersDetailsReducer = (state = initialState, action) => {
   switch (action.type) {
     case CHAPTERS_DETAILS_REQUEST:
-      return { loading: true, ...state };
+      return { ...state, loading: true, ...state };
 
     case CHAPTERS_DETAILS_SUCCESS:
       return {
+        ...state,
         loading: false,
         chapter: action.payload.chapter,
         comic: action.payload.comic,
@@ -57,6 +65,9 @@ export const chaptersDetailsReducer = (state = { chapter: [] }, action) => {
 
     case CHAPTERS_DETAILS_FAIL:
       return { loading: false, error: action.payload };
+
+    case CHAPTERS_DETAILS_RESET:
+      return { chapter: {} };
 
     default:
       return state;
@@ -117,7 +128,7 @@ export const chapterUpdateReducer = (state = { chapter: {} }, action) => {
   }
 };
 
-export const chaptersTopRatedReducer = (state = { chapters: [] }, action) => {
+export const chaptersTopRatedReducer = (state = initialState, action) => {
   switch (action.type) {
     case CHAPTERS_TOP_REQUEST:
       return { loading: true, chapters: [] };

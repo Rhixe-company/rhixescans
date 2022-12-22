@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { listChaptersDetails } from "../actions/chaptersActions";
 import { listComicsDetails } from "../actions/comicsActions";
+import { CHAPTERS_DETAILS_RESET } from "../constants/chaptersConstants";
 import Pagination from "../components/Pagination";
 import InfiniteScroll from "react-infinite-scroll-component";
 
@@ -30,9 +31,11 @@ export const ChapterScreen = ({ match, history }) => {
       history.push("/login");
     } else {
       dispatch(listChaptersDetails(chapterId));
+
       if (comicId) {
         dispatch(listComicsDetails(comicId));
       }
+      dispatch({ type: CHAPTERS_DETAILS_RESET });
     }
   }, [userInfo, history, dispatch, chapterId, comicId]);
 

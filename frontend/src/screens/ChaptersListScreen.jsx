@@ -109,32 +109,30 @@ const ChaptersListScreen = ({ history }) => {
 
               <tbody>
                 {currentPosts.map((chapter) => (
-                  <>
-                    <tr key={chapter.id}>
-                      <td>
-                        <Link to={`/comics/chapter/${chapter.id}/`}>
-                          <span>{chapter.name}</span>
-                        </Link>
-                      </td>
-                      <td>{chapter.numPages}</td>
+                  <tr key={chapter.id}>
+                    <td>
+                      <Link to={`/comics/chapter/${chapter.id}/`}>
+                        <span>{chapter.name}</span>
+                      </Link>
+                    </td>
+                    <td>{chapter.numPages}</td>
 
-                      <td>
-                        <LinkContainer to={`/admin/chapter/${chapter.id}/edit`}>
-                          <Button variant="light" className="btn-sm">
-                            <i className="fas fa-edit">Edit</i>
-                          </Button>
-                        </LinkContainer>
-
-                        <Button
-                          variant="danger"
-                          className="btn-sm"
-                          onClick={() => deleteHandler(chapter.id)}
-                        >
-                          <i className="fas fa-trash">Delete</i>
+                    <td>
+                      <LinkContainer to={`/admin/chapter/${chapter.id}/edit`}>
+                        <Button variant="light" className="btn-sm">
+                          <i className="fas fa-edit">Edit</i>
                         </Button>
-                      </td>
-                    </tr>
-                  </>
+                      </LinkContainer>
+
+                      <Button
+                        variant="danger"
+                        className="btn-sm"
+                        onClick={() => deleteHandler(chapter.id)}
+                      >
+                        <i className="fas fa-trash">Delete</i>
+                      </Button>
+                    </td>
+                  </tr>
                 ))}
               </tbody>
             </Table>
