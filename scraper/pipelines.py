@@ -16,7 +16,7 @@ class ComicsPipeline:
     def process_item(self, item, spider):
 
         adapter = ItemAdapter(item)
-        if adapter.get('rating'):
+        if adapter.get('image_url'):
             obj, created = Comic.objects.filter(
                 Q(title__icontains=adapter['title']) |
                 Q(slug__icontains=adapter['slug'])
