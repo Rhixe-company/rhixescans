@@ -71,7 +71,7 @@ class Comic(models.Model):
     author = models.CharField(max_length=1000, blank=True)
     artist = models.CharField(max_length=1000, blank=True)
     category = models.CharField(
-        max_length=10, choices=CategoryType.choices, blank=True)
+        max_length=10, choices=CategoryType.choices, blank=True, default='Manhwa')
     numChapters = models.IntegerField(default=0, null=True, blank=True)
     genres = models.ManyToManyField(
         Genre, blank=True)

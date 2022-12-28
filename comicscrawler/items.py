@@ -33,8 +33,7 @@ class ScraperItem(Item):
         remove_tags), output_processor=TakeFirst())
     status = Field(input_processor=MapCompose(
         remove_tags), output_processor=TakeFirst())
-    category = Field(input_processor=MapCompose(
-        remove_tags), output_processor=TakeFirst())
+
     genres = Field(input_processor=MapCompose(
         remove_tags), output_processor=TakeFirst())
     release_date = Field(input_processor=MapCompose(

@@ -35,9 +35,9 @@ class AsuraSpider(scrapy.Spider):
                 'div.flex-wrap span::text')[1].get().strip()
             item['artist'] = items.css(
                 'div.flex-wrap span::text')[2].get().strip()
-            item['category'] = items.css('div.imptdt a::text').get().strip()
-            item['release_date'] = items.css(
-                'div.flex-wrap span time::text').get().strip()
+            #item['category'] = items.css('div.imptdt a::text').get().strip()
+            # item['release_date'] = items.css(
+            #    'div.flex-wrap span time::text').get().strip()
             g = items.css("span.mgen a::text").getall()
             for genre in g:
                 item['genres'] = genre
