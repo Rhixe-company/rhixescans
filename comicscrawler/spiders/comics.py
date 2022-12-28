@@ -1,5 +1,5 @@
 import scrapy
-from ..items import NewComicItem, NewChapterItem
+from ..items import ScraperItem, NewChapterItem
 from bs4 import BeautifulSoup
 from Comics.models import ComicsManager, Genre, Chapter, Page
 from django.db.models import Q
@@ -22,7 +22,7 @@ class ComicsSpider(Spider):
 
     def parse_webtoon(self, response):
         for items in response.css('div#content'):
-            item = NewComicItem()
+            item = ScraperItem()
             item['slug'] = items.css('div.bixbox ol li a::attr(href)')[
                 1].get().split('/')[-2]
             item['title'] = items.css('h1.entry-title::text').get().strip()
