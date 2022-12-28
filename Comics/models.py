@@ -56,8 +56,8 @@ class Comic(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     reader = models.ManyToManyField(User,  blank=True, related_name='readers')
     title = models.CharField(max_length=2000, unique=True, null=False)
-    slug = models.SlugField(max_length=2000, unique=True,
-                            blank=True, null=True)
+    slug = models.SlugField(max_length=2000,
+                            blank=False)
     description = models.TextField(blank=True)
     CategoryType = models.TextChoices('CategoryType', 'Manhua Manhwa Manga')
 
