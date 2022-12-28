@@ -10,11 +10,17 @@ from django.db.models import Q
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def getComics(request):
-    query = request.GET.get('keyword') if request.GET.get(
-        'keyword') != None else ''
-    comics = Comic.objects.filter(
-        Q(title__icontains=query)
-    ).order_by('-updated')
+    query = request.GET.get('keyword')
+
+    if query == None:
+        comics = Comic.objects.filter(Q(status='Ongoing') |
+                                      Q(status='Completed') |
+                                      Q(status='Coming Soon')).distinct()
+    else:
+        comics = Comic.objects.filter(
+            Q(title__contains=query) |
+            Q(genres__name__contains=query)
+        ).distinct()
 
     page = request.GET.get('page')
     paginator = Paginator(comics, 24)
@@ -40,7 +46,7 @@ def getComics(request):
 
 
 @api_view(['GET'])
-@permission_classes([IsAuthenticated])
+@permission_classes([AllowAny])
 def getGenres(request):
     genres = Genre.objects.all()
     serializer = GenreSerializer(genres, many=True)
@@ -48,7 +54,7 @@ def getGenres(request):
 
 
 @api_view(['GET'])
-@permission_classes([IsAuthenticated])
+@permission_classes([AllowAny])
 def getTopComics(request):
     comics = Comic.objects.filter(rating__gte=10.0).order_by('title')
     serializer = ComicSerializer(comics, many=True)
@@ -56,7 +62,7 @@ def getTopComics(request):
 
 
 @api_view(['GET'])
-@permission_classes([IsAuthenticated])
+@permission_classes([AllowAny])
 def getComic(request, pk):
     comic = Comic.objects.get(id=pk)
     chapters = comic.chapter_set.all()
