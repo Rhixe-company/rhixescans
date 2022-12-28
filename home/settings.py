@@ -36,9 +36,7 @@ INSTALLED_APPS = [
     'Comics.apps.ComicsConfig',
     'users.apps.UsersConfig',
     'rest_framework',
-
-    'corsheaders',
-    'scraper',
+    'comicscrawler',
     'crispy_forms',
     'django_filters',
     'ckeditor',
@@ -163,22 +161,22 @@ TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
+USE_L10N = True
+
 USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-
+MEDIA_URL = '/media/'
 STATICFILES_DIRS = [
-    #    BASE_DIR / 'static',
+    #BASE_DIR / 'static',
     BASE_DIR / 'frontend/build/static'
 ]
 
-MEDIA_URL = '/media/'
-
-MEDIA_ROOT = os.path.join(BASE_DIR, 'static/media')
+MEDIA_ROOT = BASE_DIR / 'static/media'
+STATIC_ROOT = BASE_DIR / 'static'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
@@ -210,5 +208,3 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 #AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
 
 #AWS_STORAGE_BUCKET_NAME = 'proshop-bucket-demo'
-if os.getcwd() == '/app':
-    DEBUG = True

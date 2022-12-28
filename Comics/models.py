@@ -5,9 +5,13 @@ from datetime import timezone
 from django.core import files
 from requests_html import HTMLSession
 from django.utils.translation import gettext_lazy as _
+
 # Create your models here.
 
 s = HTMLSession()
+headers = {
+    'User-Agent': "Mozilla/5.0 (Windows NT x.y; Win64; x64; rv:10.0) Gecko/20100101 Firefox/10.0"
+}
 
 
 def comics_images_location(instance, filename):
@@ -90,7 +94,7 @@ class Comic(models.Model):
 
         if self.image == '' and self.image_url != '':
 
-            resp = s.get(self.image_url,  stream=True)
+            resp = s.get(self.image_url,  stream=True, headers=headers)
             pb = BytesIO()
             pb.write(resp.content)
             pb.flush()
@@ -160,7 +164,7 @@ class Page(models.Model):
     def save(self, *args, **kwargs):
 
         if self.images == '' and self.images_url != '':
-            resp = s.get(self.images_url, stream=True)
+            resp = s.get(self.images_url, stream=True, headers=headers)
             pb = BytesIO()
             pb.write(resp.content)
             pb.flush()

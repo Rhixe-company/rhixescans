@@ -3,18 +3,24 @@
 # See documentation in:
 # https://docs.scrapy.org/en/latest/topics/items.html
 
-from w3lib.html import remove_tags
+from scrapy.item import Field, Item
 from itemloaders.processors import MapCompose, TakeFirst
-from scrapy import Item, Field
+from w3lib.html import remove_tags
 import scrapy
 
 
-class NewComicItem(Item):
+class ComicscrawlerItem(scrapy.Item):
+    # define the fields for your item here like:
+    # name = scrapy.Field()
+    pass
+
+
+class ScraperItem(Item):
     title = Field(input_processor=MapCompose(
         remove_tags), output_processor=TakeFirst())
     image_url = Field(input_processor=MapCompose(
         remove_tags), output_processor=TakeFirst())
-    image = Field()
+
     description = Field(input_processor=MapCompose(
         remove_tags))
     rating = Field(input_processor=MapCompose(
