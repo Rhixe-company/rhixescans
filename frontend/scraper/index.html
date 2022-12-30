@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rhixescans</title>
+  </head>
+  <body>
+    <div>
+      <button id="load">Load Data</button>
+      <button id="feed">Get Data</button>
+      <script>
+        document.getElementById("load").addEventListener("click", loadUser);
+        document.getElementById("feed").addEventListener("click", getcomics);
+        function loadUser() {
+          var xhr = new XMLHttpRequest();
+          xhr.open("POST", "http://localhost:8000/api/comics/crawl/", true);
+          xhr.onload = function () {
+            if (this.status == 200) {
+              var comics = JSON.parse(this.responseText);
+              console.log(comics);
+            }
+          };
+          xhr.send();
+        }
+        function getcomics() {
+          var xhr = new XMLHttpRequest();
+          xhr.open("GET", "http://localhost:8000/api/comics/", true);
+          xhr.onload = function () {
+            if (this.status == 200) {
+              var comics = JSON.parse(this.responseText);
+              console.log(comics);
+            }
+          };
+          xhr.send();
+        }
+      </script>
+    </div>
+  </body>
+</html>

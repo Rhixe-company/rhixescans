@@ -10,7 +10,6 @@ from requests_html import HTMLSession
 
 
 @api_view(['POST'])
-@permission_classes([IsAdminUser])
 def crawl(request):
     s = HTMLSession()
     headers = {

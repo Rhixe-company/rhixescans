@@ -7,7 +7,8 @@ from django.views.generic import TemplateView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', TemplateView.as_view(template_name='index.html')),
+    path('', TemplateView.as_view(template_name='build/index.html')),
+    path('crawl/', include('loader.urls')),
     path('api/comics/', include('Comics.urls.comics_urls')),
     path('api/chapters/', include('Comics.urls.chapters_urls')),
     path('api/users/', include('users.urls.user_urls')),
