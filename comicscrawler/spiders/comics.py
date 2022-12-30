@@ -36,10 +36,6 @@ class ComicsSpider(CrawlSpider):
             item['category'] = items.css('div.imptdt a::text').get().strip()
             item['author'] = items.css(
                 'div.flex-wrap span::text')[1].get().strip()
-            item['updated'] = items.css(
-                'div.flex-wrap span time::text').getall()[1]
-            item['created'] = items.css(
-                'div.flex-wrap span time::text').getall()[0]
 
             g = items.css("span.mgen a::text").getall()
             for genre in g:

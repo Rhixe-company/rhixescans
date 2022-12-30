@@ -77,8 +77,8 @@ class Comic(models.Model):
         Genre, blank=True)
     serialized = models.CharField(max_length=100, blank=True, null=False)
     released = models.CharField(max_length=100, blank=True, null=False)
-    updated = models.CharField(max_length=100, blank=True, null=False)
-    created = models.CharField(max_length=100, blank=True, null=False)
+    updated = models.DateTimeField(auto_now=True)
+    created = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         ordering = ['-updated', '-created']

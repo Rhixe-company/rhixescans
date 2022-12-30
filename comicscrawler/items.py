@@ -41,10 +41,6 @@ class ScraperItem(Item):
         remove_tags), output_processor=TakeFirst())
     serialized = Field(input_processor=MapCompose(
         remove_tags), output_processor=TakeFirst())
-    created = Field(input_processor=MapCompose(
-        remove_tags), output_processor=TakeFirst())
-    updated = Field(input_processor=MapCompose(
-        remove_tags), output_processor=TakeFirst())
 
 
 class NewChapterItem(Item):

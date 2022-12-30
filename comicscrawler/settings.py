@@ -82,11 +82,9 @@ DUPEFILTER_CLASS = 'scrapy_splash.SplashAwareDupeFilter'
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-    'scrapy.pipelines.images.ImagesPipeline': 1,
-    # 'comicscrawler.pipelines.ComicscrawlerPipeline': 300,
+    'comicscrawler.pipelines.ComicscrawlerPipeline': 300,
 }
-IMAGES_STORE = sys.path.append(
-    '/home/bot/Desktop/dev/projects/rhixescans.com')
+
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html
 #AUTOTHROTTLE_ENABLED = True

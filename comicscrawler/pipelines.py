@@ -17,7 +17,7 @@ class ComicscrawlerPipeline:
         if adapter.get('image_url'):
             obj, created = ComicsManager.objects.filter(
                 Q(title__icontains=adapter['title'])
-            ).get_or_create(image_url=adapter['image_url'],  rating=adapter['rating'], status=adapter['status'], description=adapter['description'], released=adapter['released'],  author=adapter['author'], created=adapter['created'], updated=adapter['updated'],  artist=adapter['artist'], defaults={'title': adapter['title']})
+            ).get_or_create(image_url=adapter['image_url'],  rating=adapter['rating'], status=adapter['status'], description=adapter['description'], released=adapter['released'],  author=adapter['author'],  artist=adapter['artist'], defaults={'title': adapter['title']})
             obj1, created = Genre.objects.filter(
                 Q(name=adapter['genres'])
             ).get_or_create(
