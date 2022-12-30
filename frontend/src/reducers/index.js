@@ -11,6 +11,7 @@ import {
 import { bookmarkReducers } from "./bookmarkReducers";
 
 import {
+  comicsLoadReducer,
   comicsListReducer,
   comicsDetailsReducer,
   comicDeleteReducer,
@@ -31,6 +32,7 @@ import {
 
 const reducer = combineReducers({
   bookmark: bookmarkReducers,
+  comicsLoad: comicsLoadReducer,
   comicsList: comicsListReducer,
   comicsDetails: comicsDetailsReducer,
   genresList: GenresListReducer,

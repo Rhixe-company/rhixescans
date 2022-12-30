@@ -9,7 +9,12 @@ import Message from "../components/ui/Message";
 import Paginate from "../components/ui/Paginate";
 import ComicForm from "../components/content/ComicForm";
 
-import { listComics, deleteComic, createComic } from "../actions/comicsActions";
+import {
+  listComics,
+  deleteComic,
+  createComic,
+  loadComics,
+} from "../actions/comicsActions";
 import { COMICS_CREATE_RESET } from "../constants/comicsConstants";
 
 const ComicsListScreen = ({ history }) => {
@@ -70,6 +75,10 @@ const ComicsListScreen = ({ history }) => {
     dispatch(createComic());
   };
 
+  const createComicsHandler = () => {
+    dispatch(loadComics());
+  };
+
   return (
     <Container>
       {loadingDelete && <Loader />}
@@ -84,6 +93,7 @@ const ComicsListScreen = ({ history }) => {
         <Message variant="danger">{error}</Message>
       ) : (
         <div>
+          <Button onClick={createComicsHandler}>Loadcomics</Button>
           <ComicForm createComicHandler={createComicHandler} />
           <strong>{comics_count} comics available</strong>
           <Table striped bordered hover size="sm" responsive="sm">

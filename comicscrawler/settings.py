@@ -24,7 +24,7 @@ NEWSPIDER_MODULE = 'comicscrawler.spiders'
 #USER_AGENT = 'comicscrawler (+http://www.yourdomain.com)'
 USER_AGENT = "Mozilla/5.0 (Windows NT x.y; Win64; x64; rv:10.0) Gecko/20100101 Firefox/10.0"
 # Obey robots.txt rules
-ROBOTSTXT_OBEY = True
+ROBOTSTXT_OBEY = False
 
 
 # Splash settings
@@ -82,9 +82,11 @@ DUPEFILTER_CLASS = 'scrapy_splash.SplashAwareDupeFilter'
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-    'comicscrawler.pipelines.ComicscrawlerPipeline': 300,
+    'scrapy.pipelines.images.ImagesPipeline': 1,
+    # 'comicscrawler.pipelines.ComicscrawlerPipeline': 300,
 }
-
+IMAGES_STORE = sys.path.append(
+    '/home/bot/Desktop/dev/projects/rhixescans.com')
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html
 #AUTOTHROTTLE_ENABLED = True

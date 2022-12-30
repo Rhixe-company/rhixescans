@@ -2,11 +2,9 @@ import {
   COMICS_LIST_REQUEST,
   COMICS_LIST_SUCCESS,
   COMICS_LIST_FAIL,
-  COMICS_LIST_RESET,
   COMICS_DETAILS_REQUEST,
   COMICS_DETAILS_SUCCESS,
   COMICS_DETAILS_FAIL,
-  COMICS_DETAILS_RESET,
   COMICS_DELETE_REQUEST,
   COMICS_DELETE_SUCCESS,
   COMICS_DELETE_FAIL,
@@ -24,12 +22,35 @@ import {
   GENRES_REQUEST,
   GENRES_SUCCESS,
   GENRES_FAIL,
+  COMICS_LOAD_REQUEST,
+  COMICS_LOAD_SUCCESS,
+  COMICS_LOAD_FAIL,
 } from "../constants/comicsConstants";
 
 const initialState = {
   comics: [],
   comic: {},
   genres: [],
+};
+
+export const comicsLoadReducer = (state = initialState, action) => {
+  switch (action.type) {
+    case COMICS_LOAD_REQUEST:
+      return { ...state, loading: true, comics: [] };
+
+    case COMICS_LOAD_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        comics: action.payload.comics,
+      };
+
+    case COMICS_LOAD_FAIL:
+      return { ...state, loading: false, error: action.payload };
+
+    default:
+      return state;
+  }
 };
 
 export const comicsListReducer = (state = initialState, action) => {
@@ -49,9 +70,6 @@ export const comicsListReducer = (state = initialState, action) => {
 
     case COMICS_LIST_FAIL:
       return { ...state, loading: false, error: action.payload };
-
-    case COMICS_LIST_RESET:
-      return { comics: [] };
 
     default:
       return state;
@@ -74,8 +92,6 @@ export const comicsDetailsReducer = (state = initialState, action) => {
     case COMICS_DETAILS_FAIL:
       return { ...state, loading: false, error: action.payload };
 
-    case COMICS_DETAILS_RESET:
-      return { comic: {} };
     default:
       return state;
   }

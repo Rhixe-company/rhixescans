@@ -4,21 +4,19 @@ from bs4 import BeautifulSoup
 from Comics.models import ComicsManager, Genre, Chapter, Page
 from django.db.models import Q
 from scrapy.spiders import Spider
+from scrapy.spiders import CrawlSpider, Rule
+from scrapy.linkextractors import LinkExtractor
 
 
-class ComicsSpider(Spider):
+class ComicsSpider(CrawlSpider):
     name = 'comics'
-    allowed_domains = ['asura.gg']
-
-    def start_requests(self):
-        yield scrapy.Request('https://asura.gg/manga/?page=1')
-
-    def parse(self, response):
-        for link in response.css('div.bsx a::attr(href)'):
-            yield response.follow(link.get(), callback=self.parse_webtoon)
-
-        next_page = response.css('a.r::attr(href)')
-        yield from response.follow_all(next_page, self.parse)
+    allowed_domains = ['asurascans.com']
+    start_urls = ['https://www.asurascans.com/manga/']
+    rules = (
+        Rule(LinkExtractor(allow='page')),
+        Rule(LinkExtractor(allow='manga'),
+             callback='parse_webtoon')
+    )
 
     def parse_webtoon(self, response):
         for items in response.css('div#content'):
@@ -31,29 +29,22 @@ class ComicsSpider(Spider):
             item['status'] = items.css('div.imptdt i::text').get().strip()
             item['description'] = [description.strip() for description in items.css(
                 'div.entry-content p::text').getall()]
-            item['author'] = items.css(
-                'div.flex-wrap span::text')[1].get().strip()
+            item['released'] = items.css(
+                'div.flex-wrap span.author i::text').get().strip()
             item['artist'] = items.css(
                 'div.flex-wrap span::text')[2].get().strip()
             item['category'] = items.css('div.imptdt a::text').get().strip()
-            item['release_date'] = items.css(
-                'div.flex-wrap span time::text').get().strip()
+            item['author'] = items.css(
+                'div.flex-wrap span::text')[1].get().strip()
+            item['updated'] = items.css(
+                'div.flex-wrap span time::text').getall()[1]
+            item['created'] = items.css(
+                'div.flex-wrap span time::text').getall()[0]
+
             g = items.css("span.mgen a::text").getall()
             for genre in g:
                 item['genres'] = genre
                 yield item
-                obj, created = ComicsManager.objects.filter(
-                    Q(title__icontains=item['title']) |
-                    Q(slug__icontains=item['slug'])
-                ).get_or_create(image_url=item['image_url'], slug=item['slug'], rating=item['rating'], status=item['status'], description=item['description'], category=item['category'], author=item['author'], release_date=item['release_date'], artist=item['artist'], defaults={'title': item['title'], 'slug': item['slug']})
-
-                obj1, created = Genre.objects.filter(
-                    Q(name=item['genres'])
-                ).get_or_create(
-                    name=item['genres'], defaults={'name': item['genres']})
-                obj.genres.add(obj1)
-                obj.save()
-                yield (print(obj, obj1))
         for link in response.css('ul.clstyle li a::attr(href)'):
             yield response.follow(link.get(), callback=self.parse_chapters)
 
@@ -69,11 +60,9 @@ class ComicsSpider(Spider):
             "div.rdminimal img")
         for page in posts:
             item['pages'] = page['src']
-
             yield item
-            comic = ComicsManager.objects.filter(Q(title__icontains=item['title']) |
-                                                 Q(slug__icontains=item['slug'])).get(
-                title=item['title'], slug=item['slug'])
+            comic = ComicsManager.objects.filter(Q(title__icontains=item['title'])).get(
+                title=item['title'])
             obj, created = Chapter.objects.filter(
                 Q(name=item['name'])
             ).get_or_create(comics=comic, name=item['name'], defaults={'name': item['name']})

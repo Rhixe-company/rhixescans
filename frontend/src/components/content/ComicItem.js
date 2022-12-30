@@ -12,7 +12,7 @@ const ComicItem = ({ comic }) => {
       <Card.Body>
         <Link to={`/comic/${comic.id}/`}>
           <Card.Title as="div">
-            <strong>{comic.title}</strong>
+            <h3>{comic.title}</h3>
           </Card.Title>
         </Link>
 
@@ -26,20 +26,15 @@ const ComicItem = ({ comic }) => {
           </div>
         </Card.Text>
         <Card.Text>
-          <b>Last Updated:</b>
-          {new Date(comic.updated).toLocaleString("en-us")}
-        </Card.Text>
-        <Card.Text>
-          <b>Artist:</b>
-          {comic.artist}
-        </Card.Text>
-        <Card.Text>
-          <b>Status:</b>
-          {comic.status}
-        </Card.Text>
-        <Card.Text>
-          <b>Category:</b>
-          {comic.category}
+          <div>
+            <b>Last Updated:</b>
+            {new Date(comic.updated).toLocaleString("en-us")}
+          </div>
+          <div>
+            {" "}
+            <b>Artist:</b>
+            {comic.artist}
+          </div>
         </Card.Text>
 
         {genres.map((genre, index) => (

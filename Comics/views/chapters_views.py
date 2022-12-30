@@ -10,7 +10,6 @@ from Comics.serializers import *
 
 
 @api_view(['GET'])
-@permission_classes([IsAuthenticated])
 def getChapters(request):
     query = request.GET.get('keyword') if request.GET.get(
         'keyword') != None else ''
@@ -25,7 +24,6 @@ def getChapters(request):
 
 
 @api_view(['GET'])
-@permission_classes([IsAuthenticated])
 def getChapter(request, pk):
     chapter = Chapter.objects.get(id=pk)
     comicId = chapter.comics

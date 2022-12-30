@@ -14,11 +14,10 @@ from scrapy.exceptions import DropItem
 class ComicscrawlerPipeline:
     def process_item(self, item, spider):
         adapter = ItemAdapter(item)
-        if adapter.get('rating'):
+        if adapter.get('image_url'):
             obj, created = ComicsManager.objects.filter(
-                Q(title__icontains=adapter['title']) |
-                Q(slug__icontains=adapter['slug'])
-            ).get_or_create(image_url=adapter['image_url'], slug=adapter['slug'], rating=adapter['rating'], status=adapter['status'], description=adapter['description'],  author=adapter['author'],  artist=adapter['artist'], defaults={'title': adapter['title'], 'slug': adapter['slug']})
+                Q(title__icontains=adapter['title'])
+            ).get_or_create(image_url=adapter['image_url'],  rating=adapter['rating'], status=adapter['status'], description=adapter['description'], released=adapter['released'],  author=adapter['author'], created=adapter['created'], updated=adapter['updated'],  artist=adapter['artist'], defaults={'title': adapter['title']})
             obj1, created = Genre.objects.filter(
                 Q(name=adapter['genres'])
             ).get_or_create(
@@ -27,6 +26,5 @@ class ComicscrawlerPipeline:
             obj.save()
 
             return item
-
         else:
             raise DropItem(f"Missing attribute in {item}")

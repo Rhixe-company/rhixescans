@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from datetime import timezone
 from django.core import files
 from requests_html import HTMLSession
+from PIL import Image
 from django.utils.translation import gettext_lazy as _
 
 # Create your models here.
@@ -15,11 +16,11 @@ headers = {
 
 
 def comics_images_location(instance, filename):
-    return '{}/{}'.format(str(instance.slug).replace(" ", "_").replace(":", " ").replace("/", "").replace("\\", ""), filename)
+    return '{}/{}'.format(str(instance.title).replace(" ", "_").replace(":", " ").replace("/", "").replace("\\", ""), filename)
 
 
 def comics_chapters_images_location(instance, filename):
-    return '{}/{}/{}'.format(str(instance.chapters.comics.slug).replace(" ", "_").replace(":", " ").replace("/", "").replace("\\", ""),  instance.chapters.id, filename)
+    return '{}/{}/{}'.format(str(instance.chapters.comics.title).replace(" ", "_").replace(":", " ").replace("/", "").replace("\\", ""),  instance.chapters.name, filename)
 
 
 STATUS_CHOICES = [
@@ -56,8 +57,7 @@ class Comic(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     reader = models.ManyToManyField(User,  blank=True, related_name='readers')
     title = models.CharField(max_length=2000, unique=True, null=False)
-    slug = models.SlugField(max_length=2000,
-                            blank=False)
+
     description = models.TextField(blank=True)
     CategoryType = models.TextChoices('CategoryType', 'Manhua Manhwa Manga')
 
@@ -75,9 +75,10 @@ class Comic(models.Model):
     numChapters = models.IntegerField(default=0, null=True, blank=True)
     genres = models.ManyToManyField(
         Genre, blank=True)
-    release_date = models.CharField(max_length=100, blank=True, null=False)
-    updated = models.DateTimeField(auto_now=True)
-    created = models.DateTimeField(auto_now_add=True)
+    serialized = models.CharField(max_length=100, blank=True, null=False)
+    released = models.CharField(max_length=100, blank=True, null=False)
+    updated = models.CharField(max_length=100, blank=True, null=False)
+    created = models.CharField(max_length=100, blank=True, null=False)
 
     class Meta:
         ordering = ['-updated', '-created']
@@ -102,7 +103,12 @@ class Comic(models.Model):
             self.image.save(file_name, files.File(pb),
                             save=True)
         else:
-            return super().save(*args, **kwargs)
+            super().save(*args, **kwargs)
+            img = Image.open(self.image.path)
+            if img.height > 300:
+                output_size = (300, 300)
+                img.thumbnail(output_size)
+                img.save(self.image.path)
 
 
 class NewManager(models.Manager):
@@ -141,7 +147,7 @@ class Chapter(models.Model):
         ordering = ['-id']
 
     def __str__(self):
-        return '%s %s' % (self.name, self.numPages)
+        return '%s %s' % (self.name, self.comics)
 
     @property
     def created_dynamic(self):
@@ -159,7 +165,7 @@ class Page(models.Model):
         ordering = ['id']
 
     def __str__(self):
-        return '%s %s' % (self.images, self.images_url)
+        return '%s %s' % (self.images, self.chapters)
 
     def save(self, *args, **kwargs):
 

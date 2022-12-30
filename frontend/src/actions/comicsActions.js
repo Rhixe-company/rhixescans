@@ -21,7 +21,43 @@ import {
   GENRES_REQUEST,
   GENRES_SUCCESS,
   GENRES_FAIL,
+  COMICS_LOAD_REQUEST,
+  COMICS_LOAD_SUCCESS,
+  COMICS_LOAD_FAIL,
 } from "../constants/comicsConstants";
+
+export const loadComics = () => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: COMICS_LOAD_REQUEST,
+    });
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const { data } = await axios.post(`/api/comics/crawl/`, {}, config);
+    dispatch({
+      type: COMICS_LOAD_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: COMICS_LOAD_FAIL,
+      payload:
+        error.response && error.response.data.detail
+          ? error.response.data.detail
+          : error.message,
+    });
+  }
+};
 
 export const listComics =
   (keyword = "") =>

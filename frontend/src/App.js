@@ -1,5 +1,7 @@
 import { Container } from "react-bootstrap";
 import { HashRouter as Router, Route } from "react-router-dom";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "./App.css";
 
 import Header from "./components/ui/Header";
 import Footer from "./components/ui/Footer";
@@ -20,8 +22,8 @@ const App = () => {
   return (
     <>
       <Router>
-        <Header />
-        <main className="py-3">
+        <div className="App">
+          <Header />
           <Container>
             <Route path="/" component={HomeScreen} exact />
             <Route path="/login" component={LoginScreen} />
@@ -40,8 +42,8 @@ const App = () => {
             />
             <Route path="/bookmark/:id?" component={BookmarkScreen} />
           </Container>
-        </main>
-        <Footer />
+          <Footer />
+        </div>
       </Router>
     </>
   );

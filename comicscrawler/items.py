@@ -33,10 +33,17 @@ class ScraperItem(Item):
         remove_tags), output_processor=TakeFirst())
     status = Field(input_processor=MapCompose(
         remove_tags), output_processor=TakeFirst())
-
-    genres = Field(input_processor=MapCompose(
+    category = Field(input_processor=MapCompose(
         remove_tags), output_processor=TakeFirst())
-    release_date = Field(input_processor=MapCompose(
+    genres = Field(input_processor=MapCompose(
+        remove_tags))
+    released = Field(input_processor=MapCompose(
+        remove_tags), output_processor=TakeFirst())
+    serialized = Field(input_processor=MapCompose(
+        remove_tags), output_processor=TakeFirst())
+    created = Field(input_processor=MapCompose(
+        remove_tags), output_processor=TakeFirst())
+    updated = Field(input_processor=MapCompose(
         remove_tags), output_processor=TakeFirst())
 
 

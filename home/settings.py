@@ -171,12 +171,12 @@ USE_TZ = True
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 STATICFILES_DIRS = [
-    #BASE_DIR / 'static',
+    BASE_DIR / 'static',
     BASE_DIR / 'frontend/build/static'
 ]
 
 MEDIA_ROOT = BASE_DIR / 'static/media'
-STATIC_ROOT = BASE_DIR / 'static'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
