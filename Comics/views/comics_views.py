@@ -172,14 +172,9 @@ def getComic(request, pk):
 @api_view(['POST'])
 @permission_classes([IsAdminUser])
 def createComic(request):
-    comic = Comic.objects.create(
-        user=request.user,
-        title='Sample Name',
-        description='Sample Name',
-        rating=0.0,
-    )
-
-    serializer = ComicSerializer(comic, many=False)
+    serializer = ComicSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
     return Response(serializer.data)
 
 

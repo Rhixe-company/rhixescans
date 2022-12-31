@@ -7,8 +7,8 @@ from django.views.generic import TemplateView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', TemplateView.as_view(template_name='build/index.html')),
-    path('crawl/', include('loader.urls')),
+    #path('', TemplateView.as_view(template_name='build/index.html')),
+    path('', include('loader.urls')),
     path('api/comics/', include('Comics.urls.comics_urls')),
     path('api/chapters/', include('Comics.urls.chapters_urls')),
     path('api/users/', include('users.urls.user_urls')),
@@ -22,4 +22,3 @@ urlpatterns = [
 
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

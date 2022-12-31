@@ -1,0 +1,36 @@
+
+<div>
+  {% if request.user.is_authenticated %}
+    <div>
+      <form method="POST" action="">
+        {% csrf_token %}
+        <input type="text" name="text" placeholder="Add new Review" />
+        <input type="submit" value="Submit" />
+      </form>
+    </div>
+    {% endif %}
+    <br />
+    <div class="comment-wrapper">
+      <span>reviews available {{chapters.numReviews}}</span>
+      {% for review in reviews %}
+      <div>
+        {% if request.user == review.user %}
+        <a href="{% url 'delete-review' review.id %}">Delete</a>
+        {% endif %}
+        <small>@{{review.user}} {{review.created | timesince }} </small>
+        <p>{{review.text}}</p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div>
+    <h5>Participants</h5>
+    <hr />
+    {% for user in participants %}
+    <div>
+      <p>@{{user.username}}</p>
+    </div>
+    {% endfor %}
+  </div>
+</div>

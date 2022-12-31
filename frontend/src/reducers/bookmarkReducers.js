@@ -3,7 +3,7 @@ import {
   BOOKMARK_REMOVE_ITEM,
 } from "../constants/bookmarkConstants";
 
-export const bookmarkReducers = (state = { bookmarkItems: [] }, action) => {
+export const bookmarkReducers = (state = {}, action) => {
   switch (action.type) {
     case BOOKMARK_ADD_ITEM:
       const item = action.payload;

@@ -3,14 +3,26 @@ import { connect, useDispatch, useSelector } from "react-redux";
 import PropTypes from "prop-types";
 import { listComicsDetails } from "../actions/comicsActions";
 import Rating from "../components/ui/Rating";
-import { Button, Row, Col, Image, ListGroup, Card } from "react-bootstrap";
+import {
+  Form,
+  Button,
+  Row,
+  Col,
+  Image,
+  ListGroup,
+  Card,
+} from "react-bootstrap";
 import Message from "../components/ui/Message";
 import Loader from "../components/ui/Loader";
 import { Link } from "react-router-dom";
+import { removeFromBookmark, addToBookmark } from "../actions/bookmarkActions";
 
 export const ComicScreen = ({ history, match }) => {
   const comicId = match.params.id;
   const dispatch = useDispatch();
+
+  const bookmark = useSelector((state) => state.bookmark);
+  const { bookmarkItems } = bookmark;
 
   const { comic, error, loading, chapters } = useSelector(
     (state) => state.comicsDetails
@@ -24,9 +36,22 @@ export const ComicScreen = ({ history, match }) => {
     }
     dispatch(listComicsDetails(comicId));
   }, [history, userInfo, dispatch, comicId]);
-  const addToBookmarkHandler = () => {
-    history.push(`/bookmark/${match.params.id}`);
+
+  const removeFromBookmarkHandler = (e) => {
+    dispatch(removeFromBookmark(comic.id));
+    history.push(`/comic/${comic.id}/`);
   };
+
+  const addToBookmarkHandler = (e) => {
+    dispatch(addToBookmark(comic.id));
+    e.preventDefault();
+  };
+  for (let index = 0; index < bookmarkItems.length; index++) {
+    const elementid = bookmarkItems[index].id;
+    const elementtitle = bookmarkItems[index].title;
+    console.log(elementid, elementtitle);
+  }
+
   return (
     <div>
       <Link to="/" className="btn btn-light my-3">
@@ -39,18 +64,25 @@ export const ComicScreen = ({ history, match }) => {
       ) : (
         <div>
           <Row>
+            <div></div>
             <Col md={6}>
               <Link to={`/comic/${comic.id}/`}>
                 <Image fluid="true" src={comic.image} alt={comic.image} />
               </Link>
-              <Button
-                onClick={addToBookmarkHandler}
-                className="btn-block"
-                disabled={comic.id === 0}
-                type="button"
-              >
-                Add to Bookmark
-              </Button>
+
+              {bookmarkItems.length === 0 ? (
+                <Form onSubmit={addToBookmarkHandler}>
+                  <Button type="submit" id="bookmark" variant="primary">
+                    Add Bookmark
+                  </Button>
+                </Form>
+              ) : (
+                <Form onSubmit={removeFromBookmarkHandler}>
+                  <Button type="submit" variant="primary">
+                    Remove Bookmark
+                  </Button>
+                </Form>
+              )}
               <Card key={comic.id} className="my-3 p-3 rounded">
                 <Card.Body className="px-6 py-4">
                   <Link to={`/comic/${comic.id}/`}>

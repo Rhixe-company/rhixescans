@@ -2,11 +2,11 @@ from django.urls import path
 from Comics.views import comics_views as views
 
 urlpatterns = [
-    path('', views.getComics, name="comics"),
+    path('', views.getComics, name="comicsapi"),
     path('crawl/', views.crawl, name="crawl"),
-    path('genres/', views.getGenres, name="genres"),
+    path('genres/', views.getGenres, name="genresapi"),
     path('top/', views.getTopComics, name='top-comics'),
-    path('<str:pk>/', views.getComic, name="comic"),
+    path('<str:pk>/', views.getComic, name="comicapi"),
     path('create/', views.createComic, name="comic-create"),
     path('upload/', views.uploadImage, name="image-upload"),
     path('update/<str:pk>/', views.updateComic, name="comic-update"),

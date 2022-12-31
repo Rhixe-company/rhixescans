@@ -1,0 +1,75 @@
+{% extends 'base.html' %} {% load static %} {% block content %}
+<div class="container-comic row justify-content-center">
+  <div class="row justify-content-center">
+   <div class="col">
+      <a href="{% url 'index' %}" class="btn btn-dark my-3">Go Back</a>
+      <div>
+         
+      <div class="title"><h2>{{comic.title}}</h2></div>
+          <div>
+  {% if request.user.is_superuser %}
+  <a class="btn btn-dark my-3 btn-sm" href="{% url 'update-comic' comic.id %}">Edit</a>
+
+  <a  class="btn btn-dark my-3 btn-sm"href="{% url 'delete-comic' comic.id %}">Delete</a>
+  {% endif %}
+</div>
+      <div>
+        <img
+          class="img-thumbnail"
+          src="{{comic.image.url}}"
+        />
+      </div>
+
+      <div class="description"><p>{{comic.description}}</p></div>
+
+      <div class="status">
+        <small>{{comic.status}}</small>
+      </div>
+
+      <div class="rating"><em>{{comic.rating}}</em></div>
+      <div class="category">
+        <span>{{comic.category}}</span>
+      </div>
+      <div class="artist">
+        <strong>{{comic.artist}}</strong>
+      </div>
+      <div class="author"><strong>{{comic.author}}</strong></div>
+      <div class="released"><small>{{comic.released}}</small></div>
+
+      <div>
+        <b>Genres</b>
+        {% for genre in genres %}
+
+        <div>
+          <li class="list-group-item">
+            <a href="#"> {{genre.name}} </a>
+          </li>
+        </div>
+        {% endfor %}
+      </div>
+     
+    </div>
+  </div>
+  <hr />
+  <ul class="list-group list-group-flush">
+    {% for chapter in chapters %}
+       <div>
+            {% if request.user.is_superuser %}
+
+            <a class="btn btn-dark my-3 btn-sm" href="{% url 'update-chapter' chapter.id %}">Edit</a>
+
+            <a class="btn btn-dark my-3 btn-sm" href="{% url 'delete-chapter' chapter.id %}">Delete</a>
+
+            {% endif %}
+          </div>
+    <li class="list-group-item">
+     
+      <a href="{% url 'chapter' chapter.id %}"> {{chapter.name}} </a>
+      
+    </li>
+    {% empty %}
+    <small>No chapters...</small>
+    {% endfor %}
+  </ul>
+</div>
+{% endblock content %}

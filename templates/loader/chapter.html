@@ -1,0 +1,61 @@
+{% extends 'base.html' %} {% load static %} {% block content %}
+<a href="{% url 'comic' chapter.comics.id %}" class="btn btn-dark my-3">{{chapter.comics}}</a>
+<div>
+  
+  <span>{{chapter.name}}</span>
+      {% for page in pages %}
+        <div class="container-fluid">
+     <p> <img class="img-fluid" src={{page.images.url}} alt={{chapter.name}} style="width:100%;height:100%" /></p>
+    </div>
+    {% empty %}
+    <small>chapter pages not found</small>
+    {% endfor %}
+    </div>
+  <span>{{chapter.name}}</span>
+  
+</div> 
+<div>
+  <ul class="list-group list-group-flush">
+    {% for chapter in chapters %}
+
+    <li class="list-group-item">
+      <a href="{% url 'chapter' chapter.id %}"> {{chapter.name}} </a>
+      
+    </li>
+    {% empty %}
+    <small>No chapters...</small>
+    {% endfor %}
+  </ul>
+  <div>
+      {% if chapters.has_other_pages %}
+        <ul class="pagination">
+          {% if chapters.has_previous %}
+          <li class="page-item">
+            <a class="page-link" data-page="{{posts.previous_page_number}}" href="?page={{chapters.previous_page_number}}">&laquo;</a>
+          </li>
+          {% endif %}
+          {% for i in chapters.paginator.page_range  %}
+          {% if chapters.nnumber == i %}
+          <li class="page-item">
+            <a class="page-link" data-page="{{i}}" href="?page={{i}}">{{i}}</a>
+          </li>
+          {% else %}
+          <li class="page-item">
+            <a class="page-link" data-page="{{i}}" href="?page={{i}}" >{{i}}</a>
+          </li>
+          {% endif %}
+         
+          {% endfor %}
+          {% if chapters.has_next %}
+          <li class="page-item">
+            <a class="page-link" data-page="{{chapters.next_page_number}}"
+            href="?page={{chapters.next_page_number}}">&raquo;</a>
+          </li>
+          {% endif %}
+        </ul>
+        {% endif %}
+      </div>
+</div>
+  
+
+{% endblock content %}

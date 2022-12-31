@@ -1,0 +1,22 @@
+<div class="card">
+  <div class="card-header">Genres</div>
+  <ul class="list-group list-group-flush">
+    <li class="list-group-item">
+      <a href="{% url 'comics' %}">All</a>
+    </li>
+    {% for genre in genres %}
+
+    <li class="list-group-item">
+      <a href="{% url 'comics' %}?genre={{genre.name}}"> {{genre.name}} </a>
+    </li>
+    {% endfor %}
+    <br />
+    {% if request.user.is_authenticated %} {% if request.user.is_superuser %}
+    <a href="{% url 'create-comic' %}" class="btn btn-dark btn-block btn-sm m-1">Add Comic</a>
+    {% endif %}
+    <a href="{% url 'logout' %}" class="btn btn-dark btn-block btn-sm m-1"
+      >Logout</a
+    >
+    {% endif %}
+  </ul>
+</div>

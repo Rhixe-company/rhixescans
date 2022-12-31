@@ -1,0 +1,10 @@
+{% include 'base.html' %} {% load crispy_forms_tags %} {% load static %}
+{% block content %}
+<div>
+  <form method="POST" action="">
+    {% csrf_token %} {{form|crispy}}
+    <a href="{{request.META.HTTP_REFERER}}">Go Back</a>
+    <input type="submit" value="Submit" />
+  </form>
+</div>
+{% endblock content %}

@@ -57,7 +57,7 @@ class Comic(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     reader = models.ManyToManyField(User,  blank=True, related_name='readers')
     title = models.CharField(max_length=2000, unique=True, null=False)
-
+    
     description = models.TextField(blank=True)
     CategoryType = models.TextChoices('CategoryType', 'Manhua Manhwa Manga')
 
@@ -134,6 +134,9 @@ class Chapter(models.Model):
     name = models.CharField(
         max_length=1000, unique=True, blank=False, null=True)
     pages = models.ManyToManyField('Page', blank=True, related_name='pages')
+    participants = models.ManyToManyField(
+        User,  blank=True, related_name='participants')
+    numReviews = models.IntegerField(default=0, null=True, blank=True)
     numPages = models.IntegerField(default=0, null=True, blank=True)
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
