@@ -40,7 +40,7 @@ def comics(request):
                                       Q(title=genre))
     genres = Genre.objects.all()
     page = request.GET.get('page')
-    paginator = Paginator(comics, 5)
+    paginator = Paginator(comics, 20)
     try:
         comics = paginator.page(page)
     except PageNotAnInteger:
