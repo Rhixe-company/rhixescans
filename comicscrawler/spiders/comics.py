@@ -1,24 +1,26 @@
-import scrapy
 from ..items import ScraperItem, NewChapterItem
 from bs4 import BeautifulSoup
-from Comics.models import ComicsManager, Genre, Chapter, Page
+from Comics.models import ComicsManager, Chapter, Page
 from django.db.models import Q
 from scrapy.spiders import Spider
-from scrapy.spiders import CrawlSpider, Rule
-from scrapy.linkextractors import LinkExtractor
+import scrapy
 
 
-class ComicsSpider(CrawlSpider):
+class ComicsSpider(Spider):
     name = 'comics'
     allowed_domains = ['asurascans.com']
-    start_urls = ['https://www.asurascans.com/manga/']
-    rules = (
-        Rule(LinkExtractor(allow='page')),
-        Rule(LinkExtractor(allow='manga'),
-             callback='parse_webtoon')
-    )
 
-    def parse_webtoon(self, response):
+    def start_requests(self):
+        yield scrapy.Request('https://www.asurascans.com/manga/')
+
+    def parse(self, response):
+        for link in response.css('div.bsx a::attr(href)'):
+            yield response.follow(link.get(), callback=self.parse_webtoon)
+
+        next_page = response.css('a.r::attr(href)')
+        yield from response.follow_all(next_page, self.parse)
+
+    async def parse_webtoon(self, response):
         for items in response.css('div#content'):
             item = ScraperItem()
             item['slug'] = items.css('div.bixbox ol li a::attr(href)')[
@@ -36,15 +38,14 @@ class ComicsSpider(CrawlSpider):
             item['category'] = items.css('div.imptdt a::text').get().strip()
             item['author'] = items.css(
                 'div.flex-wrap span::text')[1].get().strip()
-
             g = items.css("span.mgen a::text").getall()
             for genre in g:
                 item['genres'] = genre
-                yield item
+            yield item
         for link in response.css('ul.clstyle li a::attr(href)'):
             yield response.follow(link.get(), callback=self.parse_chapters)
 
-    def parse_chapters(self, response):
+    async def parse_chapters(self, response):
         item = NewChapterItem()
         item['slug'] = response.css('div.bixbox ol li a ::attr(href)')[
             1].get().split("/")[-2]

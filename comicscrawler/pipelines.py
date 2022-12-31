@@ -28,3 +28,4 @@ class ComicscrawlerPipeline:
             return item
         else:
             raise DropItem(f"Missing attribute in {item}")
+        pass
