@@ -36,7 +36,7 @@ class ScraperItem(Item):
     category = Field(input_processor=MapCompose(
         remove_tags), output_processor=TakeFirst())
     genres = Field(input_processor=MapCompose(
-        remove_tags))
+        remove_tags), output_processor=TakeFirst())
     released = Field(input_processor=MapCompose(
         remove_tags), output_processor=TakeFirst())
     serialized = Field(input_processor=MapCompose(
