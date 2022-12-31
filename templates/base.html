@@ -18,13 +18,15 @@
     <link rel="stylesheet" href="{% static 'loader/css/index.css' %}" />
   </head>
   <body >
-    {% include 'loader/navbar.html' %}  {% if messages %}
+    <div>
+      {% include 'loader/navbar.html' %}  {% if messages %}
       <ul class="messages">
         {% for message in messages %}
         <li>{{ message }}</li>
         {% endfor %}
       </ul>
       {% endif %} {% block content %}{% endblock %}
+    </div>
     
     <button type="button" class="btn btn-danger btn-floating btn-lg" id="btn-back-to-top">
       <i class="fas fa-arrow-up"></i>
