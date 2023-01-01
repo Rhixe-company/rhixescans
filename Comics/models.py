@@ -57,7 +57,7 @@ class Comic(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     reader = models.ManyToManyField(User,  blank=True, related_name='readers')
     title = models.CharField(max_length=2000, unique=True, null=False)
-    
+    favourites = models.ManyToManyField(User,  blank=True, related_name='favourite',default=None)
     description = models.TextField(blank=True)
     CategoryType = models.TextChoices('CategoryType', 'Manhua Manhwa Manga')
 
@@ -79,7 +79,7 @@ class Comic(models.Model):
     released = models.CharField(max_length=100, blank=True, null=False)
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
-
+    
     class Meta:
         ordering = ['-updated', '-created']
 

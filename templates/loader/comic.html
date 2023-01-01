@@ -1,42 +1,61 @@
 {% extends 'base.html' %} {% load static %} {% block content %}
-<div class="container-comic row justify-content-center">
-  <div class="row justify-content-center">
+<div class="container">
+  <div class="row">
    <div class="col">
       <a href="{% url 'index' %}" class="btn btn-dark my-3">Go Back</a>
-      <div>
+   
          
       <div class="title"><h2>{{comic.title}}</h2></div>
-          <div>
-  {% if request.user.is_superuser %}
-  <a class="btn btn-dark my-3 btn-sm" href="{% url 'update-comic' comic.id %}">Edit</a>
+       {% if request.user.is_authenticated %}
 
-  <a  class="btn btn-dark my-3 btn-sm"href="{% url 'delete-comic' comic.id %}">Delete</a>
-  {% endif %}
-</div>
-      <div>
+       {% if fav %}   
+      <div class="col">
+        <a class="btn btn-outline-dark" href="{% url 'bookmark_list' %}">Remove from Bookmark</a>
+      </div>
+      {% else %}
+      <div class="col">
+        <a class="btn btn-outline-dark" href="{% url 'bookmark' comic.id %}">Add to Bookmark</a>
+      </div>
+      {% endif %}
+      
+      {% else %}
+      <div class="col">
+        <a class="btn btn-outline-dark" href="{% url 'signup'  %}">Add to Bookmark</a>
+      </div>
+         {% endif %}
+    </div>
+</div class="row justify-content-center">
+      <div class="col">
         <img
           class="img-thumbnail"
           src="{{comic.image.url}}"
         />
       </div>
 
-      <div class="description"><p>{{comic.description}}</p></div>
+      <div class="col"><p>{{comic.description}}</p></div>
 
-      <div class="status">
+      <div class="col">
         <small>{{comic.status}}</small>
       </div>
 
-      <div class="rating"><em>{{comic.rating}}</em></div>
-      <div class="category">
+      <div class="col"><em>{{comic.rating}}</em></div>
+      <div class="col">
         <span>{{comic.category}}</span>
       </div>
-      <div class="artist">
+      <div class="col">
         <strong>{{comic.artist}}</strong>
       </div>
       <div class="author"><strong>{{comic.author}}</strong></div>
       <div class="released"><small>{{comic.released}}</small></div>
+       <div>
+  {% if request.user.is_superuser %}
+  <a class="btn btn-outline-primary" href="{% url 'update-comic' comic.id %}">Edit</a>
 
-      <div>
+  <a  class="btn btn-outline-primary"href="{% url 'delete-comic' comic.id %}">Delete</a>
+  {% endif %}</div>
+      <br/>
+
+      <div class="col">
         <b>Genres</b>
         {% for genre in genres %}
 
@@ -51,25 +70,27 @@
     </div>
   </div>
   <hr />
-  <ul class="list-group list-group-flush">
+  <div class="col">
+    <ul class="list-group list-group-flush">
     {% for chapter in chapters %}
        <div>
             {% if request.user.is_superuser %}
 
-            <a class="btn btn-dark my-3 btn-sm" href="{% url 'update-chapter' chapter.id %}">Edit</a>
+            <a class="btn btn-outline-primary" href="{% url 'update-chapter' chapter.id %}">Edit</a>
 
-            <a class="btn btn-dark my-3 btn-sm" href="{% url 'delete-chapter' chapter.id %}">Delete</a>
+            <a class="btn btn-outline-primary" href="{% url 'delete-chapter' chapter.id %}">Delete</a>
 
             {% endif %}
           </div>
     <li class="list-group-item">
      
-      <a href="{% url 'chapter' chapter.id %}"> {{chapter.name}} </a>
+      <a class="btn btn-outline-dark" href="{% url 'chapter' chapter.id %}"> {{chapter.name}} </a>
       
     </li>
     {% empty %}
     <small>No chapters...</small>
     {% endfor %}
   </ul>
+  </div>
 </div>
 {% endblock content %}

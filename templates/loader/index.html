@@ -20,13 +20,10 @@
     </li>
     {% endfor %}
     <br />
-    {% if request.user.is_authenticated %} {% if request.user.is_superuser %}
+{% if request.user.is_superuser %}
     <a href="{% url 'create-comic' %}" class="btn btn-dark btn-block btn-sm m-1">Add Comic</a>
     {% endif %}
-    <a href="{% url 'logout' %}" class="btn btn-dark btn-block btn-sm m-1"
-      >Logout</a
-    >
-    {% endif %}
+  
   </ul>
 </div>
     </div>

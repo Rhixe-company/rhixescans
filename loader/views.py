@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import HttpResponseRedirect, get_object_or_404, render, redirect
 from Comics.models import *
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -8,6 +8,23 @@ from django.db.models import Q
 from django.http import HttpResponse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 # Create your views here.
+
+
+@login_required(login_url='login')
+def bookmark_list(request):
+    comics = Comic.objects.filter(favourites=request.user)
+    return render(request,
+                  'loader/favourites.html',
+                  {'comics': comics})
+
+@login_required(login_url='login')
+def bookmark(request, pk):
+    comic = get_object_or_404(Comic, id=pk)
+    if comic.favourites.filter(id=request.user.id).exists():
+        comic.favourites.remove(request.user)
+    else:
+        comic.favourites.add(request.user)
+    return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
 
 def index(request):
@@ -53,9 +70,12 @@ def comics(request):
 
 def comic(request, pk):
     comic = Comic.objects.get(id=pk)
+    fav = bool
+    if comic.favourites.filter(id=request.user.id).exists():
+        fav = True
     genres = comic.genres.all()
     chapters = comic.chapter_set.all()
-    context = {'comic': comic, 'genres': genres, 'chapters': chapters}
+    context = {'comic': comic, 'genres': genres, 'chapters': chapters, 'fav':fav}
     return render(request, 'loader/comic.html', context)
 
 

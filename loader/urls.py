@@ -5,6 +5,8 @@ from . import views
 
 urlpatterns = [
     path('', views.index, name='index'),
+    path('bookmark/<str:pk>/', views.bookmark, name='bookmark'),
+    path('bookmark/', views.bookmark_list, name='bookmark_list'),
     path('comics/', views.comics, name='comics'),
     path('comic/<str:pk>/', views.comic, name='comic'),
     path('comic/chapter/<str:pk>/', views.chapterview, name='chapter'),

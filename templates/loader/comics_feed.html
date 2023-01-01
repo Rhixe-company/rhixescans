@@ -1,52 +1,21 @@
-<div class="row">
-  {% for comic in comics %}
-  <div class="col-md-4">
-    <div class="card my-2">
-      <img src="{{comic.image.url}}" class="card-img-top" alt="{{comic.title}}">
-      <div class="card-body">
-        <p class="card-title">{{comic.title}}</p>
-        <small class="card-text">{{comic.artist}}</small>
-      </div>
-      {% for genre in comic.genres.all %}
-        <ul class="list-group list-group-flush">
-          <li class="list-group-item">{{genre}}</li>
-        </ul>
-      {% endfor %}
-      <div class="card-body">
-        <a href="{% url 'comic' comic.id %}" class="card-link">View</a>
-      </div>
-    </div>
-  </div>
-  {% empty %}
-  <h3>No comics...</h3>
-  {% endfor %}
-  <div>
-      {% if comics.has_other_pages %}
-        <ul class="pagination">
-          {% if comics.has_previous %}
-          <li class="page-item">
-            <a class="page-link" data-page="{{posts.previous_page_number}}" href="?page={{comics.previous_page_number}}">&laquo;</a>
-          </li>
-          {% endif %}
-          {% for i in comics.paginator.page_range  %}
-          {% if comics.nnumber == i %}
-          <li class="page-item">
-            <a class="page-link" data-page="{{i}}" href="?page={{i}}">{{i}}</a>
-          </li>
-          {% else %}
-          <li class="page-item">
-            <a class="page-link" data-page="{{i}}" href="?page={{i}}" >{{i}}</a>
-          </li>
-          {% endif %}
-         
-          {% endfor %}
-          {% if comics.has_next %}
-          <li class="page-item">
-            <a class="page-link" data-page="{{comics.next_page_number}}"
-            href="?page={{comics.next_page_number}}">&raquo;</a>
-          </li>
-          {% endif %}
-        </ul>
-        {% endif %}
-      </div>
-</div>
+ <div class="row">
+            {% for comic in comics %}
+            <div class="col-md-4">
+                
+                    <div class="card mb-4 box-shadow">
+                        <img class="card-img-top" src="{{comic.image.url}}" alt="{{ comic.title }}">
+                        <div class="card-body">
+                            <h2 style="font-size:18px;font-weight:bold">{{comic.title|truncatechars:50}}</h2>
+                            <p class="card-text">{{comic.description|truncatechars:50}}</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <small class="text-muted">{{comic.updated}}</small>
+                                <div id="favourite-section"> <a class="btn btn-outline-primary" href="{% url 'comic' comic.id %}"> View</a>
+                            </div></div>
+                                       
+
+                        </div>
+                    </div>
+               
+            </div>
+            {% endfor %}
+        </div>
