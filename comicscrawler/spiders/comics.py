@@ -1,6 +1,6 @@
 from ..items import ScraperItem, NewChapterItem
 from bs4 import BeautifulSoup
-from Comics.models import ComicsManager, Chapter, Page
+from Comics.models import ComicsManager, Chapter, Page, Genre
 from django.db.models import Q
 from scrapy.spiders import Spider
 import scrapy
@@ -41,7 +41,16 @@ class ComicsSpider(Spider):
             g = items.css("span.mgen a::text").getall()
             for genre in g:
                 item['genres'] = genre
-            yield item
+                yield item
+                obj, created = ComicsManager.objects.filter(
+                    Q(title__icontains=item['title'])
+                ).get_or_create(image_url=item['image_url'],  rating=item['rating'], status=item['status'], description=item['description'], released=item['released'],  author=item['author'],  artist=item['artist'], defaults={'title': item['title']})
+                obj1, created = Genre.objects.filter(
+                    Q(name=item['genres'])
+                ).get_or_create(
+                    name=item['genres'], defaults={'name': item['genres']})
+                obj.genres.add(obj1)
+                obj.save()
         for link in response.css('ul.clstyle li a::attr(href)'):
             yield response.follow(link.get(), callback=self.parse_chapters)
 
