@@ -1,5 +1,8 @@
-{% include 'base.html' %} {% load crispy_forms_tags %} {% load static %}
-{% block content %}
+{% extends 'base.html' %}
+ {% load static %} 
+ {% block content %} 
+ {% load crispy_forms_tags %}
+ {% include 'loader/navbar.html' %}
 <div>
   <form method="POST" action="">
     {% csrf_token %} {{form|crispy}}
@@ -7,4 +10,5 @@
     <input type="submit" value="Submit" />
   </form>
 </div>
-{% endblock content %}
+{% include 'loader/footer.html' %}
+ {% endblock content %}

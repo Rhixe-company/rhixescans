@@ -62,7 +62,7 @@
 
         <div>
           <li class="list-group-item">
-            <a href="#"> {{genre.name}} </a>
+            <a class="text-dark" href="#"> {{genre.name}} </a>
           </li>
         </div>
         {% endfor %}
@@ -80,7 +80,7 @@
           </div>
     <li class="list-group-item">
      
-      <a href="{% url 'chapter' chapter.id %}"> {{chapter.name}} </a>
+      <a class="text-dark" href="{% url 'chapter' chapter.id %}"> {{chapter.name}} </a>
       
     </li>
     {% empty %}

@@ -1,61 +1,54 @@
-<div class="container">
-  <div class="row">
+<div class="main-container">
     {% for comic in comics %}
-    <div class="col-md-4">
-      <div class="card mb-4 box-shadow">
-        <a class="text-dark" href="{% url 'comic' comic.id %}">
+    <div class="items card" id="comics-list">
+        <a href="{% url 'comic' comic.id %}">
           <img
-            class="card-img-top"
             src="{{comic.imageURL}}"
-            alt="{{ comic.imageURL }}"
+            class="card-img-top img-fluid rounded"
+            alt="{{comic.imageURL}}"
           />
         </a>
-        <div class="card-body">
-          <h2 class="comic-title" style="font-size: 16px; font-weight: bold">
-            {{comic.title|truncatechars:100}}
-          </h2>
-          <p class="card-text">{{comic.description|truncatechars:200}}</p>
-          <em class="card-text">{{comic.rating}}</em>
-          <small class="card-text">{{comic.status}}</small>
-        </div>
-
-        <ul class="list-group list-group-flush">
-          {% with comic.chapter_set.first as chapter %}
-          <li class="list-group-item">
-            <a href="/comic/chapter/{{chapter.id}}"> {{chapter.name}} </a>
-          </li>
-          {% endwith %}
-        </ul>
-      </div>
+      <div class="card-body">
+        <h5 class="card-title"><a class="text-white" href="{% url 'comic' comic.id %}">{{comic.title}}</a></h5>
+        <p class="card-text">{{comic.status}}</p>
+        {% with comic.chapter_set.first as chapter %}
+        <a href="/comic/chapter/{{chapter.id}}" class="btn btn-primary btn-sm">{{chapter.name}}</a>
+        {% endwith %}
+      </div>  
     </div>
-    {% empty %}
-    <p>There are no comics</p>
     {% endfor %}
-    <div class="py-4">
-        <nav aria-label="Page navigation example">
-          {% if comics.has_other_pages %}
-          <ul class="pagination">
-            {% if comics.has_previous %}
-            <li class="page-item"><a class="page-link" href="?page={{ comics.previous_page_number }}">Previous</a>
-            </li>
-            {% else %}
-            <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
-            {% endif %}
-            {% for num in comics.paginator.page_range %}
-            {% if comics.number == l %}
-            <li class="page-item active"><span class="page-link">{{ num }} <span class="sr-only">(current)</span></span>
-            </li>
-            {% else %}
-            <li><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
-            {% endif %}
-            {% endfor %}
-            {% if comics.has_next %}
-            <li class="page-item"><a class="page-link" href="?page={{ comics.next_page_number }}">Next</a></li>
-            {% else %}
-            <li class="page-item disabled"><a class="page-link" href="#">Next</a></li>
-            {% endif %}
-          </ul>
-          {% endif %}
-        </nav>
-      </div>
-</div>
+  </div>
+  <nav aria-label="Page navigation example">
+    {% if comics.has_other_pages %}
+    <ul class="pagination">
+      {% if comics.has_previous %}
+      <li class="page-item">
+        <a class="page-link" href="?page={{ comics.previous_page_number }}"
+          >Previous</a
+        >
+      </li>
+      {% else %}
+      <li class="page-item disabled">
+        <a class="page-link" href="#">Previous</a>
+      </li>
+      {% endif %} {% for num in comics.paginator.page_range %}
+       {% if comics.number == l %}
+      <li class="page-item active">
+        <span class="page-link"
+          >{{ num }} <span class="sr-only">(current)</span></span
+        >
+      </li>
+      {% else %}
+      <li><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+      {% endif %}
+       {% endfor %}
+        {% if comics.has_next %}
+      <li class="page-item">
+        <a class="page-link" href="?page={{ comics.next_page_number }}">Next</a>
+      </li>
+      {% else %}
+      <li class="page-item disabled"><a class="page-link" href="#">Next</a></li>
+      {% endif %}
+    </ul>
+    {% endif %}
+  </nav>

@@ -1,4 +1,8 @@
-{% extends 'base.html' %} {% load static %} {% block title %} Welcome to 
-{% endblock %} {% block content %}{% include 'loader/navbar.html' %}
+{% extends 'base.html' %}
+ {% load static %} 
+ {% block content %} 
+ {% load crispy_forms_tags %}
+ {% include 'loader/navbar.html' %}
 
- {% include 'loader/footer.html' %}{% endblock content %}
+ {% include 'loader/footer.html' %}
+ {% endblock content %}

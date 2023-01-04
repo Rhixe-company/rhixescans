@@ -5,8 +5,9 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .forms import *
 from django.db.models import Q
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.core import serializers
 # Create your views here.
 
 
@@ -16,6 +17,16 @@ def comic_search(request):
     c = ''
     results = []
     query = Q()
+
+    if request.POST.get('action') == 'post':
+        search_string = str(request.POST.get('ss'))
+
+        if search_string is not None:
+            search_string = Comic.objects.filter(
+                title__contains=search_string)
+            data = serializers.serialize(
+                'json', list(search_string), fields=('id','title','image','status','category'))
+            return JsonResponse({'search_string': data})
 
     if 'q' in request.GET:
         form = ComicSearchForm(request.GET)

@@ -4,8 +4,10 @@ from django.contrib.auth.models import User
 from django import forms
 from Comics.models import *
 
+
 class ChapterViewForm(forms.Form):
     c = forms.ModelChoiceField(queryset=Chapter.objects.all().order_by('name'))
+
 
 class ComicSearchForm(forms.Form):
     q = forms.CharField()
@@ -19,7 +21,10 @@ class ComicSearchForm(forms.Form):
         self.fields['c'].label = 'Genre'
         self.fields['q'].label = 'Search For'
         self.fields['q'].widget.attrs.update(
-            {'class': 'form-control'})
+            {'class': 'form-control menudd'})
+        self.fields['q'].widget.attrs.update(
+            {'data-toggle': 'dropdown'})
+
 
 class CustomUserCreationForm(UserCreationForm):
 
