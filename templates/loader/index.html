@@ -1,33 +1,29 @@
-{% extends 'base.html' %} {% load static %} {% block title %}
-    Welcome to Index
-    {% endblock %} {% block content %}
+{% extends 'base.html' %} {% load static %} {% block title %} Welcome to Index
+{% endblock %} {% block content %}
 
-  <br />
+<br />
 <div class="container-main">
-    <div class="container-genres">
-        <div class="container">
-            <div class="card">
-  <div class="card-header"><b>Genres</b></div>
-  <ul class="list-group list-group-flush">
-    <li class="list-group-item">
-      <a href="{% url 'index' %}">All</a>
-    </li>
-    {% for genre in genres %}
+  <div class="container-genres">
+    <div class="container">
+      <div class="card">
+        <div class="card-header"><b>Genres</b></div>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">
+            <a href="{% url 'index' %}">All</a>
+          </li>
+          {% for genre in genres %}
 
-    <li class="list-group-item">
-      <a href="{% url 'index' %}?genre={{genre.name}}"> {{genre.name}} </a>
-    </li>
-    {% endfor %}
-   
-  
-  </ul>
-</div>
-        </div>
+          <li class="list-group-item">
+            <a href="{% url 'index' %}?genre={{genre.name}}">
+              {{genre.name}}
+            </a>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
     </div>
-    <div class="container-comics">
-       <div class="container">
-         {% include 'loader/comics_feed.html' %}
-       </div>
-    </div>
+  </div>
+  <div class="container-comics">{% include 'loader/comics_feed.html' %}</div>
 </div>
+
 {% endblock content %}

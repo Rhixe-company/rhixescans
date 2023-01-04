@@ -109,6 +109,15 @@ class Comic(models.Model):
         else:
             return super().save(*args, **kwargs)
 
+    @property
+    def imageURL(self):
+        try:
+            url = self.image.url
+        except:
+            url = ''
+        print('URL:', url)
+        return url
+
 
 class NewManager(models.Manager):
     pass
@@ -180,6 +189,15 @@ class Page(models.Model):
                              save=True)
         else:
             return super().save(*args, **kwargs)
+
+    @property
+    def imageURL(self):
+        try:
+            url = self.images.url
+        except:
+            url = ''
+        print('URL:', url)
+        return url
 
 
 class Review(models.Model):

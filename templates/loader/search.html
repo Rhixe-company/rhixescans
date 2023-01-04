@@ -20,23 +20,30 @@
                 <div class="col-md-4">
                      
                     <div class="card mb-4 box-shadow">
-                     <a class="text-dark" href="{% url 'comic' comic.id %}">
-                        <img class="card-img-top" src="{{comic.image.url}}" alt="{{ comic.title }}">
-                        </a> 
-                        <div class="card-body">
-                            <a class="text-dark" href="{% url 'comic' comic.id %}">
-                            <h2 class='comic-title' style="font-size:18px;font-weight:bold">{{comic.title|truncatechars:50}}</h2>
-                            </a> 
-                            <p class="card-text">{{comic.description|truncatechars:100}}</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <span class="text-muted">{{comic.category}}</span>
-                                <span class="text-muted"><span>{{ comic.updated|timesince }} ago</span></span>
-                          </div>
-                           
+        <a class="text-dark" href="{% url 'comic' comic.id %}">
+          <img
+            class="card-img-top"
+            src="{{comic.image.url}}"
+            alt="{{ comic.title }}"
+          />
+        </a>
+        <div class="card-body">
+          <h2 class="comic-title" style="font-size: 16px; font-weight: bold">
+            {{comic.title|truncatechars:100}}
+          </h2>
+          <p class="card-text">{{comic.description|truncatechars:200}}</p>
+          <em class="card-text">{{comic.rating}}</em>
+          <small class="card-text">{{comic.status}}</small>
+        </div>
 
-                        </div>
-                           
-                    </div>
+        <ul class="list-group list-group-flush">
+          {% with comic.chapter_set.first as chapter %}
+          <li class="list-group-item">
+            <a href="/comic/chapter/{{chapter.id}}"> {{chapter.name}} </a>
+          </li>
+          {% endwith %}
+        </ul>
+      </div>
               
                
             </div>
