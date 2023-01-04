@@ -54,10 +54,10 @@ def index(request):
 
     genre = request.GET.get('genre')
     if genre == None:
-        comics = Comic.objects.all().order_by('title')
+        comics = Comic.objects.all()
     else:
         comics = Comic.objects.filter(Q(genres__name=genre) |
-                                      Q(title=genre)).order_by('title')
+                                      Q(title=genre))
     genres = Genre.objects.all()[:20]
     page = request.GET.get('page')
     paginator = Paginator(comics, 21)
@@ -74,10 +74,10 @@ def index(request):
 def comics(request):
     genre = request.GET.get('genre')
     if genre == None:
-        comics = Comic.objects.all()
+        comics = Comic.objects.all().order_by('title')
     else:
         comics = Comic.objects.filter(Q(genres__name=genre) |
-                                      Q(title=genre))
+                                      Q(title=genre)).order_by('title')
     genres = Genre.objects.all()
     page = request.GET.get('page')
     paginator = Paginator(comics, 21)

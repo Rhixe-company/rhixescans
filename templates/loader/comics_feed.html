@@ -35,14 +35,11 @@
           </li>
           {% endif %}
           {% for i in comics.paginator.page_range  %}
-          {% if comics.nnumber == i %}
+          {% if comics.number == i %}
           <li class="page-item">
             <a class="page-link" data-page="{{i}}" href="?page={{i}}">{{i}}</a>
           </li>
-          {% else %}
-          <li class="page-item">
-            <a class="page-link" data-page="{{i}}" href="?page={{i}}" >{{i}}</a>
-          </li>
+          
           {% endif %}
          
           {% endfor %}
