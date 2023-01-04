@@ -1,14 +1,13 @@
-{% extends 'base.html' %} {% load static %} {% block content %}
-<div class="container-index">
-  <h1 class="display-4 text-center">
-    <i class="fas fa-book-open text-primary"></i> My
-    <span class="text-primary">Index</span>Page
-  </h1>
+{% extends 'base.html' %} {% load static %} {% block title %}
+    Welcome to Index
+    {% endblock %} {% block content %}
+
   <br />
-  <div class="row" id="genres-list">
-    <div class="col-md-3">
-     <div class="card">
-  <div class="card-header">Genres</div>
+<div class="container-main">
+    <div class="container-genres">
+        <div class="container">
+            <div class="card">
+  <div class="card-header"><b>Genres</b></div>
   <ul class="list-group list-group-flush">
     <li class="list-group-item">
       <a href="{% url 'index' %}">All</a>
@@ -19,19 +18,16 @@
       <a href="{% url 'index' %}?genre={{genre.name}}"> {{genre.name}} </a>
     </li>
     {% endfor %}
-    <br />
-{% if request.user.is_superuser %}
-    <a href="{% url 'create-comic' %}" class="btn btn-dark btn-block btn-sm m-1">Add Comic</a>
-    {% endif %}
+   
   
   </ul>
 </div>
+        </div>
     </div>
-    <div class="col-md-9" id="comics-list">
-      {% include 'loader/comics_feed.html' %}
-      
+    <div class="container-comics">
+       <div class="container">
+         {% include 'loader/comics_feed.html' %}
+       </div>
     </div>
-  </div>
-  
 </div>
 {% endblock content %}

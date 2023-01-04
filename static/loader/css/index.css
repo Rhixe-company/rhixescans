@@ -21,13 +21,9 @@ strong {
   font-family: "Barlow Semi Condensed", sans-serif;
 }
 
-.main-container {
-  max-width: max-content;
-  margin: 0 auto;
-  margin-top: 100px;
-  margin-bottom: 100px;
-  justify-content: space-around;
-  align-self: flex-start;
+.container-main {
+  display: grid;
+  grid-template-columns: 1fr 3fr;
 }
 
 .list-group-item a {
@@ -35,10 +31,10 @@ strong {
   color: black;
 }
 
-.image-thumbail {
-  height: 200px;
-  object-fit: cover;
+.comic-title {
+  color: brown;
 }
+
 
 #btn-back-to-top {
 position: fixed;

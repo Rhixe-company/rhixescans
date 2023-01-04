@@ -5,6 +5,20 @@ from django import forms
 from Comics.models import *
 
 
+class ComicSearchForm(forms.Form):
+    q = forms.CharField()
+    c = forms.ModelChoiceField(
+        queryset=Genre.objects.all().order_by('name'))
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['c'].label = ''
+        self.fields['c'].required = False
+        self.fields['c'].label = 'Genre'
+        self.fields['q'].label = 'Search For'
+        self.fields['q'].widget.attrs.update(
+            {'class': 'form-control'})
+
 class CustomUserCreationForm(UserCreationForm):
 
     class Meta:

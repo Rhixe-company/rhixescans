@@ -1,20 +1,27 @@
  <div class="row">
             {% for comic in comics %}
             <div class="col-md-4">
-                
+                     
                     <div class="card mb-4 box-shadow">
+                     <a class="text-dark" href="{% url 'comic' comic.id %}">
                         <img class="card-img-top" src="{{comic.image.url}}" alt="{{ comic.title }}">
+                        </a> 
                         <div class="card-body">
-                            <h2 style="font-size:18px;font-weight:bold">{{comic.title|truncatechars:50}}</h2>
-                            <p class="card-text">{{comic.description|truncatechars:200}}</p>
+                            <a class="text-dark" href="{% url 'comic' comic.id %}">
+                            <h2 class='comic-title' style="font-size:18px;font-weight:bold">{{comic.title|truncatechars:50}}</h2>
+                            </a> 
+                            <p class="card-text">{{comic.description|truncatechars:100}}</p>
                             <div class="d-flex justify-content-between align-items-center">
-                                <small class="text-muted">{{comic.artist}}</small>
-                                <div id="favourite-section"> <a class="btn btn-outline-primary" href="{% url 'comic' comic.id %}"> View</a>
-                            </div></div>
-                                       
+                                <span class="text-muted">{{comic.category}}</span>
+                                <span class="text-muted"><span>{{ comic.created|timesince }} ago</span></span>
+                          </div>
+                           
 
                         </div>
+                        
+                           
                     </div>
+              
                
             </div>
             {% endfor %}
@@ -24,7 +31,7 @@
         <ul class="pagination">
           {% if comics.has_previous %}
           <li class="page-item">
-            <a class="page-link" data-page="{{posts.previous_page_number}}" href="?page={{comics.previous_page_number}}">&laquo;</a>
+            <a class="page-link" data-page="{{comics.previous_page_number}}" href="?page={{comics.previous_page_number}}">&laquo;</a>
           </li>
           {% endif %}
           {% for i in comics.paginator.page_range  %}

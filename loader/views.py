@@ -10,6 +10,29 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 # Create your views here.
 
 
+def comic_search(request):
+    form = ComicSearchForm()
+    q = ''
+    c = ''
+    results = []
+    query = Q()
+
+    if 'q' in request.GET:
+        form = ComicSearchForm(request.GET)
+        if form.is_valid():
+            q = form.cleaned_data['q']
+            c = form.cleaned_data['c']
+
+            if c is not None:
+                query &= Q(genres=c)
+            if q is not None:
+                query &= Q(title__contains=q)
+
+            results = Comic.objects.filter(query)
+    context = {'form': form, 'q': q,
+               'results': results}
+    return render(request, 'loader/search.html', context)
+
 @login_required(login_url='login')
 def bookmark_list(request):
     comics = Comic.objects.filter(favourites=request.user)
@@ -37,7 +60,7 @@ def index(request):
                                       Q(title=genre))
     genres = Genre.objects.all()
     page = request.GET.get('page')
-    paginator = Paginator(comics, 20)
+    paginator = Paginator(comics, 21)
     try:
         comics = paginator.page(page)
     except PageNotAnInteger:
@@ -57,7 +80,7 @@ def comics(request):
                                       Q(title=genre))
     genres = Genre.objects.all()
     page = request.GET.get('page')
-    paginator = Paginator(comics, 20)
+    paginator = Paginator(comics, 21)
     try:
         comics = paginator.page(page)
     except PageNotAnInteger:
