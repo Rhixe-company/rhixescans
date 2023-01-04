@@ -1,38 +1,39 @@
-
-<div>
-   <ul class="list-group list-group-flush">
+<div class='container'>
+  <ul class="list-group list-group-flush">
     {% for chapter in chapters %}
 
     <li class="list-group-item">
       <a href="{% url 'chapter' chapter.id %}"> {{chapter.name}} </a>
-      
     </li>
     {% empty %}
     <small>No chapters...</small>
     {% endfor %}
   </ul>
-      {% if chapters.has_other_pages %}
-        <ul class="pagination">
-          {% if chapters.has_previous %}
-          <li class="page-item">
-            <a class="page-link" data-page="{{posts.previous_page_number}}" href="?page={{chapters.previous_page_number}}">&laquo;</a>
-          </li>
+  <div class="py-4">
+        <nav aria-label="Page navigation example">
+          {% if chapters.has_other_pages %}
+          <ul class="pagination">
+            {% if chapters.has_previous %}
+            <li class="page-item"><a class="page-link" href="?page={{ chapters.previous_page_number }}">Previous</a>
+            </li>
+            {% else %}
+            <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
+            {% endif %}
+            {% for num in chapters.paginator.page_range %}
+            {% if chapters.number == l %}
+            <li class="page-item active"><span class="page-link">{{ num }} <span class="sr-only">(current)</span></span>
+            </li>
+            {% else %}
+            <li><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+            {% endif %}
+            {% endfor %}
+            {% if chapters.has_next %}
+            <li class="page-item"><a class="page-link" href="?page={{ chapters.next_page_number }}">Next</a></li>
+            {% else %}
+            <li class="page-item disabled"><a class="page-link" href="#">Next</a></li>
+            {% endif %}
+          </ul>
           {% endif %}
-          {% for i in chapters.paginator.page_range  %}
-          {% if chapters.number == i %}
-          <li class="page-item">
-            <a class="page-link" data-page="{{i}}" href="?page={{i}}">{{i}}</a>
-          </li>
-          
-          {% endif %}
-         
-          {% endfor %}
-          {% if chapters.has_next %}
-          <li class="page-item">
-            <a class="page-link" data-page="{{chapters.next_page_number}}"
-            href="?page={{chapters.next_page_number}}">&raquo;</a>
-          </li>
-          {% endif %}
-        </ul>
-        {% endif %}
+        </nav>
       </div>
+</div>

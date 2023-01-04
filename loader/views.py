@@ -108,8 +108,8 @@ def comic(request, pk):
 def chapterview(request, pk):
     chapter = Chapter.objects.get(id=pk)
     pages = chapter.pages.all()
-    chapter_reviews = chapter.review_set.all()
-
+    chapter_reviews = chapter.comments.all()
+    reviews_count = chapter_reviews.count()
     chapters = chapter.comics.chapter_set.all()
     page = request.GET.get('page')
     paginator = Paginator(chapters, 30)
@@ -125,14 +125,14 @@ def chapterview(request, pk):
             chapter=chapter,
             text=request.POST.get('text')
         )
-        reviews = chapter.review_set.all()
+        reviews = chapter.comments.all()
         chapter.numReviews = len(reviews)
         chapter.user = request.user
         chapter.save()
         return redirect('chapter', pk=chapter.id)
 
     context = {'chapter': chapter, 'pages': pages,
-               'chapter_reviews': chapter_reviews,  'chapters': chapters}
+               'chapter_reviews': chapter_reviews,  'chapters': chapters, 'total_reviews': reviews_count}
     return render(request, 'loader/chapter.html', context)
 
 

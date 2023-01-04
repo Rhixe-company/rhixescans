@@ -203,7 +203,8 @@ class Page(models.Model):
 
 class Review(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    chapter = models.ForeignKey(Chapter, on_delete=models.SET_NULL, null=True)
+    chapter = models.ForeignKey(
+        Chapter, on_delete=models.SET_NULL, null=True, related_name='comments')
     text = models.TextField(max_length=3000, blank=True)
     rating = models.PositiveSmallIntegerField(
         choices=RATING_CHOICES, default=1)
