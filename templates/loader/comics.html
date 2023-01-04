@@ -1,13 +1,18 @@
-{% extends 'base.html' %} {% load static %} {% block title %}
-    Welcome to Comics
-    {% endblock %} {% block content %}
-<br/>
-<div class="container-comics">
-  
- 
-  <div class="row">
-    <div class="col-md-3">{% include 'loader/genres_feed.html' %}</div>
-    <div class="col-md-9">{% include 'loader/comics_feed.html' %}</div>
-  </div>
-  {% endblock content %}
+{% extends 'base.html' %} {% load static %} {% block title %} Welcome to Comics
+{% endblock %} {% block content %}{% include 'loader/navbar.html' %}
+<div class="container">
+  <ul class="nav">
+    <li class="nav-item">
+      <a class="nav-link active" aria-current="page" href="comics/">All</a>
+    </li>
+    {% for genre in genres %}
+    <li class="nav-item">
+      <a class="nav-link" href="{% url 'comics' %}?genre={{genre.name}}">
+        {{genre.name}}</a
+      >
+    </li>
+    {% endfor %}
+  </ul>
+  <div class="container-comics">{% include 'loader/comics_feed.html' %}</div>
 </div>
+{% include 'loader/footer.html' %}{% endblock content %}

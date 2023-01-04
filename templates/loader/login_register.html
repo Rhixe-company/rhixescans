@@ -1,4 +1,5 @@
-{% extends 'base.html' %} {% load static %} {%block content %}
+{% extends 'base.html' %} {% load static %} {% block title %} Welcome to Login
+{% endblock %} {% block content %}{% include 'loader/navbar.html' %}
 <div class="container-index">
   {% load crispy_forms_tags %}
   <div class="login--wrapper">
@@ -43,4 +44,4 @@
     {% endif %}
   </div>
 </div>
-{% endblock content %}
+{% include 'loader/footer.html' %}{% endblock content %}

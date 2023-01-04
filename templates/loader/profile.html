@@ -1,5 +1,5 @@
 {% extends 'base.html' %} {% load static %} {% block title %} Welcome to Profile
-{% endblock %} {% block content %}
+{% endblock %} {% block content %}{% include 'loader/navbar.html' %}
 <style>
   .profile-container {
     display: grid;
@@ -110,4 +110,5 @@
   </div>
 </div>
 
-{% endblock content %}
+ {% include 'loader/footer.html' %}{% endblock content %}
+

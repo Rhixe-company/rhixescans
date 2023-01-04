@@ -1,6 +1,5 @@
-{% extends 'base.html' %} {% load static %} {% block title %}
-    Welcome to {{chapter.name}}
-    {% endblock %} {% block content %}
+{% extends 'base.html' %} {% load static %} {% block title %} Welcome to {{chapter.name}}
+{% endblock %} {% block content %}{% include 'loader/navbar.html' %}
 <a href="{% url 'comic' chapter.comics.id %}" class="btn btn-dark my-3">{{chapter.comics}}</a>
 
   
@@ -27,5 +26,4 @@
   
 </div>
 
-
-{% endblock content %}
+ {% include 'loader/footer.html' %}{% endblock content %}

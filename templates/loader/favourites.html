@@ -1,4 +1,5 @@
-{% extends "base.html" %} {% block content %}
+{% extends 'base.html' %} {% load static %} {% block title %} Welcome to
+Bookmark {% endblock %} {% block content %}{% include 'loader/navbar.html' %}
 <div class="container">
   <section class="jumbotron text-center bg-white">
     <div class="container">
@@ -50,5 +51,4 @@
     </div>
   </div>
 </div>
-
-{% endblock %}
+{% include 'loader/footer.html' %}{% endblock content %}

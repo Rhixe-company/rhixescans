@@ -1,29 +1,18 @@
 {% extends 'base.html' %} {% load static %} {% block title %} Welcome to Index
-{% endblock %} {% block content %}
+{% endblock %} {% block content %}{% include 'loader/navbar.html' %}
+<div class="container">
+  <ul class="nav">
+    <li class="nav-item">
+      <a class="nav-link active" aria-current="page" href="/">All</a>
+    </li>
+    {% for genre in genres %}
+    <li class="nav-item">
+      <a class="nav-link" href="/?genre={{genre.name}}"> {{genre.name}}</a>
+    </li>
+    {% endfor %}
+  </ul>
 
-<br />
-<div class="container-main">
-  <div class="container-genres">
-    <div class="container">
-      <div class="card">
-        <div class="card-header"><b>Genres</b></div>
-        <ul class="list-group list-group-flush">
-          <li class="list-group-item">
-            <a href="{% url 'index' %}">All</a>
-          </li>
-          {% for genre in genres %}
-
-          <li class="list-group-item">
-            <a href="{% url 'index' %}?genre={{genre.name}}">
-              {{genre.name}}
-            </a>
-          </li>
-          {% endfor %}
-        </ul>
-      </div>
-    </div>
-  </div>
   <div class="container-comics">{% include 'loader/comics_feed.html' %}</div>
 </div>
 
-{% endblock content %}
+{% include 'loader/footer.html' %}{% endblock content %}

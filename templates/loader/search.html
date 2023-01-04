@@ -1,6 +1,5 @@
-{% extends "base.html" %}
-{% block title %}Search Page{% endblock %}
-{% block content %}
+{% extends 'base.html' %} {% load static %} {% block title %} Welcome to Search
+{% endblock %} {% block content %}{% include 'loader/navbar.html' %}
 <div class="container pt-5">
     {% if q %}
     <h1>Comic containing "{{ q }}"
@@ -64,4 +63,4 @@
     </form>
     {% endif %}
 </div>
-{% endblock %}
+{% include 'loader/footer.html' %}{% endblock content %}

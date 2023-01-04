@@ -21,6 +21,6 @@ urlpatterns = [
     path('update-chapter/<str:pk>/', views.updateChapter, name="update-chapter"),
     path('delete-chapter/<str:pk>/', views.deleteChapter, name="delete-chapter"),
     path('delete-review/<str:pk>/', views.deleteReview, name="delete-review"),
-    path('update-user/', views.updateUser, name="update-user"),
+    path('update-user/<str:pk>/', views.updateUser, name="update-user"),
     path('profile/<str:pk>/', views.userProfile, name="user-profile"),
 ]
