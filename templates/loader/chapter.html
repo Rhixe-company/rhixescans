@@ -9,7 +9,7 @@
   <span>{{chapter.name}}</span>
       {% for page in pages %}
         <div class="container-fluid">
-     <p> <img class="img-fluid" src={{page.images.url}} alt={{chapter.name}} style="width:100%;height:100%" /></p>
+     <p> <img class="img-fluid" src={{page.imageURL}} alt={{chapter.imageURL}} style="width:100%;height:100%" /></p>
     </div>
     {% empty %}
     <small>chapter pages not found</small>

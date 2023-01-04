@@ -1,37 +1,54 @@
-{% extends "base.html" %}
-{% block content %}
+{% extends "base.html" %} {% block content %}
 <div class="container">
-    <section class="jumbotron text-center bg-white">
-        <div class="container">
-            <h1 class="display-4 text-center">
-                <i class="fas fa-book-open text-primary"></i> Bookmark
-                <span class="text-primary">Page</span>
-            </h1>
-        </div>
-    </section>
-    <div>
-        <div class="row">
-            {% for comic in comics %}
-            <div class="col-md-4">
-                <a class="text-dark" href="{% url 'comic' comic.id %}">
-                    <div class="card mb-4 box-shadow">
-                        <img class="card-img-top" src="{{comic.image.url}}" alt="{{ comic.title }}">
-                        <div class="card-body">
-                            <h2 style="font-size:18px;font-weight:bold">{{comic.title|truncatechars:50}}</h2>
-                            <p class="card-text">{{comic.description|truncatechars:50}}</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <small class="text-muted">9 mins</small>
-                                <div id="favourite-section"><a href="{% url 'bookmark' comic.id %}"
-                                        class="btn btn-outline-primary">Remove</a></div>
-                            </div>
-
-                        </div>
-                    </div>
-                </a>
-            </div>
-            {% endfor %}
-        </div>
+  <section class="jumbotron text-center bg-white">
+    <div class="container">
+      <h1 class="display-4 text-center">
+        <i class="fas fa-book-open text-primary"></i> Bookmark
+        <span class="text-primary">Page</span>
+      </h1>
     </div>
+  </section>
+  <div>
+    <div class="row">
+      {% for comic in comics %}
+      <div class="col-md-4">
+        <div class="card mb-4 box-shadow">
+          <a class="text-dark" href="{% url 'comic' comic.id %}">
+            <img
+              class="card-img-top"
+              src="{{comic.imageURL}}"
+              alt="{{ comic.imageURL}}"
+            />
+          </a>
+          <div class="card-body">
+            <h2 style="font-size: 18px; font-weight: bold">
+              {{comic.title|truncatechars:100}}
+            </h2>
+            <p class="card-text">{{comic.description|truncatechars:200}}</p>
+
+            <ul class="list-group list-group-flush">
+              {% with comic.chapter_set.first as chapter %}
+              <li class="list-group-item">
+                <a href="/comic/chapter/{{chapter.id}}"> {{chapter.name}} </a>
+              </li>
+              {% endwith %}
+            </ul>
+            <div class="d-flex justify-content-between align-items-center">
+              <small class="text-muted">9 mins</small>
+              <div id="favourite-section">
+                <a
+                  href="{% url 'bookmark' comic.id %}"
+                  class="btn btn-outline-primary"
+                  >Remove</a
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
 </div>
 
 {% endblock %}
