@@ -2,9 +2,7 @@
     Welcome to {{chapter.name}}
     {% endblock %} {% block content %}
 <a href="{% url 'comic' chapter.comics.id %}" class="btn btn-dark my-3">{{chapter.comics}}</a>
-<div>
- {% include 'loader/chapterpages.html' %}
-</div>
+
   
 <div>
   
