@@ -33,12 +33,14 @@ def comic_search(request):
                'results': results}
     return render(request, 'loader/search.html', context)
 
+
 @login_required(login_url='login')
 def bookmark_list(request):
     comics = Comic.objects.filter(favourites=request.user)
     return render(request,
                   'loader/favourites.html',
                   {'comics': comics})
+
 
 @login_required(login_url='login')
 def bookmark(request, pk):
@@ -54,10 +56,10 @@ def index(request):
 
     genre = request.GET.get('genre')
     if genre == None:
-        comics = Comic.objects.all()
+        comics = Comic.newmanager.all()
     else:
-        comics = Comic.objects.filter(Q(genres__name=genre) |
-                                      Q(title=genre))
+        comics = Comic.newmanager.filter(Q(genres__name=genre) |
+                                         Q(title=genre))
     genres = Genre.objects.all()[:20]
     page = request.GET.get('page')
     paginator = Paginator(comics, 21)
@@ -98,7 +100,8 @@ def comic(request, pk):
         fav = True
     genres = comic.genres.all()
     chapters = comic.chapter_set.all()
-    context = {'comic': comic, 'genres': genres, 'chapters': chapters, 'fav':fav}
+    context = {'comic': comic, 'genres': genres,
+               'chapters': chapters, 'fav': fav}
     return render(request, 'loader/comic.html', context)
 
 
@@ -106,7 +109,7 @@ def chapterview(request, pk):
     chapter = Chapter.objects.get(id=pk)
     pages = chapter.pages.all()
     chapter_reviews = chapter.review_set.all()
-    participants = chapter.participants.all()
+
     chapters = chapter.comics.chapter_set.all()
     page = request.GET.get('page')
     paginator = Paginator(chapters, 50)
@@ -122,13 +125,14 @@ def chapterview(request, pk):
             chapter=chapter,
             text=request.POST.get('text')
         )
-        chapter.participants.add(request.user)
         reviews = chapter.review_set.all()
         chapter.numReviews = len(reviews)
+        chapter.user = request.user
         chapter.save()
         return redirect('chapter', pk=chapter.id)
+
     context = {'chapter': chapter, 'pages': pages,
-               'chapter_reviews': chapter_reviews, 'participants': participants,'chapters':chapters}
+               'chapter_reviews': chapter_reviews,  'chapters': chapters}
     return render(request, 'loader/chapter.html', context)
 
 
@@ -270,21 +274,22 @@ def deleteChapter(request, pk):
 
 def userProfile(request, pk):
     user = User.objects.get(id=pk)
-    comics = user.comic_set.all()
-    comics_count = comics.count()
-    comics_review = user.review_set.all()
+    chapters = user.chapter_set.all()
+
+    chapters_count = chapters.count()
+    chapter_review = user.review_set.all()
     genres = Genre.objects.all()
 
     page = request.GET.get('page')
-    paginator = Paginator(comics, 24)
+    paginator = Paginator(chapters, 24)
     try:
-        comics = paginator.page(page)
+        chapters = paginator.page(page)
     except PageNotAnInteger:
-        comics = paginator.page(1)
+        chapters = paginator.page(1)
     except EmptyPage:
-        comics = paginator.page(paginator.num_pages)
-    context = {'user': user, 'comics': comics, 'genres': genres,
-               'comics_count': comics_count, 'comics_review': comics_review}
+        chapters = paginator.page(paginator.num_pages)
+    context = {'user': user, 'chapters': chapters, 'genres': genres,
+               'chapters_count': chapters_count, 'chapter_review': chapter_review}
     return render(request, 'loader/profile.html', context)
 
 

@@ -1,18 +1,26 @@
-
-<div>
+<div class='container container-main'>
   {% if request.user.is_authenticated %}
     <div>
-      <form method="POST" action="">
-        {% csrf_token %}
-        <input type="text" name="text" placeholder="Add new Review" />
-        <input type="submit" value="Submit" />
-      </form>
+      <h5>Participants</h5>
+    <hr />
+    {% for user in participants %}
+    <div>
+      <p>@{{user.username}}</p>
     </div>
-    {% endif %}
-    <br />
+    {% endfor %}
+    </div>
+    
+    
     <div class="comment-wrapper">
-      <span>reviews available {{chapters.numReviews}}</span>
-      {% for review in reviews %}
+      <form class="d-flex form-inline my-2 my-lg-0" method="POST" action="">
+        {% csrf_token %}
+        <input lass="form-control me-sm-2" type="text" name="text" placeholder="Add new Comment" />
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">
+          Submit
+        </button>
+      </form>
+      <span>reviews available {{chapter.numReviews}}</span>
+      {% for review in chapter_reviews %}
       <div>
         {% if request.user == review.user %}
         <a href="{% url 'delete-review' review.id %}">Delete</a>
@@ -21,16 +29,9 @@
         <p>{{review.text}}</p>
       </div>
       {% endfor %}
-    </div>
+      <div>
+    
   </div>
-
-  <div>
-    <h5>Participants</h5>
-    <hr />
-    {% for user in participants %}
-    <div>
-      <p>@{{user.username}}</p>
+  {% endif %}
     </div>
-    {% endfor %}
-  </div>
 </div>

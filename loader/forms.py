@@ -4,6 +4,8 @@ from django.contrib.auth.models import User
 from django import forms
 from Comics.models import *
 
+class ChapterViewForm(forms.Form):
+    c = forms.ModelChoiceField(queryset=Chapter.objects.all().order_by('name'))
 
 class ComicSearchForm(forms.Form):
     q = forms.CharField()

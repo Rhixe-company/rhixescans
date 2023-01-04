@@ -57,10 +57,9 @@ class Comic(models.Model):
     class NewManager(models.Manager):
         def get_queryset(self):
             return super().get_queryset() .filter(status='Ongoing')
-    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
-    reader = models.ManyToManyField(User,  blank=True, related_name='readers')
     title = models.CharField(max_length=2000, unique=True, null=False)
-    favourites = models.ManyToManyField(User,  blank=True, related_name='favourite',default=None)
+    favourites = models.ManyToManyField(
+        User,  blank=True, related_name='favourite', default=None)
     description = models.TextField(blank=True)
     CategoryType = models.TextChoices('CategoryType', 'Manhua Manhwa Manga')
 
@@ -84,7 +83,7 @@ class Comic(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     objects = models.Manager()  # default manager
     newmanager = NewManager()
-    
+
     class Meta:
         ordering = ['-updated', '-created']
 
@@ -135,12 +134,11 @@ class ComicsManager(Comic, ExtraManagers):
 
 
 class Chapter(models.Model):
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     comics = models.ForeignKey(Comic, on_delete=models.CASCADE)
     name = models.CharField(
         max_length=1000, unique=True, blank=False, null=True)
     pages = models.ManyToManyField('Page', blank=True, related_name='pages')
-    participants = models.ManyToManyField(
-        User,  blank=True, related_name='participants')
     numReviews = models.IntegerField(default=0, null=True, blank=True)
     numPages = models.IntegerField(default=0, null=True, blank=True)
     updated = models.DateTimeField(auto_now=True)
