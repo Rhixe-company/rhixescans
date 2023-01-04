@@ -112,7 +112,7 @@ def chapterview(request, pk):
 
     chapters = chapter.comics.chapter_set.all()
     page = request.GET.get('page')
-    paginator = Paginator(chapters, 50)
+    paginator = Paginator(chapters, 30)
     try:
         chapters = paginator.page(page)
     except PageNotAnInteger:
