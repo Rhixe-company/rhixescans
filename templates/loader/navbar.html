@@ -40,9 +40,9 @@
         
         {% endif %}
       </ul>
-      <form class="d-flex"  method="GET" action=''>
-            <input type='text'  class="form-control me-sm-2" name='genre' placeholder='Search'/>
-            <button class="btn btn-secondary my-2 my-sm-0" type="submit">
+      <form class="d-flex form-inline my-2 my-lg-0"  method="GET" action='/search/'>
+            <input type='text'  class="form-control me-sm-2" name='q' placeholder='Search' aria-label='Search' required/>
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">
           Search
         </button>
           </form>
