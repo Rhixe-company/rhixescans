@@ -40,13 +40,13 @@ class ChaptersSpider(Spider):
         for page in posts:
             item['pages'] = page['src']
             yield item
-            comic = ComicsManager.objects.filter(Q(title__icontains=item['title'])).get(
+            comic = ComicsManager.objects.filter(Q(title__contains=item['title'])).get(
                 title=item['title'])
             obj, created = Chapter.objects.filter(
-                Q(name=item['name'])
+                Q(name__contains=item['name'])
             ).get_or_create(comics=comic, name=item['name'], defaults={'name': item['name']})
             obj1, created = Page.objects.filter(
-                Q(images_url__icontains=item['pages'])
+                Q(images_url__contains=item['pages'])
             ).get_or_create(images_url=item['pages'], defaults={'images_url': item['pages'], 'chapters': obj})
             obj.pages.add(obj1)
             obj.numPages = obj.page_set.all().count()

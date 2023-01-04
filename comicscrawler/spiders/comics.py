@@ -42,10 +42,10 @@ class ComicsSpider(Spider):
                 item['genres'] = genre
                 yield item
                 obj, created = ComicsManager.objects.filter(
-                    Q(title__icontains=item['title'])
+                    Q(title__contains=item['title'])
                 ).get_or_create(image_url=item['image_url'],  rating=item['rating'], status=item['status'], description=item['description'], released=item['released'], category=item['category'],  author=item['author'],  artist=item['artist'], defaults={'title': item['title']})
                 obj1, created = Genre.objects.filter(
-                    Q(name=item['genres'])
+                    Q(name__contains=item['genres'])
                 ).get_or_create(
                     name=item['genres'], defaults={'name': item['genres']})
                 obj.genres.add(obj1)
