@@ -1,38 +1,41 @@
-
 <div>
-   <ul class="list-group list-group-flush">
+  <ul class="list-group list-group-flush">
     {% for chapter in chapters %}
 
     <li class="list-group-item">
       <a href="{% url 'chapter' chapter.id %}"> {{chapter.name}} </a>
-      
     </li>
     {% empty %}
     <small>No chapters...</small>
     {% endfor %}
   </ul>
-      {% if chapters.has_other_pages %}
-        <ul class="pagination">
-          {% if chapters.has_previous %}
-          <li class="page-item">
-            <a class="page-link" data-page="{{posts.previous_page_number}}" href="?page={{chapters.previous_page_number}}">Prev Chapter</a>
-          </li>
-          {% endif %}
-          {% for i in chapters.paginator.page_range  %}
-          {% if chapters.number == i %}
-          <li class="page-item">
-            <a class="page-link" data-page="{{i}}" href="?page={{i}}">{{i}}</a>
-          </li>
-          
-          {% endif %}
-         
-          {% endfor %}
-          {% if chapters.has_next %}
-          <li class="page-item">
-            <a class="page-link" data-page="{{chapters.next_page_number}}"
-            href="?page={{chapters.next_page_number}}">Next Chapter</a>
-          </li>
-          {% endif %}
-        </ul>
-        {% endif %}
-      </div>
+  {% if chapters.has_other_pages %}
+  <ul class="pagination">
+    {% if chapters.has_previous %}
+    <li class="page-item">
+      <a
+        class="page-link"
+        data-page="{{posts.previous_page_number}}"
+        href="?page={{chapters.previous_page_number}}"
+        >&laquo;</a
+      >
+    </li>
+    {% endif %} {% for i in chapters.paginator.page_range %} {% if
+    chapters.number == i %}
+    <li class="page-item">
+      <a class="page-link" data-page="{{i}}" href="?page={{i}}">{{i}}</a>
+    </li>
+
+    {% endif %} {% endfor %} {% if chapters.has_next %}
+    <li class="page-item">
+      <a
+        class="page-link"
+        data-page="{{chapters.next_page_number}}"
+        href="?page={{chapters.next_page_number}}"
+        >&raquo;</a
+      >
+    </li>
+    {% endif %}
+  </ul>
+  {% endif %}
+</div>
