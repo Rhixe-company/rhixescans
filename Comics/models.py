@@ -168,7 +168,7 @@ class Chapter(models.Model):
 class Page(models.Model):
     chapters = models.ForeignKey(Chapter, on_delete=models.CASCADE)
     images = models.ImageField(
-        upload_to=comics_chapters_images_location, max_length=10000, blank=False, unique=True, default=None, null=True)
+        upload_to=comics_chapters_images_location, max_length=10000, blank=False)
     images_url = models.URLField(
         max_length=10000, blank=True, unique=True, default=None, null=True)
 
