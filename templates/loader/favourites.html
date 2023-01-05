@@ -1,6 +1,6 @@
 {% extends 'base.html' %} {% load static %} {% block title %} Welcome to
 Bookmark {% endblock %} {% block content %}{% include 'loader/navbar.html' %}
-<div class="container">
+<div class="container text-dark">
   <section class="jumbotron text-center bg-white">
     <div class="container">
       <h1 class="display-4 text-center">
@@ -30,7 +30,7 @@ Bookmark {% endblock %} {% block content %}{% include 'loader/navbar.html' %}
             <ul class="list-group list-group-flush">
               {% with comic.chapter_set.first as chapter %}
               <li class="list-group-item">
-                <a href="/comic/chapter/{{chapter.id}}"> {{chapter.name}} </a>
+                <a class="text-dark" href="/comic/chapter/{{chapter.id}}"> {{chapter.name}} </a>
               </li>
               {% endwith %}
             </ul>

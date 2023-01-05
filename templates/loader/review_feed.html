@@ -1,4 +1,4 @@
-<div class="container container-main">
+<div class="container text-dark">
   {% if request.user.is_authenticated %}
   <div class="comment-form">
     <form class="d-flex form-inline my-2 my-lg-0" method="POST" action="">
@@ -18,9 +18,9 @@
   <div class="comment-wrapper">
     <span>reviews available {{total_reviews}}</span>
     {% for review in chapter_reviews %}
-    <div>
+    <div class='text-dark'>
       {% if request.user == review.user %}
-      <a href="{% url 'delete-review' review.id %}">Delete</a>
+      <a class='text-dark' href="{% url 'delete-review' review.id %}">Delete</a>
       {% endif %}
       <small>@{{review.user}} {{review.created | timesince }} </small>
       <p>{{review.text}}</p>

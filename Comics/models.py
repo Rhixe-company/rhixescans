@@ -3,6 +3,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from datetime import timezone
 from django.core import files
+from django.urls import reverse
 from requests_html import HTMLSession
 from PIL import Image
 from django.utils.translation import gettext_lazy as _
@@ -81,8 +82,15 @@ class Comic(models.Model):
     released = models.CharField(max_length=100, blank=True, null=False)
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
+    likes = models.ManyToManyField(
+        User, related_name='like', default=None, blank=True)
+    like_count = models.BigIntegerField(default='0')
     objects = models.Manager()  # default manager
     newmanager = NewManager()
+    
+    def get_absolute_url(self):
+        return reverse("comic", args=[ self.id])
+    
 
     class Meta:
         ordering = ['-updated', '-created']
@@ -153,6 +161,9 @@ class Chapter(models.Model):
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
 
+    def get_absolute_url(self):
+        return reverse("chapter", args=[self.id])
+    
     class Meta:
         ordering = ['-id']
 

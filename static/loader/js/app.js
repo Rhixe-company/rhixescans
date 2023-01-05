@@ -1,3 +1,35 @@
+//Get the button
+let mybutton = document.getElementById("btn-back-to-top");
+
+// When the user scrolls down 20px from the top of the document, show the button
+window.onscroll = function () {
+  scrollFunction();
+};
+
+function scrollFunction() {
+  if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+    mybutton.style.display = "block";
+  } else {
+    mybutton.style.display = "none";
+  }
+}
+// When the user clicks on the button, scroll to the top of the document
+mybutton.addEventListener("click", backToTop);
+
+function backToTop() {
+  document.body.scrollTop = 0;
+  document.documentElement.scrollTop = 0;
+}
+
+
+// Anime Smooth Scroll
+$("#view-chapter").on('click', function () {
+  const images = $('#images').position().top
+  $('html, body').animate({
+    screenTop: images
+  }, 900)
+});
+
 $(document).on("keyup", "#id_q", function (e) {
   e.preventDefault();
 
@@ -32,16 +64,15 @@ $(document).on("keyup", "#id_q", function (e) {
             </li>
             `
           );
-          
         });
 
         if (!$(".show")[0]) {
-          
-          $('.menudd').trigger('click')
-          
+          $(".menudd").trigger("click");
         }
         document.getElementById("list").className = "show";
-        document.getElementById("list").innerHTML = (!results.length) ? ("No comics match your query") : (results.join(""));
+        document.getElementById("list").innerHTML = !results.length
+          ? "No comics match your query"
+          : results.join("");
       },
       error: function (xhr, errmsg, err) {},
     });

@@ -2,7 +2,7 @@
 {% endblock %} {% block content %}
 {% load crispy_forms_tags %}
 {% include 'loader/navbar.html' %}
-<div class="container pt-5">
+<div class="container pt-5 text-dark">
     {% if q %}
     <h1>Comic containing "{{ q }}"
         {% if c %}
@@ -73,6 +73,5 @@
 </div>
 {% include 'loader/footer.html' %}
 
-<script src="{% static 'loader/js/search.js' %}"></script>
 
 {% endblock content %}

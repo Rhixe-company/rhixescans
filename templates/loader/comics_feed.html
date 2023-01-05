@@ -1,7 +1,7 @@
 <div class="main-container">
     {% for comic in comics %}
     <div class="items card" id="comics-list">
-        <a href="{% url 'comic' comic.id %}">
+        <a href="{{comic.get_absolute_url}}">
           <img
             src="{{comic.imageURL}}"
             class="card-img-top img-fluid rounded"
@@ -9,10 +9,10 @@
           />
         </a>
       <div class="card-body">
-        <h5 class="card-title"><a class="text-white" href="{% url 'comic' comic.id %}">{{comic.title}}</a></h5>
+        <h5 class="card-title "><a class="text-black" href="{{comic.get_absolute_url}}">{{comic.title}}</a></h5>
         <p class="card-text">{{comic.status}}</p>
         {% with comic.chapter_set.first as chapter %}
-        <a href="/comic/chapter/{{chapter.id}}" class="btn btn-primary btn-sm">{{chapter.name}}</a>
+        <a href="{{chapter.get_absolute_url}}" class="btn btn-outline-primary btn-sm">{{chapter.name}}</a>
         {% endwith %}
       </div>  
     </div>

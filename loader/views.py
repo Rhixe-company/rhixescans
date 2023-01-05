@@ -11,6 +11,25 @@ from django.core import serializers
 # Create your views here.
 
 
+@login_required(login_url='login')
+def like(request):
+    if request.POST.get('action') == 'post':
+        result = ''
+        id = int(request.POST.get('postid'))
+        comic = get_object_or_404(Comic, id=id)
+        if comic.likes.filter(id=request.user.id).exists():
+            comic.likes.remove(request.user)
+            comic.like_count -= 1
+            result = comic.like_count
+            comic.save()
+        else:
+            comic.likes.add(request.user)
+            comic.like_count += 1
+            result = comic.like_count
+            comic.save()
+
+        return JsonResponse({'result': result, })
+
 def comic_search(request):
     form = ComicSearchForm()
     q = ''
@@ -116,6 +135,7 @@ def comic(request, pk):
     return render(request, 'loader/comic.html', context)
 
 
+@login_required(login_url='login')
 def chapterview(request, pk):
     chapter = Chapter.objects.get(id=pk)
     pages = chapter.pages.all()
@@ -176,7 +196,7 @@ def loginUser(request):
 
 def logoutUser(request):
     logout(request)
-    return redirect('login')
+    return redirect('index')
 
 
 def registerUser(request):
@@ -283,6 +303,7 @@ def deleteChapter(request, pk):
     return render(request, 'loader/delete.html', {'obj': chapter})
 
 
+@login_required(login_url='login')
 def userProfile(request, pk):
     user = User.objects.get(id=pk)
     chapters = user.chapter_set.all()

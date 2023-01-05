@@ -1,24 +1,15 @@
 {% extends 'base.html' %} {% load static %} {% block title %} Welcome to {{comic.title}}
 {% endblock %} {% block content %}{% include 'loader/navbar.html' %}
 <div>
-  <a href="{{request.META.HTTP_REFERER}}">Go Back</a>
-  <div>
-    {% if request.user.is_superuser %}
-
-    <a href="{% url 'update-comic' comic.id %}">Edit</a>
-
-    <a href="{% url 'delete-comic' comic.id %}">Delete</a>
-    <br />
-    <a href="{% url 'create-comic' %}">Create New Comic</a>
-
-    <a href="{% url 'create-chapter' %}">Create New Chapter</a>
-
-    {% endif %}
-    <div>
-      <h1>{{ comic.title }}</h1>
-    </div>
-    {% load static %}
-    <div class="d-flex justify-content-center">
+  <div class="col">
+      <a href="{% url 'index' %}" class="btn btn-dark my-3">Go Back</a>
+   </div>
+      
+</div class="row justify-content-center text-dark">
+   <h2>{{comic.title}}</h2>
+       
+        
+        <div class="d-flex">
         {% if request.user.is_authenticated %}
         <div class="pr-2">
            {% csrf_token %} 
@@ -77,96 +68,92 @@
         </div>
         {% endif %}
       </div>
-    <div>
       <img
-        src="{{comic.imageURL}}"
-        alt="{{comic.imageURL}}"
-        width="400"
-        height="400"
-      />
-      
-    </div>
+          class="img-fluid"
+          src="{{comic.imageURL}}"
+        />
+      <div class="col">
+        
+      </div>
 
-    <div>
-      Description:
-      <p>{{ comic.description }}</p>
-    </div>
-    <div>
-      Rating:
-      <strong>{{ comic.rating }}</strong>
-    </div>
-    <div>
-      Category:
-      <p>{{ comic.category }}</p>
-    </div>
-    <div>
-      Status:
-      <p>{{ comic.status }}</p>
-    </div>
-    <div>
-      Author:
-      <p>{{ comic.author }}</p>
-    </div>
-    <div>
-      Date:
-      <p>{{ comic.created|timesince }} ago</p>
-    </div>
-    {% for genre in genres%}
-    <div>
+      <div class="col"><p>{{comic.description}}</p></div>
      
-      <p>{{genre.name}}</p>
-    </div>
-    {% endfor%}
-  </div>
-<hr />
-  <div>
-    <h3>Total Chapters {{comic.numChapters}}</h3>
-    
+      <div class="col">
+        <small>{{comic.status}}</small>
+      </div>
+
+      <div class="col"><em>{{comic.rating}}</em></div>
+      <div class="col">
+        <span>{{comic.category}}</span>
+      </div>
+      <div class="col">
+        <strong>{{comic.artist}}</strong>
+      </div>
+      <div class="author"><strong>{{comic.author}}</strong></div>
+      <div class="released"><small>{{comic.released}}</small></div>
+       <div>
+  {% if request.user.is_superuser %}
+  <a class="btn btn-outline-primary" href="{% url 'update-comic' comic.id %}">Edit</a>
+
+  <a  class="btn btn-outline-primary"href="{% url 'delete-comic' comic.id %}">Delete</a>
+  {% endif %}</div>
+      <br/>
+
+      <div class="col">
+        <b>Genres</b>
+        {% for genre in genres %}
+
+        <div>
+          <li class="list-group-item">
+            <a class="text-dark" href="#"> {{genre.name}} </a>
+          </li>
+        </div>
+        {% endfor %}
+      </div>
+      <ul class="list-group list-group-flush">
     {% for chapter in chapters %}
-    <div>
-      <ul>
-        <li>
-          <div>
+       <div>
             {% if request.user.is_superuser %}
 
-            <a href="{% url 'update-chapter' chapter.id %}">Edit</a>
+            <a class="btn btn-outline-primary" href="{% url 'update-chapter' chapter.id %}">Edit</a>
 
-            <a href="{% url 'delete-chapter' chapter.id %}">Delete</a>
+            <a class="btn btn-outline-primary" href="{% url 'delete-chapter' chapter.id %}">Delete</a>
 
             {% endif %}
           </div>
-          <div>
-            <a href="{{chapter.get_absolute_url}}"
-              >{{chapter.name}}</a
-            >
-          </div>
-        </li>
-      </ul>
-    </div>
+    <li class="list-group-item ">
+     
+      <a class="text-dark" href="{{chapter.get_absolute_url}}"> {{chapter.name}} </a>
+      
+    </li>
     {% empty %}
-    <small>No Chapter Found</small>
+    <small>No chapters...</small>
     {% endfor %}
+  </ul>
+    </div>
   </div>
-</div>
-<script>
 
-$(document).on("click", "#like-button", function (e) {
-  e.preventDefault();
-  $.ajax({
-    type: "POST",
-    url: '{% url "like" %}',
-    data: {
-      postid: $("#like-button").val(),
-      csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val(),
-      action: "post",
-    },
-    success: function (json) {
-      document.getElementById("like_count").innerHTML = json["result"];
-    },
-    error: function (xhr, errmsg, err) {},
-  });
-});
-</script>
+</div>
+ <script>
+  $(document).on('click', '#like-button', function (e) {
+    e.preventDefault();
+    $.ajax({
+      type: 'POST',
+      url: '{% url "like" %}',
+      data: {
+        postid: $('#like-button').val(),
+        csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+        action: 'post'
+      },
+      success: function (json) {
+        document.getElementById("like_count").innerHTML = json['result']
+      },
+      error: function (xhr, errmsg, err) {
+
+      }
+    });
+  })
+ </script>
  {% include 'loader/footer.html' %}
 
  {% endblock content %}

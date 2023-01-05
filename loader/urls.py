@@ -8,6 +8,7 @@ urlpatterns = [
     path('search/', views.comic_search, name='comic_search'),
     path('bookmark/<str:pk>/', views.bookmark, name='bookmark'),
     path('bookmark/', views.bookmark_list, name='bookmark_list'),
+    path('like/', views.like, name='like'),
     path('comics/', views.comics, name='comics'),
     path('comic/<str:pk>/', views.comic, name='comic'),
     path('comic/chapter/<str:pk>/', views.chapterview, name='chapter'),
