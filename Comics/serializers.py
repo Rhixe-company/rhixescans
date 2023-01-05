@@ -1,8 +1,13 @@
 from rest_framework import serializers
 from .models import Comic, Chapter, Genre, Page
-from django.contrib.auth.models import User
-from users.serializers import UserSerializer
+from accounts.models import Profile
 
+
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Profile
+        fields = ['id','avatar', 'bio']
 
 class PageSerializer(serializers.ModelSerializer):
     class Meta:

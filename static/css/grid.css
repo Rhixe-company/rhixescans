@@ -1,0 +1,38 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed&display=swap');
+
+body {
+  background: #000;
+  font-family: 'Roboto Condensed', sans-serif;
+  margin: 0;
+  height: 100vh;
+  display: grid;
+  grid-template-areas: 
+  'header header header'
+  'nav content content'
+  'nav footer footer'
+  ;
+  grid-template-columns: 1fr 4fr;
+  grid-template-rows: 80px 1fr 70px;
+}
+
+header, footer, main, nav {
+color: #fff;
+padding: 20px;
+border: silver 1px solid;
+}
+
+header {
+    grid-area: header;
+}
+
+nav {
+    grid-area: nav;
+}
+
+main {
+    grid-area: content;
+}
+
+footer {
+    grid-area: footer;
+}

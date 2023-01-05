@@ -27,6 +27,7 @@ ALLOWED_HOSTS = ['127.0.0.1', 'localhost',
 # Application definition
 
 INSTALLED_APPS = [
+    'accounts.apps.AccountsConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -34,7 +35,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'Comics.apps.ComicsConfig',
-    'users.apps.UsersConfig',
     'rest_framework',
     'comicscrawler',
     'crispy_forms',
@@ -110,6 +110,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'loader.views.genres_list',
+                'accounts.views.avatar'
             ],
         },
     },
@@ -177,16 +179,20 @@ STATICFILES_DIRS = [
 ]
 
 MEDIA_ROOT = BASE_DIR / 'static/media'
-STATIC_ROOT = BASE_DIR / 'statics'
-LOGIN_REDIRECT_URL = 'user-profile'
+#STATIC_ROOT = BASE_DIR / 'static'
+LOGIN_REDIRECT_URL = 'loader:bookmark_list'
 LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = "YOU_EMAIL"
-EMAIL_HOST_PASSWORD = 'YOU_EMAIL_PASSWORD'
+EMAIL_HOST = os.environ.get('HOST')
+EMAIL_HOST_USER = os.environ.get('HOST_USER')
+EMAIL_HOST_PASSWORD = os.environ.get('HOST_PASSWORD')
+EMAIL_PORT = os.environ.get('PORT')
+#EMAIL_HOST = 'smtp.gmail.com'
+#EMAIL_PORT = 587
+#EMAIL_USE_TLS = True
+#EMAIL_HOST_USER = "YOU_EMAIL"
+#EMAIL_HOST_PASSWORD = 'YOU_EMAIL_PASSWORD'
 
 CKEDITOR_UPLOAD_PATH = 'uploads/'
 

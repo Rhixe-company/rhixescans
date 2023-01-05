@@ -89,7 +89,7 @@ class Comic(models.Model):
     newmanager = NewManager()
     
     def get_absolute_url(self):
-        return reverse("comic", args=[ self.id])
+        return reverse("loader:comic", args=[self.id])
     
 
     class Meta:
@@ -162,7 +162,7 @@ class Chapter(models.Model):
     created = models.DateTimeField(auto_now_add=True)
 
     def get_absolute_url(self):
-        return reverse("chapter", args=[self.id])
+        return reverse("loader:chapter", args=[self.id])
     
     class Meta:
         ordering = ['-id']

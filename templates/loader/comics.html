@@ -1,13 +1,15 @@
-{% extends 'base.html' %} {% load static %} {% block title %} Welcome to Comics
-{% endblock %} {% block content %}{% include 'loader/navbar.html' %}
+{% extends '../base/base.html' %} {% load static %} {% block title %} Welcome to Comics
+{% endblock %} {% block content %}{% include '../base/nav-main.html' %}
+<section class="jumbotron text-center bg-white">
+    <div class="container">
+      <h1 class="display-4 text-center">
+        <i class="fas fa-book-open text-primary"></i> Comics
+        <span class="text-primary">Page</span>
+      </h1>
+    </div>
+  </section>
 <div class="container">
-  <br />
-  <nav class="nav nav-pills nav-fill">
-    <a class="nav-link text-dark" aria-current="page" href="/comics/">All</a>
-    {% for genre in genres %}
-    <a class="nav-link text-dark" href="/comics/?genre={{genre.name}}">{{genre.name}}</a>
-    {% endfor %}
-  </nav>
+
   {% include 'loader/comics_feed.html' %}
 </div>
 {% include 'loader/footer.html' %}{% endblock content %}

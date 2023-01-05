@@ -10,8 +10,14 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core import serializers
 # Create your views here.
 
+def genres_list(request):
+    genres_list = Genre.objects.all()[:10]
+    context = {
+        'genres_list':genres_list
+    }
+    return context
 
-@login_required(login_url='login')
+@login_required(login_url='loader:login')
 def like(request):
     if request.POST.get('action') == 'post':
         result = ''
@@ -64,7 +70,7 @@ def comic_search(request):
     return render(request, 'loader/search.html', context)
 
 
-@login_required(login_url='login')
+@login_required(login_url='loader:login')
 def bookmark_list(request):
     comics = Comic.objects.filter(favourites=request.user)
     return render(request,
@@ -72,7 +78,7 @@ def bookmark_list(request):
                   {'comics': comics})
 
 
-@login_required(login_url='login')
+@login_required(login_url='loader:login')
 def bookmark(request, pk):
     comic = get_object_or_404(Comic, id=pk)
     if comic.favourites.filter(id=request.user.id).exists():
@@ -135,7 +141,7 @@ def comic(request, pk):
     return render(request, 'loader/comic.html', context)
 
 
-@login_required(login_url='login')
+@login_required(login_url='loader:login')
 def chapterview(request, pk):
     chapter = Chapter.objects.get(id=pk)
     pages = chapter.pages.all()
@@ -169,7 +175,7 @@ def chapterview(request, pk):
 
 def loginUser(request):
     if request.user.is_authenticated:
-        return redirect('index')
+        return redirect('loader:index')
 
     if request.method == 'POST':
         email = request.POST.get('email')
@@ -182,11 +188,11 @@ def loginUser(request):
                 request, username=user.username, password=password)
         except:
             messages.error(request, 'User with this email does not exists')
-            return redirect('login')
+            return redirect('loader:login')
 
         if user is not None:
             login(request, user)
-            return redirect('index')
+            return redirect('loader:index')
         else:
             messages.error(request, 'Email OR password is incorrect')
 
@@ -196,7 +202,7 @@ def loginUser(request):
 
 def logoutUser(request):
     logout(request)
-    return redirect('index')
+    return redirect('loader:index')
 
 
 def registerUser(request):
@@ -217,14 +223,14 @@ def registerUser(request):
             next_url = request.GET.get('next')
             if next_url == '' or next_url == None:
                 next_url = 'index'
-            return redirect(index)
+            return redirect('loader:index')
         else:
             messages.error(request, 'An error has occured with registration')
     context = {'form': form}
     return render(request, 'loader/register.html', context)
 
 
-@login_required(login_url='login')
+@login_required(login_url='loader:login')
 def createComic(request):
 
     form = ComicForm()
@@ -239,7 +245,7 @@ def createComic(request):
     return render(request, 'loader/comic_form.html', context)
 
 
-@login_required(login_url='login')
+@login_required(login_url='loader:login')
 def updateComic(request, pk):
     Comics = Comic.objects.get(id=pk)
     form = ComicForm(instance=Comics)
@@ -255,7 +261,7 @@ def updateComic(request, pk):
     return render(request, 'loader/comic_form.html', context)
 
 
-@login_required(login_url='login')
+@login_required(login_url='loader:login')
 def deleteComic(request, pk):
     comic = Comic.objects.get(id=pk)
     if request.method == 'POST':
@@ -264,7 +270,7 @@ def deleteComic(request, pk):
     return render(request, 'loader/delete.html', {'obj': comic})
 
 
-@login_required(login_url='login')
+@login_required(login_url='loader:login')
 def createChapter(request):
     form = ChapterForm()
     if request.method == 'POST':
@@ -278,7 +284,7 @@ def createChapter(request):
     return render(request, 'loader/chapter_form.html', context)
 
 
-@login_required(login_url='login')
+@login_required(login_url='loader:login')
 def updateChapter(request, pk):
     chapter = Chapter.objects.get(id=pk)
     form = ChapterForm(instance=chapter)
@@ -294,7 +300,7 @@ def updateChapter(request, pk):
     return render(request, 'loader/chapter_form.html', context)
 
 
-@login_required(login_url='login')
+@login_required(login_url='loader:login')
 def deleteChapter(request, pk):
     chapter = Chapter.objects.get(id=pk)
     if request.method == 'POST':
@@ -303,7 +309,7 @@ def deleteChapter(request, pk):
     return render(request, 'loader/delete.html', {'obj': chapter})
 
 
-@login_required(login_url='login')
+@login_required(login_url='loader:login')
 def userProfile(request, pk):
     user = User.objects.get(id=pk)
     chapters = user.chapter_set.all()
@@ -325,7 +331,7 @@ def userProfile(request, pk):
     return render(request, 'loader/profile.html', context)
 
 
-@login_required(login_url='login')
+@login_required(login_url='loader:login')
 def updateUser(request, pk):
     user = User.objects.get(id=pk)
     form = UserForm(instance=user)
@@ -339,7 +345,7 @@ def updateUser(request, pk):
     return render(request, 'loader/update-user.html', context)
 
 
-@login_required(login_url='login')
+@login_required(login_url='loader:login')
 def deleteReview(request, pk):
     review = Review.objects.get(id=pk)
     if request.user != review.user:

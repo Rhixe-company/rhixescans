@@ -1,0 +1,96 @@
+<div>
+  <a href="{{request.META.HTTP_REFERER}}">Go Back</a>
+  <div>
+    {% if request.user.is_superuser %}
+
+    <a href="{% url 'loader:update-comic' comic.id %}">Edit</a>
+
+    <a href="{% url 'loader:delete-comic' comic.id %}">Delete</a>
+    <br />
+    <a href="{% url 'loader:create-comic' %}">Create New Comic</a>
+
+    <a href="{% url 'loader:create-chapter' %}">Create New Chapter</a>
+
+    {% endif %}
+    <div>
+      <h1>{{ comic.title }}</h1>
+    </div>
+    {% load static %}
+
+    <div>
+      <img
+        class="img-fluid rounded"
+        src="{{comic.imageURL}}"
+        alt="{{comic.imageURL}}"
+        width="400"
+        height="400"
+      />
+    </div>
+    <div>
+      Artist:
+      <p>{{ comic.artist }}</p>
+    </div>
+
+    <div>
+      Description:
+      <p>{{ comic.description }}</p>
+    </div>
+    <div>
+      Rating:
+      <em>{{ comic.rating }}</em>
+    </div>
+    <div>
+      Category:
+      <p>{{ comic.category }}</p>
+    </div>
+    <div>
+      Status:
+      <p>{{ comic.status }}</p>
+    </div>
+    <div>
+      Published:
+      <p>{{ comic.created|timesince }} ago</p>
+    </div>
+
+    <div>
+      Author:
+      <p>{{ comic.author }}</p>
+    </div>
+    <div>
+      Updated:
+      <p>{{ comic.updated|timesince }} ago</p>
+    </div>
+    <div>
+      Genres
+      <nav class="nav nav-pills">
+        {% for genre in genres %}
+        <a class="nav-link text-dark" href="#">{{genre.name}}</a>
+        {% endfor %}
+      </nav>
+    </div>
+  </div>
+  <hr />
+  <div>
+    <h3>Total Chapters {{comic.numChapters}}</h3>
+    <div class="container">
+      <ul class="list-group">
+        {% for chapter in chapters %}
+
+        <li>
+          <a class="text-dark" href="{{chapter.get_absolute_url}}">
+            {{chapter.name}}
+          </a>
+        </li>
+        {% if request.user.is_superuser %}
+        <div>
+          <a href="{% url 'loader:update-chapter' chapter.id %}">Edit</a>
+
+          <a href="{% url 'loader:delete-chapter' chapter.id %}">Delete</a>
+        </div>
+        {% endif %} {% empty %}
+        <small>No Chapter Found</small>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</div>

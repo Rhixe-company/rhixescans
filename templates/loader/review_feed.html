@@ -1,32 +1,32 @@
-<div class="container text-dark">
-  {% if request.user.is_authenticated %}
-  <div class="comment-form">
-    <form class="d-flex form-inline my-2 my-lg-0" method="POST" action="">
-      {% csrf_token %}
-      <input
-        lass="form-control me-sm-2"
-        type="text"
-        name="text"
-        placeholder="Add new Comment"
-      />
-      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">
-        Submit
-      </button>
-    </form>
-  </div>
+{% if request.user.is_authenticated %}
+<div class="comment-form">
+  <form class="d-flex form-inline my-2 my-lg-0" method="POST" action="">
+    {% csrf_token %}
+    <input
+      lass="form-control me-sm-2"
+      type="text"
+      name="text"
+      placeholder="Add new Comment"
+    />
+    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">
+      Submit
+    </button>
+  </form>
+</div>
 
-  <div class="comment-wrapper">
-    <span>reviews available {{total_reviews}}</span>
-    {% for review in chapter_reviews %}
-    <div class='text-dark'>
-      {% if request.user == review.user %}
-      <a class='text-dark' href="{% url 'delete-review' review.id %}">Delete</a>
-      {% endif %}
-      <small>@{{review.user}} {{review.created | timesince }} </small>
-      <p>{{review.text}}</p>
-    </div>
-    {% endfor %}
-    <div></div>
+<div class="comment-wrapper">
+  <span>reviews available {{total_reviews}}</span>
+  {% for review in chapter_reviews %}
+  <div class="text-dark">
+    {% if request.user == review.user %}
+    <a class="text-dark" href="{% url 'loader:delete-review' review.id %}"
+      >Delete</a
+    >
     {% endif %}
+    <small>@{{review.user}} {{review.created | timesince }} </small>
+    <p>{{review.text}}</p>
   </div>
+  {% endfor %}
+  <div></div>
+  {% endif %}
 </div>

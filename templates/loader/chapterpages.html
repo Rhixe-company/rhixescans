@@ -1,17 +1,4 @@
-<div class="container text-dark">
-  <ul class="list-group list-group-flush">
-    {% for chapter in chapters %}
-
-    <li class="list-group-item">
-      <a class="text-dark" href="{{chapter.get_absolute_url}}">
-        {{chapter.name}}
-      </a>
-    </li>
-    {% empty %}
-    <small>No chapters...</small>
-    {% endfor %}
-  </ul>
-  <div class="py-4">
+ <div class="py-4">
     <nav aria-label="Page navigation example">
       {% if chapters.has_other_pages %}
       <ul class="pagination">
@@ -58,4 +45,3 @@
       {% endif %}
     </nav>
   </div>
-</div>

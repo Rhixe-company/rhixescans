@@ -1,7 +1,7 @@
-{% extends 'base.html' %} {% load static %} {% block title %} Welcome to Search
+{% extends '../base/base.html' %} {% load static %} {% block title %} Welcome to Search
 {% endblock %} {% block content %}
 {% load crispy_forms_tags %}
-{% include 'loader/navbar.html' %}
+{% include '../base/nav-main.html' %}
 <div class="container pt-5 text-dark">
     {% if q %}
     <h1>Comic containing "{{ q }}"
@@ -21,7 +21,7 @@
                 <div class="col-md-4">
                      
                     <div class="card mb-4 box-shadow">
-        <a class="text-dark" href="{% url 'comic' comic.id %}">
+        <a class="text-dark" href="{{comic.get_absolute_url}}">
           <img
             class="card-img-top"
             src="{{comic.imageURL}}"
@@ -40,7 +40,7 @@
         <ul class="list-group list-group-flush">
           {% with comic.chapter_set.first as chapter %}
           <li class="list-group-item">
-            <a href="/comic/chapter/{{chapter.id}}"> {{chapter.name}} </a>
+            <a href="{{chapter.get_absolute_url}}"> {{chapter.name}} </a>
           </li>
           {% endwith %}
         </ul>
@@ -54,12 +54,12 @@
             </div>
         </div>
     </div>
-    <p><a href="{% url "comic_search" %}" class="btn btn-primary" role="button" aria-disabled="true">New
+    <p><a href="{% url "loader:comic_search" %}" class="btn btn-primary" role="button" aria-disabled="true">New
             Search</a>
     </p>
     {% else %}
     <h1>Search for comics</h1>
-    <form method="get" action='{% url 'comic_search' %}' class='dropdown show'>
+    <form method="get" action='{% url 'loader:comic_search' %}' class='dropdown show'>
       {% csrf_token %}
        {{form.q}}
        <ul class="dropdown-menu col-12 pl-2" role="menu" aria-labelledby="menu" id="list">
