@@ -79,12 +79,17 @@
       </div>
     <div>
       <img
+      class='img-fluid rounded'
         src="{{comic.imageURL}}"
         alt="{{comic.imageURL}}"
         width="400"
         height="400"
       />
       
+    </div>
+    <div>
+      Artist:
+      <p>{{ comic.artist }}</p>
     </div>
 
     <div>
@@ -93,7 +98,7 @@
     </div>
     <div>
       Rating:
-      <strong>{{ comic.rating }}</strong>
+      <em>{{ comic.rating }}</em>
     </div>
     <div>
       Category:
@@ -104,13 +109,19 @@
       <p>{{ comic.status }}</p>
     </div>
     <div>
+      Published:
+      <p>{{ comic.created|timesince }} ago</p>
+    </div>
+
+    <div>
       Author:
       <p>{{ comic.author }}</p>
     </div>
     <div>
-      Date:
-      <p>{{ comic.created|timesince }} ago</p>
+      Updated:
+      <p>{{ comic.updated|timesince }} ago</p>
     </div>
+
     {% for genre in genres%}
     <div>
      
