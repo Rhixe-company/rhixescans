@@ -2,14 +2,16 @@
 #
 # See documentation in:
 # https://docs.scrapy.org/en/latest/topics/items.html
-
+from scrapy_djangoitem import DjangoItem
 from scrapy.item import Field, Item
 from itemloaders.processors import MapCompose, TakeFirst
 from w3lib.html import remove_tags
 import scrapy
+from Comics.models import *
 
 
-class ComicscrawlerItem(scrapy.Item):
+class ComicItem(DjangoItem):
+    django_model = Comic
     # define the fields for your item here like:
     # name = scrapy.Field()
     pass
