@@ -36,18 +36,18 @@
 </style>
 {% include '../base/nav-main.html' %}
 <a
-  href="{% url 'loader:comic' chapter.comics.id %}"
+  href="{% url 'loader:comic' chapter.comic.id %}"
   class="btn btn-sm my-3 button"
-  >{{chapter.comics}}</a
+  >{{chapter.comic}}</a
 >
 <div>
   <h3>{{chapter.name}}</h3>
   {% for page in pages %}
   <img src="{{page.imageURL}}" alt="{{chapter.imageURL}}" />
   {% endfor %}
-  <h3>{{chapter.comics}}</h3>
+  <h3>{{chapter.comic}}</h3>
   <a
-    href="{% url 'loader:comic' chapter.comics.id %}"
+    href="{% url 'loader:comic' chapter.comic.id %}"
     class="btn btn-sm my-3 button"
     >{{chapter.name}}</a
   >

@@ -1,0 +1,79 @@
+{% extends '../base/base.html' %} {% load static %} {% block title %} Welcome to Search
+{% endblock %} {% block content %}
+{% load crispy_forms_tags %}
+
+<div class="album py-5 bg-dark">
+    <div class="text-white">
+      {% if q %}
+    <h1>Comic containing "{{ q }}"
+        {% if c %}
+        In genre "{{ c }}"
+        {% endif %}
+    </h1>
+    <p>
+        {% with results.count as total_results %}
+        Found {{ total_results }} result{{ total_results|pluralize }}
+        {% endwith %}
+    </p>
+    </div>
+    <div class="container pt-5 text-dark">
+        <div class="container">
+            <div class="row">
+                {% for comic in results %}
+                <div class="col-md-4">
+                     
+                    <div class="card mb-4 box-shadow">
+        <a class="text-dark" href="{{comic.get_absolute_url}}">
+          <img
+            class="card-img-top"
+            src="{{comic.imageURL}}"
+            alt="{{ comic.imageURL }}"
+          />
+        </a>
+        <div class="card-body">
+          <h2 class="comic-title" style="font-size: 16px; font-weight: bold">
+            {{comic.title|truncatechars:100}}
+          </h2>
+          <p class="card-text">{{comic.description|truncatechars:200}}</p>
+          <em class="card-text">{{comic.rating}}</em>
+          <small class="card-text">{{comic.status}}</small>
+        </div>
+
+        <ul class="list-group list-group-flush">
+          {% with comic.chapter_set.first as chapter %}
+          <li class="list-group-item">
+            <a href="{{chapter.get_absolute_url}}"> {{chapter.name}} </a>
+          </li>
+          {% endwith %}
+        </ul>
+      </div>
+              
+               
+            </div>
+                {% empty %}
+                <p>There are no results for your query.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <p><a href="{% url "accounts:comic_search" %}" class="btn btn-primary" role="button" aria-disabled="true">New
+            Search</a>
+    </p>
+    {% else %}
+    <h1>Search for comics</h1>
+    <form method="get" action='{% url 'accounts:comic_search' %}' class='dropdown show'>
+      {% csrf_token %}
+       {{form.q}}
+       <ul class="dropdown-menu col-12 pl-2" role="menu" aria-labelledby="menu" id="list">
+          
+        </ul>
+       
+        {{form.c}}
+        <input class="btn btn-primary my-1" type="submit" value="Search">
+    </form>
+    {% endif %}
+</div>
+
+
+
+{% endblock content %}

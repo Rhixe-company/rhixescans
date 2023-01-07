@@ -1,7 +1,7 @@
 from io import BytesIO
 from django.db import models
 from django.contrib.auth.models import User
-from datetime import timezone
+from django.utils import timezone
 from django.core import files
 from django.urls import reverse
 from requests_html import HTMLSession
@@ -21,7 +21,7 @@ def comics_images_location(instance, filename):
 
 
 def comics_chapters_images_location(instance, filename):
-    return '{}/{}/{}'.format(str(instance.chapters.comics.title).replace(" ", "_").replace(":", " ").replace("/", "").replace("\\", ""),  instance.chapters.name, filename)
+    return '{}/{}/{}'.format(str(instance.chapter.comic.title).replace(" ", "_").replace(":", " ").replace("/", "").replace("\\", ""),  instance.chapter.name, filename)
 
 
 STATUS_CHOICES = [
@@ -58,7 +58,8 @@ class Comic(models.Model):
     class NewManager(models.Manager):
         def get_queryset(self):
             return super().get_queryset() .filter(status='Ongoing')
-    title = models.CharField(max_length=2000, unique=True, null=False)
+    slug = models.SlugField(unique=True, null=True)
+    title = models.CharField(max_length=2000, unique='slug', null=False)
     favourites = models.ManyToManyField(
         User,  blank=True, related_name='favourite', default=None)
     description = models.TextField(blank=True)
@@ -80,8 +81,8 @@ class Comic(models.Model):
         Genre, blank=True)
     serialized = models.CharField(max_length=100, blank=True, null=False)
     released = models.CharField(max_length=100, blank=True, null=False)
-    updated = models.DateTimeField(auto_now=True)
-    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(default=timezone.now)
+    created = models.DateTimeField(default=timezone.now)
     likes = models.ManyToManyField(
         User, related_name='like', default=None, blank=True)
     like_count = models.BigIntegerField(default='0')
@@ -98,10 +99,7 @@ class Comic(models.Model):
     def __str__(self):
         return self.title
 
-    @property
-    def created_dynamic(self):
-        now = timezone.now()
-        return now
+    
 
     def save(self, *args, **kwargs):
 
@@ -152,14 +150,14 @@ class ComicsManager(Comic, ExtraManagers):
 
 class Chapter(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
-    comics = models.ForeignKey(Comic, on_delete=models.CASCADE)
+    comic = models.ForeignKey(Comic, on_delete=models.CASCADE, null=True)
     name = models.CharField(
         max_length=1000, unique=True, blank=False, null=True)
     pages = models.ManyToManyField('Page', blank=True, related_name='pages')
     numReviews = models.IntegerField(default=0, null=True, blank=True)
     numPages = models.IntegerField(default=0, null=True, blank=True)
-    updated = models.DateTimeField(auto_now=True)
-    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(default=timezone.now)
+    created = models.DateTimeField(default=timezone.now)
 
     def get_absolute_url(self):
         return reverse("loader:chapter", args=[self.id])
@@ -168,26 +166,24 @@ class Chapter(models.Model):
         ordering = ['-id']
 
     def __str__(self):
-        return '%s %s' % (self.name, self.comics)
+        return '%s %s' % (self.name, self.comic)
 
-    @property
-    def created_dynamic(self):
-        now = timezone.now()
-        return now
+    
 
 
 class Page(models.Model):
-    chapters = models.ForeignKey(Chapter, on_delete=models.CASCADE)
+    chapter = models.ForeignKey(Chapter, on_delete=models.CASCADE)
     images = models.ImageField(
         upload_to=comics_chapters_images_location, max_length=10000, blank=False)
     images_url = models.URLField(
         max_length=10000, blank=True, unique=True, default=None, null=True)
+    created = models.DateTimeField(default=timezone.now)
 
     class Meta:
         ordering = ['id']
 
     def __str__(self):
-        return '%s %s' % (self.images, self.chapters)
+        return '%s %s' % (self.images, self.chapter)
 
     def save(self, *args, **kwargs):
 
@@ -219,8 +215,8 @@ class Review(models.Model):
     text = models.TextField(max_length=3000, blank=True)
     rating = models.PositiveSmallIntegerField(
         choices=RATING_CHOICES, default=1)
-    updated = models.DateTimeField(auto_now=True)
-    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(default=timezone.now)
+    created = models.DateTimeField(default=timezone.now)
 
     class Meta:
         ordering = ['-created']

@@ -147,7 +147,7 @@ def chapterview(request, pk):
     pages = chapter.pages.all()
     chapter_reviews = chapter.comments.all()
     reviews_count = chapter_reviews.count()
-    chapters = chapter.comics.chapter_set.all()
+    chapters = chapter.comic.chapter_set.all()
     page = request.GET.get('page')
     paginator = Paginator(chapters, 30)
     try:
