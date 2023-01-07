@@ -10,6 +10,7 @@ urlpatterns = [
     path('bookmark/<str:pk>/', views.bookmark, name='bookmark'),
     path('bookmark/', views.bookmark_list, name='bookmark_list'),
     path('like/', views.like, name='like'),
+    path('genre/<genre>/', views.CatListView.as_view(), name='genre'),
     path('comics/', views.comics, name='comics'),
     path('comic/<str:pk>/', views.comic, name='comic'),
     path('comic/chapter/<str:pk>/', views.chapterview, name='chapter'),

@@ -35,7 +35,8 @@
           </a>
           <ul class="dropdown-menu">
             {% for genres in genres_list %}
-            <li><a class="dropdown-item" href="/?genre={{genres.name}}">
+            <li>
+              <a class="dropdown-item" href="{% url 'loader:genre' genres.name %}">
               {{ genres.name }}
             </a></li>
             <li><hr class="dropdown-divider"></li>

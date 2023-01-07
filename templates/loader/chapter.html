@@ -12,6 +12,7 @@
     margin: 0;
   }
   .button {
+    color: #fff;
     padding: 0.5rem 2rem;
     border: 1px #ccc solid;
     display: inline-block;
@@ -22,7 +23,7 @@
   }
 
   .button:hover {
-    background: red;
+    background: purple;
   }
 
   .list-group-item a {
@@ -31,27 +32,27 @@
   }
 
   .list-group-item a:hover {
-    background: red;
+    background: purple;
   }
 </style>
 {% include '../base/nav-main.html' %}
 <a
   href="{% url 'loader:comic' chapter.comic.id %}"
-  class="btn btn-sm my-3 button"
+  class="btn btn-sm my-3 button btn-secondary"
   >{{chapter.comic}}</a
 >
-<div>
-  <h3>{{chapter.name}}</h3>
+<h3>{{chapter.name}}</h3>
   {% for page in pages %}
-  <img src="{{page.imageURL}}" alt="{{chapter.imageURL}}" />
+  <div>
+    <img src="{{page.imageURL}}" alt="{{chapter.imageURL}}" />
+  </div>
   {% endfor %}
   <h3>{{chapter.comic}}</h3>
   <a
     href="{% url 'loader:comic' chapter.comic.id %}"
-    class="btn btn-sm my-3 button"
+    class="btn btn-sm my-3 button btn-secondary"
     >{{chapter.name}}</a
   >
-</div>
 <div class="container">
   <ul class="list-group list-group-flush">
     {% for chapter in chapters %}
@@ -68,5 +69,4 @@
 </div>
 
 <div>{% include 'loader/review_feed.html' %}</div>
-
 {% include 'loader/footer.html' %} {% endblock content %}

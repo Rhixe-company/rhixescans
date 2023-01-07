@@ -1,15 +1,15 @@
-{% extends '../base/base.html' %} {% load static %} {% block title %} Welcome to Comics
-{% endblock %} {% block content %}{% include '../base/nav-main.html' %}
-<section class="jumbotron text-center bg-white">
-    <div class="container">
-      <h1 class="display-4 text-center">
+{% extends "../base/base.html" %} {% block title %} Welcome to Index {% endblock %} {% load crispy_forms_tags %} {% block content %}{% load static %} {% include '../base/nav-main.html' %}
+<div class="album py-5 bg-dark">
+  <div class="container">
+    <div class="row">
+      <h1 class="display-4 text-center text-white">
         <i class="fas fa-book-open text-primary"></i> Comics
         <span class="text-primary">Page</span>
       </h1>
     </div>
-  </section>
-<div class="container">
 
-  {% include 'loader/comics_feed.html' %}
+    {% include 'loader/comics_feed.html' %}
+  </div>
 </div>
+
 {% include 'loader/footer.html' %}{% endblock content %}

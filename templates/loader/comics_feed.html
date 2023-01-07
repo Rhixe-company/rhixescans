@@ -1,42 +1,38 @@
-<div class="main-container">
+<div class="row">
+  <div class="main-container">
     {% for comic in comics %}
-    <div class="items card" id="comics-list">
-        <div>
-            <h4 class="card-title "><a class="text-black" href="{{comic.get_absolute_url}}">{{comic.title|truncatechars:50}}</a></h4>
-            <a href="{{comic.get_absolute_url}}">
-            <img
-              src="{{comic.imageURL}}"
-              class="img-fluid rounded"
-              alt="{{comic.imageURL}}"
-            />
-          </a>
+    <div class="items card mb-4 box-shadow">
+      <a href="{{comic.get_absolute_url}}">
+        <img
+          class="card-img-top"
+          src="{{comic.imageURL}}"
+          alt="{{ comic.title }}"
+        />
+      </a>
+      <div class="card-body text-dark">
+        <h2 style="font-size: 18px; font-weight: bold">
+          {{comic.title|truncatechars:50}}
+        </h2>
+        <p class="card-text">{{comic.description|truncatechars:100}}</p>
+        <div class="d-flex justify-content-between align-items-center">
+          <small class="text-muted"
+            ><date>{{ comic.updated|timesince }} ago</date></small
+          >
         </div>
-        
-      <div class="card-body">
-        
-        <div class="card-text">
-          <b>Rating:</b>
-          <em class="text-muted">{{ comic.rating }}</em>
-        </div>
-        
-        <div class="card-text">
-          <b> Updated:</b>
-          <small class="text-muted">{{ comic.updated|timesince }} ago</small>
-        </div>
-        
-        <div class="card-text">
-          <b> Author:</b>
-          <small class="text-muted" >{{comic.author}}</small>
-        </div>
-        <hr/>
-        {% with comic.chapter_set.first as chapter %}
-        <a href="{{chapter.get_absolute_url}}" class="btn btn-outline-primary btn-sm">{{chapter.name}}</a>
-        {% endwith %}
-      </div>  
+      </div>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">
+          {% with comic.chapter_set.first as chapter %}
+          <a href="{{chapter.get_absolute_url}}" class=""
+            >{{chapter.name}}</a
+          >
+          {% endwith %}
+        </li>
+      </ul>
     </div>
     {% endfor %}
   </div>
-  <nav aria-label="Page navigation example">
+  <div class="row d-flex justify-content-center align-items-center">
     {% if comics.has_other_pages %}
     <ul class="pagination">
       {% if comics.has_previous %}
@@ -44,13 +40,14 @@
         <a class="page-link" href="?page={{ comics.previous_page_number }}"
           >Previous</a
         >
-      </li>
+      </li> 
       {% else %}
       <li class="page-item disabled">
         <a class="page-link" href="#">Previous</a>
       </li>
-      {% endif %} {% for num in comics.paginator.page_range %}
-       {% if comics.number == l %}
+      {% endif %}
+       {% for num in comics.paginator.page_range %}
+        {% if comics.number == l %}
       <li class="page-item active">
         <span class="page-link"
           >{{ num }} <span class="sr-only">(current)</span></span
@@ -69,4 +66,5 @@
       {% endif %}
     </ul>
     {% endif %}
-  </nav>
+  </div>
+</div>

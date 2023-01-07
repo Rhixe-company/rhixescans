@@ -17,9 +17,9 @@
 <div class="comment-wrapper">
   <span>reviews available {{total_reviews}}</span>
   {% for review in chapter_reviews %}
-  <div class="text-dark">
+  <div class="text-white">
     {% if request.user == review.user %}
-    <a class="text-dark" href="{% url 'loader:delete-review' review.id %}"
+    <a class="text-white btn btn-sm btn-primary" href="{% url 'loader:delete-review' review.id %}"
       >Delete</a
     >
     {% endif %}

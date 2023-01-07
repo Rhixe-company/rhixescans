@@ -1,25 +1,16 @@
 {% extends '../base/base.html' %} {% load static %} {% block title %} Welcome to Profile
 {% endblock %} {% block content %}{% include '../base/nav-main.html' %}
-<br />
-<div class="container">
-  <ul class="nav justify-content-center">
-  <li class="nav-item">
-    <a class="nav-link active" aria-current="page" href="comics/">All</a>
-  </li>
-  {% for genre in genres %}
-  <li class="nav-item">
-    <a class="nav-link" href="{% url "loader:user-profile" user.id %}?genre={{genre.name}}">
-      {{genre.name}}</a
-    >
-  </li>
-  {% endfor %}
-</ul>
 
-  <div>
-    <div class="container">
-      <div class="row">
-        {% for chapter in chapters %}
-        <div class="col-md-4">
+<div class="container-fluid">
+  <div class="row">
+    <div class="col"> 
+      <h1>{{user.username}} Dashboard</h1>
+    </div>
+  </div>
+  
+  <div class="row">
+    {% for chapter in chapters %}
+        <div class="col">
           <div class="card mb-4 box-shadow">
             <div class="card-body">
               <a class="text-dark" href="{{chapter.get_absolute_url}}">
@@ -31,12 +22,7 @@
             <div class="card-text">
               <span>{{chapter.updated|timesince}} ago</span>
             </div>
-          </div>
-        </div>
-        {% endfor %}
-      </div>
-      <div>
-        {% if chapters.has_other_pages %}
+            {% if chapters.has_other_pages %}
         <ul class="pagination">
           <div>
             {% if chapters.has_previous %}
@@ -76,24 +62,23 @@
           </div>
         </ul>
         {% endif %}
-      </div>
-    </div>
+          </div>
+        </div>
+        {% endfor %}
   </div>
-  <div>
-    <div class="container">
-      <div class="row">
+  <div class="row">
+    <div class="col">
         <p>Recent Activities</p>
 {% for review in chapter_review %}
 <a href='{% url 'loader:user-profile' review.user.id %}'>@{{review.user}} {{review.created|timesince}}</a>
 <div>replied to '<a href='{{chapter.get_absolute_url}}'>{{review.chapter.name}}'</a></div>
 <p>{{review}}</p>
 {% if request.user == review.user %}
-<a href="{% url 'loader:delete-review' review.id %}">Delete</a>
+<a class="btn btn-sm btn-primary" href="{% url 'loader:delete-review' review.id %}">Delete</a>
 {% endif %}
 <hr />
 {% endfor%}
       </div>
-    </div>
   </div>
 </div>
 

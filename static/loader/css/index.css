@@ -1,25 +1,40 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto+Condensed&display=swap");
 
-body {
-  background: #eee;
-  font-family: "Roboto Condensed", sans-serif;
+* {
+  box-sizing: border-box;
+  padding: 0;
   margin: 0;
-  height: auto;
 }
 
-.small {
-  font-size: 0.875rem;
-  color: #4b4b4b;
+body {
+  background: rgb(30, 21, 21);
+  font-family: "Roboto Condensed", sans-serif;
+  color: #fff;
+  line-height: 1.7;
+  font-size: 13px;
+  height: 100vh;
 }
+
+main {
+display: grid;
+}
+
+footer {
+  text-align: center;
+}
+footer a {
+  text-decoration: none;
+  color: brown;
+}
+
+
 
 .main-container {
-  max-width: 960px;
-  margin: 10px auto;
-  padding: 10px;
+  max-width: max-content;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 10px;
-  align-items: end;
+  gap: 5px;
+  align-items: flex-start;
   /* column-gap: 10px;
   grid-template-columns: repeat(3, 1fr);
   row-gap: 10px; */
@@ -27,16 +42,28 @@ body {
   /*grid-template-rows: repeat(3, 1fr); */
 }
 
+.album{
+  margin: 0;
+  padding: 0;
+}
 .items {
-  max-width: max-content;
-  font-size: 20px;
-  padding: 20px;
-  border: darkred 1px solid;
+  font-size: 10px;
+  margin: 0px auto;
+  padding: 5px;
+  border: purple 1px solid;
+}
+.items, p{
+  font-size: small;
+  font-weight: 100;
+}
+.items, h2{
+font-size: 15px; font-weight: bold
 }
 .items,
 a {
   text-decoration: none;
 }
+
 
 .avatar {
   height: 30px;

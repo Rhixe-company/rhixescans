@@ -49,18 +49,18 @@ $(document).on("keyup", "#id_q", function (e) {
         $.each(JSON.parse(json.search_string), (i, item) => {
           results.push(
             `
-            <li role="presentation" class="list-group-item text-dark">
-            <a class='text-dark' href='/comic/ ${item.pk} /'>
+            <li role="presentation" class="list-group-item bg-white">
+            <a class='text-white' href='/comic/ ${item.pk} /'>
             <img width="100"
                 height="100" class="img-thumbnail rounded d-block" src='/media/${item.fields.image}' alt='/media/${item.fields.image}'/>
                 </a>
-            <div><a href='/comic/ ${item.pk} /'>
+            <div class='text-white'><a href='/comic/ ${item.pk} /'>
             
-            <h4 class="comic-title">${item.fields.title}</h4>
+            <h2 class="comic-title text-white">${item.fields.title}</h2>
             
             </a></div>
-             <small>${item.fields.status}</small>
-            <span>${item.fields.category}</span>
+             <small class='text-white'>${item.fields.status}</small>
+            <span class='text-white'>${item.fields.category}</span>
             </li>
             `
           );

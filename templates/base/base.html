@@ -31,7 +31,9 @@
     <link rel="stylesheet" href="{% static 'loader/css/index.css' %}" />
   </head>
   <body>
-    {% block content %} {% load crispy_forms_tags %} {% endblock %}
+   <main class="container-flex">
+     {% block content %} {% load crispy_forms_tags %} {% endblock %}
+   </main>
 
     <script src="{% static 'loader/js/app.js' %}"></script>
     <script

@@ -1,9 +1,10 @@
 {% extends '../base/base.html' %} {% load static %} {% block title %} Welcome to Search
 {% endblock %} {% block content %}
 {% load crispy_forms_tags %}
-{% include '../base/nav-main.html' %}
-<div class="container pt-5 text-dark">
-    {% if q %}
+
+<div class="album py-5 bg-dark">
+    <div class="text-white">
+      {% if q %}
     <h1>Comic containing "{{ q }}"
         {% if c %}
         In genre "{{ c }}"
@@ -14,7 +15,8 @@
         Found {{ total_results }} result{{ total_results|pluralize }}
         {% endwith %}
     </p>
-    <div class="album py-5 bg-light">
+    </div>
+    <div class="container pt-5 text-dark">
         <div class="container">
             <div class="row">
                 {% for comic in results %}
@@ -71,7 +73,8 @@
     </form>
     {% endif %}
 </div>
-{% include 'loader/footer.html' %}
 
+
+{% include 'loader/footer.html' %}
 
 {% endblock content %}

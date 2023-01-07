@@ -8,10 +8,23 @@ from django.db.models import Q
 from django.http import HttpResponse, JsonResponse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core import serializers
+from django.views.generic import ListView
 # Create your views here.
 
+
+class CatListView(ListView):
+    template_name = 'loader/genre.html'
+    context_object_name = 'catlist'
+
+    def get_queryset(self):
+        content = {
+            'cat': self.kwargs['genre'],
+            'posts': Comic.objects.filter(genres__name=self.kwargs['genre'])
+        }
+        return content
+
 def genres_list(request):
-    genres_list = Genre.objects.all()[:10]
+    genres_list = Genre.objects.all()
     context = {
         'genres_list':genres_list
     }
@@ -92,9 +105,9 @@ def index(request):
 
     genre = request.GET.get('genre')
     if genre == None:
-        comics = Comic.newmanager.all()
+        comics = Comic.objects.all()
     else:
-        comics = Comic.newmanager.filter(Q(genres__name=genre) |
+        comics = Comic.objects.filter(Q(genres__name=genre) |
                                          Q(title=genre))
     genres = Genre.objects.all()[:20]
     page = request.GET.get('page')
@@ -166,7 +179,7 @@ def chapterview(request, pk):
         chapter.numReviews = len(reviews)
         chapter.user = request.user
         chapter.save()
-        return redirect('chapter', pk=chapter.id)
+        return redirect('loader:chapter', pk=chapter.id)
 
     context = {'chapter': chapter, 'pages': pages,
                'chapter_reviews': chapter_reviews,  'chapters': chapters, 'total_reviews': reviews_count}
@@ -352,5 +365,5 @@ def deleteReview(request, pk):
         return HttpResponse('Your are not allowed here!!')
     if request.method == 'POST':
         review.delete()
-        return redirect('chapter', pk=review.chapter.id)
+        return redirect('loader:chapter', pk=review.chapter.id)
     return render(request, 'loader/delete.html', {'obj': review})

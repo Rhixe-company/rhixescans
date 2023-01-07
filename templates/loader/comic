@@ -1,0 +1,149 @@
+{% extends '../base/base.html' %} {% load static %} {% block title %} Welcome to
+{{comic.title}} {% endblock %} {% block content %} {% load crispy_forms_tags %}
+<style>
+  h3 {
+    font-weight: 600;
+    font-size: 1.6rem;
+    text-transform: capitalize;
+    margin: 0;
+  }
+  a {
+    margin: 0;
+    font-size: 1.2rem;
+    color: black;
+    text-decoration: none;
+  }
+
+  .list-group-item a {
+    text-decoration: none;
+    transition: background 500ms ease;
+  }
+
+  .list-group-item a:hover {
+    background: red;
+  }
+</style>
+{% include '../base/nav-main.html' %}
+
+<div class="container">
+  <a class="btn-sm btn btn-primary my-1" href="/">Go Back</a>
+  <br>
+  {% if request.user.is_superuser %}
+
+  <a class="btn-sm btn btn-primary my-1" href="{% url 'loader:update-comic' comic.id %}">Edit</a>
+
+  <a class="btn-sm btn btn-primary my-1" href="{% url 'loader:delete-comic' comic.id %}">Delete</a>
+  <br />
+  <a class="btn-sm btn btn-primary my-1" href="{% url 'loader:create-comic' %}">Create New Comic</a>
+
+  <a class="btn-sm btn btn-primary my-1" href="{% url 'loader:create-chapter' %}">Create New Chapter</a>
+
+  {% endif %}
+  <div class="card mb-4 box-shadow">
+    <img
+      class="card-img-top img-fluid rounded"
+      src="{{comic.imageURL}}"
+      alt="{{comic.imageURL}}"
+    />
+
+    <div class="card-body">
+      <h3>{{comic.title|truncatechars:50}}</h3>
+      <br />
+      <div class="d-flex card-text justify-content-center">
+        {% include 'loader/bookmark.html' %}
+      </div>
+      <br />
+      <div>
+        <b>Description:</b>
+        <p class="card-text">{{comic.description}}</p>
+      </div>
+      <br>
+      <div>
+        <b> Genres</b>
+        <nav class="nav nav-pills">
+          {% for genre in genres %}
+          <a class="nav-link text-dark" href="#">{{genre.name}}</a>
+          {% endfor %}
+        </nav>
+      </div>
+      <br>
+      <div class="d-flex justify-content-between">
+        <div class="text-muted">
+          <b>Artist:</b>
+          {{ comic.artist }}
+        </div>
+        <div class="text-muted">
+          <b>Rating:</b>
+          {{ comic.rating }}
+        </div>
+        <div class="text-muted">
+          <b>Category:</b>
+          {{ comic.category }}
+        </div>
+        <div class="text-muted">
+          <b>Status:</b>
+          {{ comic.status }}
+        </div>
+        <div class="text-muted">
+          <b>Published Date:</b>
+          <date>{{ comic.created|timesince }} ago</date>
+        </div>
+        <div class="text-muted">
+          <b>Author:</b>
+          {{ comic.author }}
+        </div>
+      </div>
+      
+      
+    </div>
+  </div>
+</div>
+<div class="container">
+  <b>Total Chapters {{comic.numChapters}}</b>
+  <div class="col">
+   
+    <ul class=" list-group list-group-flush">
+       {% for chapter in chapters %}
+       
+     <li class="list-group-item">
+      <a class="text-dark" href="{{chapter.get_absolute_url}}">
+        {{chapter.name}}
+      </a>
+    </li>
+    {% if request.user.is_superuser %}
+        <div>
+          <a class="btn-sm btn btn-primary my-1" href="{% url 'loader:update-chapter' chapter.id %}">Edit</a>
+
+          <a class="btn-sm btn btn-primary my-1" href="{% url 'loader:delete-chapter' chapter.id %}">Delete</a>
+        </div>
+    {% endif %}
+    {% empty %}
+    <small>No Chapter Found</small>
+    {% endfor %}
+    </ul>
+     
+  </div>
+</div>
+  <script>
+    $(document).on("click", "#like-button", function (e) {
+      e.preventDefault();
+      $.ajax({
+        type: "POST",
+        url: '{% url "loader:like" %}',
+        data: {
+          postid: $("#like-button").val(),
+          csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val(),
+          action: "post",
+        },
+        success: function (json) {
+          document.getElementById("like_count").innerHTML = json["result"];
+        },
+        error: function (xhr, errmsg, err) {},
+      });
+    });
+  </script>
+ 
+</div>
+ {% include 'loader/footer.html' %}
+  
+  {% endblock content %}
