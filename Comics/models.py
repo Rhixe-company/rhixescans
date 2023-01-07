@@ -59,7 +59,7 @@ class Comic(models.Model):
         def get_queryset(self):
             return super().get_queryset() .filter(status='Ongoing')
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
-    slug = models.SlugField(null=True, unique=True, blank=False)
+    slug = models.SlugField(max_length=1000000, null=True, unique=True, blank=False)
     title = models.CharField(max_length=2000, unique=True, null=False)
     favourites = models.ManyToManyField(
         User,  blank=True, related_name='favourite', default=None)
