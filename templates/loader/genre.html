@@ -14,14 +14,14 @@
           </div>
           {% for post in catlist.posts %}
           <div class="col-md-4">
-            <a class="text-dark" href="{{comic.get_absolute_url}}">
+            <a class="text-dark" href="{{post.get_absolute_url}}">
               <div class="card mb-4 box-shadow">
                 <img class="card-img-top" src="{{post.imageURL}}" alt="{{ post.title }}">
                 <div class="card-body">
                   <h2 class="header">{{post.title|truncatechars:50}}</h2>
-                  <p class="card-text">{{post.description|truncatechars:150}}</p>
+                  <p class="card-text">{{post.description|truncatechars:100}}</p>
                   <div class="d-flex justify-content-between align-items-center">
-                    <small class="text-muted"><date>{{ post.created|timesince }} ago</date></small>
+                    <small class="text-muted"><date>{{ post.updated|timesince }} ago</date></small>
                   </div>
                 </div>
                 <ul class=" list-group list-group-flush">

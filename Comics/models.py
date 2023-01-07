@@ -83,7 +83,7 @@ class Comic(models.Model):
         Genre, blank=True)
     serialized = models.CharField(max_length=100, blank=True, null=False)
     released = models.CharField(max_length=100, blank=True, null=False)
-    updated = models.DateTimeField(default=timezone.now)
+    updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(default=timezone.now)
     likes = models.ManyToManyField(
         User, related_name='like', default=None, blank=True)
@@ -155,7 +155,7 @@ class Chapter(models.Model):
     pages = models.ManyToManyField('Page', blank=True, related_name='pages')
     numReviews = models.IntegerField(default=0, null=True, blank=True)
     numPages = models.IntegerField(default=0, null=True, blank=True)
-    updated = models.DateTimeField(default=timezone.now)
+    updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(default=timezone.now)
 
     def get_absolute_url(self):
@@ -212,7 +212,7 @@ class Review(models.Model):
     text = models.TextField(max_length=3000, blank=True)
     rating = models.PositiveSmallIntegerField(
         choices=RATING_CHOICES, default=1)
-    updated = models.DateTimeField(default=timezone.now)
+    updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(default=timezone.now)
 
     class Meta:
