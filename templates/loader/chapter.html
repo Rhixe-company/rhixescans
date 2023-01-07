@@ -41,13 +41,13 @@
   class="btn btn-sm my-3 button btn-secondary"
   >{{chapter.comic}}</a
 >
-<h3>{{chapter.name}}</h3>
+<h2 class="text-white">{{chapter.name}}</h2>
   {% for page in pages %}
   <div>
     <img src="{{page.imageURL}}" alt="{{chapter.imageURL}}" />
   </div>
   {% endfor %}
-  <h3>{{chapter.comic}}</h3>
+  <h2 class="text-white">{{chapter.comic}}</h2>
   <a
     href="{% url 'loader:comic' chapter.comic.id %}"
     class="btn btn-sm my-3 button btn-secondary"

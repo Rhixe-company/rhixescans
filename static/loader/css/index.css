@@ -1,34 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto+Condensed&display=swap");
 
-* {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
-  
-}
-
-.card{
-  margin-top: 0%;
-  margin-bottom: 0%;
-  color: #333;
-
-}
-
-.active {
-  color: blueviolet;
-}
 
 
-
-p {
-  font-weight: normal;
-  line-height: 1;
-}
-
-h2 {
-  font-size: 15px;
-  font-weight: bold;
-}
 
 body {
   background: #333;
@@ -40,6 +13,17 @@ body {
   font-size: 13px;
   height: 100vh;
 }
+
+p {
+  font-weight: normal;
+  line-height: 1;
+}
+
+h2 {
+  font-size: 15px;
+  font-weight: bold;
+}
+
 
 a{
   text-decoration: none;
