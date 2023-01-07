@@ -1,10 +1,10 @@
 from ..items import NewChapterItem
 from bs4 import BeautifulSoup
-from Comics.models import ComicsManager, Chapter, Page
+from Comics.models import *
 from django.db.models import Q
 from scrapy.spiders import Spider
 import scrapy
-
+from django.contrib.postgres.search import SearchVector
 
 class ChaptersSpider(Spider):
     name = 'chapters'
@@ -28,6 +28,7 @@ class ChaptersSpider(Spider):
             yield response.follow(link.get(), callback=self.parse_chapters)
 
     async def parse_chapters(self, response):
+        results = []
         item = NewChapterItem()
         item['slug'] = response.css('div.bixbox ol li a ::attr(href)')[
             1].get().split("/")[-2]
@@ -40,16 +41,22 @@ class ChaptersSpider(Spider):
         for page in posts:
             item['pages'] = page['src']
             yield item
-            comic = ComicsManager.objects.filter(Q(title__contains=item['title'])).get(
-                title=item['title'])
-            obj, created = Chapter.objects.filter(
-                Q(name__contains=item['name'])
-            ).get_or_create(comics=comic, name=item['name'], defaults={'name': item['name']})
-            obj1, created = Page.objects.filter(
-                Q(images_url__contains=item['pages'])
-            ).get_or_create(images_url=item['pages'], defaults={'images_url': item['pages'], 'chapters': obj})
-            obj.pages.add(obj1)
-            obj.numPages = obj.page_set.all().count()
-            obj.save()
-            comic.numChapters = comic.chapter_set.all().count()
-            comic.save()
+            results = Comic.objects.annotate(
+                search=SearchVector('title','slug'),).filter(search=item['title'])
+            if results is not None:
+                comic = ComicsManager.objects.filter(Q(title__contains=item['title']) |
+                                                     Q(slug__contains=item['slug'])).get(title=item['title'])
+                obj, created = Chapter.objects.filter(
+                    Q(name__contains=item['name'])
+                ).get_or_create(comic=comic, name=item['name'], defaults={'name': item['name']})
+                obj1, created = Page.objects.filter(
+                    Q(images_url__contains=item['pages'])
+                ).get_or_create(images_url=item['pages'], defaults={'images_url': item['pages'], 'chapter': obj})
+                obj.pages.add(obj1)
+                obj.numPages = obj.page_set.all().count()
+                obj.save()
+                comic.numChapters = comic.chapter_set.all().count()
+                comic.save()
+            else:
+                self.logger.info(
+                    'A chapter from %s couldnt be saved', response.url)
