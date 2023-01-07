@@ -5,40 +5,40 @@
         {% if chapters.has_previous %}
         <li class="page-item">
           <a
-            class="page-link text-dark"
+            class="page-link"
             href="?page={{ chapters.previous_page_number }}"
             >Previous</a
           >
         </li>
         {% else %}
         <li class="page-item disabled">
-          <a class="page-link text-dark" href="#">Previous</a>
+          <a class="page-link" href="#">Previous</a>
         </li>
         {% endif %} 
         {% for num in chapters.paginator.page_range %}
-         {% if chapters.number == l %}
+         {% if chapters.number == num %}
         <li class="page-item active">
-          <span class="page-link text-dark"
+          <span class="page-link"
             >{{ num }} <span class="sr-only">(current)</span></span
           >
         </li>
         {% else %}
         <li>
-          <a class="page-link text-dark" href="?page={{ num }}">{{ num }}</a>
+          <a class="page-link" href="?page={{ num }}">{{ num }}</a>
         </li>
         {% endif %} 
         {% endfor %}
          {% if chapters.has_next %}
         <li class="page-item">
           <a
-            class="page-link text-dark"
+            class="page-link"
             href="?page={{ chapters.next_page_number }}"
             >Next</a
           >
         </li>
         {% else %}
         <li class="page-item disabled">
-          <a class="page-link text-dark" href="#">Next</a>
+          <a class="page-link" href="#">Next</a>
         </li>
         {% endif %}
       </ul>

@@ -1,7 +1,7 @@
 <div class="row">
   <div class="main-container">
     {% for comic in comics %}
-    <div class="items card mb-4 box-shadow">
+    <div class="items card mb-1 box-shadow">
       <a href="{{comic.get_absolute_url}}">
         <img
           class="card-img-top"
@@ -10,7 +10,7 @@
         />
       </a>
       <div class="card-body text-dark">
-        <h2 style="font-size: 18px; font-weight: bold">
+        <h2>
           {{comic.title|truncatechars:50}}
         </h2>
         <p class="card-text">{{comic.description|truncatechars:100}}</p>
@@ -32,7 +32,8 @@
     </div>
     {% endfor %}
   </div>
-  <div class="row d-flex justify-content-center align-items-center">
+ <div class="py-1">
+  <nav aria-label="Page navigation">
     {% if comics.has_other_pages %}
     <ul class="pagination">
       {% if comics.has_previous %}
@@ -47,14 +48,14 @@
       </li>
       {% endif %}
        {% for num in comics.paginator.page_range %}
-        {% if comics.number == l %}
+        {% if comics.number == num %}
       <li class="page-item active">
         <span class="page-link"
           >{{ num }} <span class="sr-only">(current)</span></span
         >
       </li>
       {% else %}
-      <li><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+      <li><a  class="page-link" href="?page={{ num }}">{{ num }}</a></li>
       {% endif %}
        {% endfor %}
         {% if comics.has_next %}
@@ -66,5 +67,6 @@
       {% endif %}
     </ul>
     {% endif %}
-  </div>
+  </nav>
+ </div>
 </div>

@@ -16,16 +16,6 @@ class Profile(models.Model):
         upload_to=user_directory_path, default='users/avatar.jpg')
     bio = models.TextField(max_length=500, blank=True)
 
-    def clean(self):
-        if not self.avatar:
-            raise ValidationError("x")
-        else:
-            w, h = get_image_dimensions(self.avatar)
-            if w != 200:
-                raise ValidationError("x")
-            if h != 200:
-                raise ValidationError("x")
-
     def __str__(self):
         return self.user.username
 

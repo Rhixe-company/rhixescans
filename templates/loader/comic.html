@@ -1,5 +1,5 @@
 {% extends "../base/base.html" %} {% block title %} Welcome to {{comic.title}} {% endblock %} {% load crispy_forms_tags %} {% block content %}{% load static %} {% include '../base/nav-main.html' %}
-<div class="album py-5 bg-dark">
+<div class="album py-1 bg-dark">
   <div class="container">
     <div class="row">
       <h1 class="display-4 text-center text-white">
@@ -8,7 +8,7 @@
     </div>
 
     <div class="row">
-        <div class="card mb-4 box-shadow">
+        <div class="card mb-1 box-shadow">
              <img
           class="card-img-top"
           src="{{comic.imageURL}}"

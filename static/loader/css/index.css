@@ -4,15 +4,46 @@
   box-sizing: border-box;
   padding: 0;
   margin: 0;
+  
+}
+
+.card{
+  margin-top: 0%;
+  margin-bottom: 0%;
+  color: #333;
+
+}
+
+.active {
+  color: blueviolet;
+}
+
+
+
+p {
+  font-weight: normal;
+  line-height: 1;
+}
+
+h2 {
+  font-size: 15px;
+  font-weight: bold;
 }
 
 body {
-  background: rgb(30, 21, 21);
+  background: #333;
+  margin-bottom: auto;
+  padding: 0rem;
   font-family: "Roboto Condensed", sans-serif;
-  color: #fff;
+  
   line-height: 1.7;
   font-size: 13px;
   height: 100vh;
+}
+
+a{
+  text-decoration: none;
+  color: grey;
 }
 
 main {
@@ -21,6 +52,9 @@ display: grid;
 
 footer {
   text-align: center;
+}
+footer h2 {
+  color: #fff;
 }
 footer a {
   text-decoration: none;
@@ -42,10 +76,6 @@ footer a {
   /*grid-template-rows: repeat(3, 1fr); */
 }
 
-.album{
-  margin: 0;
-  padding: 0;
-}
 .items {
   font-size: 10px;
   margin: 0px auto;

@@ -22,8 +22,7 @@ class ComicsSpider(Spider):
     async def parse_webtoon(self, response):
         for items in response.css('div#content'):
             item = ScraperItem()
-            item['slug'] = items.css('div.bixbox ol li a::attr(href)')[
-                1].get().split('/')[-2]
+            item['slug'] = items.css('div.bixbox ol li a::attr(href)')[1].get().split('/')[-2]
             item['title'] = items.css('h1.entry-title::text').get().strip()
             item['image_url'] = items.css('div.thumb img::attr(src)').get()
             item['rating'] = float(items.css('div.num::text').get().strip())
@@ -43,7 +42,7 @@ class ComicsSpider(Spider):
                 yield item
                 obj, created = ComicsManager.objects.filter(
                     Q(title__contains=item['title'])
-                ).get_or_create(image_url=item['image_url'],  rating=item['rating'], status=item['status'], description=item['description'], released=item['released'], category=item['category'],  author=item['author'],  artist=item['artist'], defaults={'title': item['title']})
+                ).get_or_create(slug=item['slug'], image_url=item['image_url'],  rating=item['rating'], status=item['status'], description=item['description'], released=item['released'], category=item['category'],  author=item['author'],  artist=item['artist'], defaults={'title': item['title']})
                 obj1, created = Genre.objects.filter(
                     Q(name__contains=item['genres'])
                 ).get_or_create(
