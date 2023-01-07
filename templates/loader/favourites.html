@@ -3,10 +3,10 @@ Bookmark {% endblock %} {% block content %}{% include '../base/nav-main.html' %}
 <div class="container text-dark">
   <section class="jumbotron text-center bg-white">
     <div class="container">
-      <h1 class="display-4 text-center">
+      <p class="display-4 text-center">
         <i class="fas fa-book-open text-primary"></i> Bookmark
         <span class="text-primary">Page</span>
-      </h1>
+      </p>
     </div>
   </section>
   <div>
@@ -30,7 +30,9 @@ Bookmark {% endblock %} {% block content %}{% include '../base/nav-main.html' %}
             <ul class="list-group list-group-flush">
               {% with comic.chapter_set.first as chapter %}
               <li class="list-group-item">
-                <a class="text-dark" href="{{chapter.get_absolute_url}}"> {{chapter.name}} </a>
+                <a class="text-dark" href="{{chapter.get_absolute_url}}">
+                  {{chapter.name}}
+                </a>
               </li>
               {% endwith %}
             </ul>

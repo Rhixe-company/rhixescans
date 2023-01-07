@@ -59,7 +59,8 @@ class Comic(models.Model):
         def get_queryset(self):
             return super().get_queryset() .filter(status='Ongoing')
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
-    slug = models.SlugField(max_length=1000000, null=True, unique=True, blank=False)
+    slug = models.SlugField(
+        max_length=1000000, null=True, unique=True, blank=False)
     title = models.CharField(max_length=2000, unique=True, null=False)
     favourites = models.ManyToManyField(
         User,  blank=True, related_name='favourite', default=None)
@@ -89,18 +90,15 @@ class Comic(models.Model):
     like_count = models.BigIntegerField(default='0')
     objects = models.Manager()  # default manager
     newmanager = NewManager()
-    
+
     def get_absolute_url(self):
         return reverse("loader:comic", args=[self.id])
-    
 
     class Meta:
-        ordering = ['-updated', '-created']
+        ordering = ['updated', 'created']
 
     def __str__(self):
         return self.title
-
-    
 
     def save(self, *args, **kwargs):
 
@@ -162,14 +160,12 @@ class Chapter(models.Model):
 
     def get_absolute_url(self):
         return reverse("loader:chapter", args=[self.id])
-    
+
     class Meta:
         ordering = ['-id']
 
     def __str__(self):
         return '%s %s' % (self.name, self.comic)
-
-    
 
 
 class Page(models.Model):

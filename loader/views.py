@@ -23,14 +23,16 @@ class CatListView(ListView):
         }
         return content
 
+
 def genres_list(request):
     genres_list = Genre.objects.all()
     context = {
-        'genres_list':genres_list
+        'genres_list': genres_list
     }
     return context
 
-@login_required(login_url='loader:login')
+
+@login_required()
 def like(request):
     if request.POST.get('action') == 'post':
         result = ''
@@ -49,6 +51,7 @@ def like(request):
 
         return JsonResponse({'result': result, })
 
+
 def comic_search(request):
     form = ComicSearchForm()
     q = ''
@@ -63,7 +66,7 @@ def comic_search(request):
             search_string = Comic.objects.filter(
                 title__contains=search_string)
             data = serializers.serialize(
-                'json', list(search_string), fields=('id','title','image','status','category'))
+                'json', list(search_string), fields=('id', 'title', 'image', 'status', 'category'))
             return JsonResponse({'search_string': data})
 
     if 'q' in request.GET:
@@ -83,7 +86,7 @@ def comic_search(request):
     return render(request, 'loader/search.html', context)
 
 
-@login_required(login_url='loader:login')
+@login_required()
 def bookmark_list(request):
     comics = Comic.objects.filter(favourites=request.user)
     return render(request,
@@ -91,7 +94,7 @@ def bookmark_list(request):
                   {'comics': comics})
 
 
-@login_required(login_url='loader:login')
+@login_required()
 def bookmark(request, pk):
     comic = get_object_or_404(Comic, id=pk)
     if comic.favourites.filter(id=request.user.id).exists():
@@ -102,14 +105,7 @@ def bookmark(request, pk):
 
 
 def index(request):
-
-    genre = request.GET.get('genre')
-    if genre == None:
-        comics = Comic.objects.all()
-    else:
-        comics = Comic.objects.filter(Q(genres__name=genre) |
-                                         Q(title=genre))
-    genres = Genre.objects.all()[:20]
+    comics = Comic.newmanager.all()
     page = request.GET.get('page')
     paginator = Paginator(comics, 21)
     try:
@@ -118,18 +114,12 @@ def index(request):
         comics = paginator.page(1)
     except EmptyPage:
         comics = paginator.page(paginator.num_pages)
-    context = {'comics': comics, 'genres': genres}
+    context = {'comics': comics}
     return render(request, 'loader/index.html', context)
 
 
 def comics(request):
-    genre = request.GET.get('genre')
-    if genre == None:
-        comics = Comic.objects.all().order_by('title')
-    else:
-        comics = Comic.objects.filter(Q(genres__name=genre) |
-                                      Q(title=genre)).order_by('title')
-    genres = Genre.objects.all()
+    comics = Comic.objects.all().order_by('title')
     page = request.GET.get('page')
     paginator = Paginator(comics, 21)
     try:
@@ -138,7 +128,7 @@ def comics(request):
         comics = paginator.page(1)
     except EmptyPage:
         comics = paginator.page(paginator.num_pages)
-    context = {'comics': comics, 'genres': genres}
+    context = {'comics': comics}
     return render(request, 'loader/comics.html', context)
 
 
@@ -154,7 +144,7 @@ def comic(request, pk):
     return render(request, 'loader/comic.html', context)
 
 
-@login_required(login_url='loader:login')
+@login_required()
 def chapterview(request, pk):
     chapter = Chapter.objects.get(id=pk)
     pages = chapter.pages.all()
@@ -243,7 +233,7 @@ def registerUser(request):
     return render(request, 'loader/register.html', context)
 
 
-@login_required(login_url='loader:login')
+@login_required()
 def createComic(request):
 
     form = ComicForm()
@@ -258,7 +248,7 @@ def createComic(request):
     return render(request, 'loader/comic_form.html', context)
 
 
-@login_required(login_url='loader:login')
+@login_required()
 def updateComic(request, pk):
     Comics = Comic.objects.get(id=pk)
     form = ComicForm(instance=Comics)
@@ -274,7 +264,7 @@ def updateComic(request, pk):
     return render(request, 'loader/comic_form.html', context)
 
 
-@login_required(login_url='loader:login')
+@login_required()
 def deleteComic(request, pk):
     comic = Comic.objects.get(id=pk)
     if request.method == 'POST':
@@ -283,7 +273,7 @@ def deleteComic(request, pk):
     return render(request, 'loader/delete.html', {'obj': comic})
 
 
-@login_required(login_url='loader:login')
+@login_required()
 def createChapter(request):
     form = ChapterForm()
     if request.method == 'POST':
@@ -297,7 +287,7 @@ def createChapter(request):
     return render(request, 'loader/chapter_form.html', context)
 
 
-@login_required(login_url='loader:login')
+@login_required()
 def updateChapter(request, pk):
     chapter = Chapter.objects.get(id=pk)
     form = ChapterForm(instance=chapter)
@@ -313,7 +303,7 @@ def updateChapter(request, pk):
     return render(request, 'loader/chapter_form.html', context)
 
 
-@login_required(login_url='loader:login')
+@login_required()
 def deleteChapter(request, pk):
     chapter = Chapter.objects.get(id=pk)
     if request.method == 'POST':
@@ -322,7 +312,7 @@ def deleteChapter(request, pk):
     return render(request, 'loader/delete.html', {'obj': chapter})
 
 
-@login_required(login_url='loader:login')
+@login_required()
 def userProfile(request, pk):
     user = User.objects.get(id=pk)
     chapters = user.chapter_set.all()
@@ -344,7 +334,7 @@ def userProfile(request, pk):
     return render(request, 'loader/profile.html', context)
 
 
-@login_required(login_url='loader:login')
+@login_required()
 def updateUser(request, pk):
     user = User.objects.get(id=pk)
     form = UserForm(instance=user)
@@ -358,7 +348,7 @@ def updateUser(request, pk):
     return render(request, 'loader/update-user.html', context)
 
 
-@login_required(login_url='loader:login')
+@login_required()
 def deleteReview(request, pk):
     review = Review.objects.get(id=pk)
     if request.user != review.user:

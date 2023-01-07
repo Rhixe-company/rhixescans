@@ -1,98 +1,135 @@
-{% extends "../base/base.html" %} {% block title %} Welcome to {{comic.title}} {% endblock %} {% load crispy_forms_tags %} {% block content %}{% load static %} {% include '../base/nav-main.html' %}
+{% extends "../base/base.html" %} {% block title %} Welcome to {{comic.title}}
+{% endblock %} {% load crispy_forms_tags %} {% block content %}{% load static %}
+{% include '../base/nav-main.html' %}
 <div class="album py-1 bg-dark">
-  <div class="container">
+  <div class="container text-dark">
+    <a class="btn-sm btn btn-primary my-1" href="/">Go Back</a>
     <div class="row">
-      <h1 class="display-4 text-center text-white">
+      <p class="display-4 text-center text-white">
         <i class="fas fa-book-open text-primary"></i> {{comic.title}}
-      </h1>
+      </p>
+
+      <br />
+      {% if request.user.is_superuser %}
+
+      <a
+        class="btn-sm btn btn-primary my-1"
+        href="{% url 'loader:update-comic' comic.id %}"
+        >Edit</a
+      >
+
+      <a
+        class="btn-sm btn btn-primary my-1"
+        href="{% url 'loader:delete-comic' comic.id %}"
+        >Delete</a
+      >
+      <br />
+      <a
+        class="btn-sm btn btn-primary my-1"
+        href="{% url 'loader:create-comic' %}"
+        >Create New Comic</a
+      >
+
+      <a
+        class="btn-sm btn btn-primary my-1"
+        href="{% url 'loader:create-chapter' %}"
+        >Create New Chapter</a
+      >
+
+      {% endif %}
     </div>
 
-    <div class="row">
-        <div class="card mb-1 box-shadow">
-             <img
-          class="card-img-top"
+    <div class="card text-center">
+      <div class="card-header">
+        {{comic.title}}
+        <img
+          class="img-fluid rounded"
           src="{{comic.imageURL}}"
-          alt="{{ comic.title }}"
+          alt="{{ comic.imageURL }}"
         />
-         <div class="card-body text-dark">
-        <h2 style="font-size: 18px; font-weight: bold">
-          {{comic.title}}
-        </h2>
-        <p class="card-text">{{comic.description}}</p>
-        <div class="d-flex justify-content-between align-items-center">
-            
-          <small class="text-muted">Last Updated:<date>{{ comic.updated|timesince }} ago</date></small
-          >
-          {% include 'loader/bookmark.html' %}
-        </div>
-        <br>
-        <b class="card-text"> Genres</b>
-        <nav class="nav nav-pills">
-          {% for genre in genres %}
-          <a class="nav-link text-dark" href="{% url 'loader:genre' genre.name%}">{{genre.name}}</a>
-          {% endfor %}
-        </nav>
-        <table class="table">
-              <thead>
-                <tr>
-                  <th>Author</th>
-                  <th>Artist</th>
-                  <th>Category</th>
-                  <th>Status</th>
-                  <th>Released</th>
-                  <th>Published Date</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>{{comic.author}}</td>
-                  <td>{{comic.artist}}</td>
-                  <td>{{comic.category}}</td>
-                  <td>{{comic.status}}</td>
-                  <td>{{comic.released}}</td>
-                  <td><date>{{ comic.created|timesince }}</date></td>
-                </tr>
-              </tbody>
-              
-            </table>
       </div>
-        </div>
+      <div class="card-body">
+        <h5 class="card-title">{{ comic.updated|timesince }} ago</h5>
+        <p class="card-text">{{comic.description}}</p>
+        {% include 'loader/bookmark.html' %} {% for genre in genres %}
+        <a class="btn btn-primary" href="{% url 'loader:genre' genre.name%}"
+          >{{genre.name}}</a
+        >
+        {% endfor %}
+        <a href="#" class="btn btn-primary">Go somewhere</a>
+      </div>
+      <div class="card-footer text-muted">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Author</th>
+              <th>Artist</th>
+              <th>Category</th>
+              <th>Status</th>
+              <th>Released</th>
+              <th>Published Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{{comic.author}}</td>
+              <td>{{comic.artist}}</td>
+              <td>{{comic.category}}</td>
+              <td>{{comic.status}}</td>
+              <td>{{comic.released}}</td>
+              <td><date>{{ comic.created|timesince }}</date></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
-    <hr>
-    <b>Total Chapters {{comic.numChapters}}</b>
-    <div class="row">
-        <ul class=" list-group list-group-flush">
-            {% for chapter in chapters %}
-       
-     <li class="list-group-item">
-      <a class="" href="{{chapter.get_absolute_url}}">
-        {{chapter.name}}
-      </a>
-    </li>
-    {% empty %}
-    <small>No Chapter Found</small>
-    {% endfor %}
-        </ul>
+    <div class="card" style="width: 100%">
+      <div class="card-header">
+        <b>Total Chapters {{comic.numChapters}}</b>
+      </div>
+      <ul class="list-group list-group-flush">
+        {% for chapter in chapters %}
+        <li class="list-group-item">
+          <a href="{{chapter.get_absolute_url}}">{{chapter.name}}</a>
+        </li>
+        {% if request.user.is_superuser %}
+        <div>
+          <a
+            class="btn-sm btn btn-primary my-1"
+            href="{% url 'loader:update-chapter' chapter.id %}"
+            >Edit</a
+          >
+
+          <a
+            class="btn-sm btn btn-primary my-1"
+            href="{% url 'loader:delete-chapter' chapter.id %}"
+            >Delete</a
+          >
+        </div>
+        {% endif %} {% empty %}
+        <small>No Chapter Found</small>
+        {% endfor %}
+      </ul>
     </div>
   </div>
 </div>
- <script>
-    $(document).on("click", "#like-button", function (e) {
-      e.preventDefault();
-      $.ajax({
-        type: "POST",
-        url: '{% url "loader:like" %}',
-        data: {
-          postid: $("#like-button").val(),
-          csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val(),
-          action: "post",
-        },
-        success: function (json) {
-          document.getElementById("like_count").innerHTML = json["result"];
-        },
-        error: function (xhr, errmsg, err) {},
-      });
+<script>
+  $(document).on("click", "#like-button", function (e) {
+    e.preventDefault();
+    $.ajax({
+      type: "POST",
+      url: '{% url "loader:like" %}',
+      data: {
+        postid: $("#like-button").val(),
+        csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val(),
+        action: "post",
+      },
+      success: function (json) {
+        document.getElementById("like_count").innerHTML = json["result"];
+      },
+      error: function (xhr, errmsg, err) {},
     });
-  </script>
+  });
+</script>
 
 {% include 'loader/footer.html' %}{% endblock content %}

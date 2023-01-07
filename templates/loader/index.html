@@ -1,11 +1,11 @@
 {% extends "../base/base.html" %} {% block title %} Welcome to Index {% endblock %} {% load crispy_forms_tags %} {% block content %}{% load static %} {% include '../base/nav-main.html' %}
 <div class="album py-1 bg-dark">
   <div class="container">
-    <div class="row">
-      <h1 class="display-4 text-center text-white">
+    <div class="col-12 pb-1 text-white">
+      <p class="display-4 text-center">
         <i class="fas fa-book-open text-primary"></i> Index
         <span class="text-primary">Page</span>
-      </h1>
+      </p>
     </div>
 
     {% include 'loader/comics_feed.html' %}

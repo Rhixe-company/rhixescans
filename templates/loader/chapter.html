@@ -42,23 +42,23 @@
   >{{chapter.comic}}</a
 >
 <h2 class="text-white">{{chapter.name}}</h2>
-  {% for page in pages %}
-  <div>
-    <img src="{{page.imageURL}}" alt="{{chapter.imageURL}}" />
-  </div>
-  {% endfor %}
-  <h2 class="text-white">{{chapter.comic}}</h2>
-  <a
-    href="{% url 'loader:comic' chapter.comic.id %}"
-    class="btn btn-sm my-3 button btn-secondary"
-    >{{chapter.name}}</a
-  >
+{% for page in pages %}
+<div>
+  <img src="{{page.imageURL}}" alt="{{chapter.imageURL}}" />
+</div>
+{% endfor %}
+<h2 class="text-white">{{chapter.comic}}</h2>
+<a
+  href="{% url 'loader:comic' chapter.comic.id %}"
+  class="btn btn-sm my-3 button btn-secondary"
+  >{{chapter.name}}</a
+>
 <div class="container">
   <ul class="list-group list-group-flush">
     {% for chapter in chapters %}
 
     <li class="list-group-item">
-      <a class="text-dark" href="{{chapter.get_absolute_url}}">
+      <a class="text-white" href="{{chapter.get_absolute_url}}">
         {{chapter.name}}
       </a>
     </li>

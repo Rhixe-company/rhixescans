@@ -2,8 +2,8 @@
 {% endblock %} {% block content %}{% include '../base/nav-main.html' %}
 
 <div class="container">
-    
-<div class="container">
+    <
+<div class="container-fluid">
   <div class="row">
     <div class="col"> 
       <h1>{{user.username}} Dashboard</h1>
@@ -80,7 +80,8 @@
 {% endif %}
 <hr />
 {% endfor%}
-    </div>
+      </div
+  </div>
 </div>
 
  {% include 'loader/footer.html' %}{% endblock content %}

@@ -1,7 +1,7 @@
 {% extends '../base/base.html' %} {% load static %} {% block title %} Welcome to Search
 {% endblock %} {% block content %}
 {% load crispy_forms_tags %}
-
+{% include '../base/nav-main.html'%}
 <div class="album py-5 bg-dark">
     <div class="text-white">
       {% if q %}
@@ -64,7 +64,7 @@
     <form method="get" action='{% url 'loader:comic_search' %}' class='dropdown show'>
       {% csrf_token %}
        {{form.q}}
-       <ul class="dropdown-menu col-12 pl-2" role="menu" aria-labelledby="menu" id="list">
+       <ul class="dropdown-menu col-12 pl-2 text-dark" role="menu" aria-labelledby="menu" id="list">
           
         </ul>
        
