@@ -2,7 +2,7 @@
   {% for comic in comics %}
   <div class="col-md-4">
     <a class="text-dark" href="{{comic.get_absolute_url}}">
-      <div class="card mb-4 box-shadow">
+      <div class="card mb-1 box-shadow">
         <img
           class="card-img-top"
           src="{{comic.imageURL}}"
@@ -16,7 +16,8 @@
             <p class="text-muted">{{comic.status}}</p>
           </div>
         </div>
-        <ul class="list-group list-group-flush">
+        <div class="card-footer">
+          <ul class="list-group list-group-flush">
           <li class="list-group-item">
             {% with comic.chapter_set.first as chapter %}
             <a href="{{chapter.get_absolute_url}}" class="text-dark"
@@ -25,6 +26,7 @@
             {% endwith %}
           </li>
         </ul>
+        </div>
       </div>
     </a>
   </div>
