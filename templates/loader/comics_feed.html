@@ -17,14 +17,11 @@
           </div>
         </div>
         <div class="card-footer">
-          <ul class="list-group list-group-flush">
-          <li class="list-group-item">
-            {% with comic.chapter_set.first as chapter %}
+          {% with comic.chapter_set.first as chapter %}
             <a href="{{chapter.get_absolute_url}}" class="text-dark"
               >{{chapter.name}}</a
             >
             {% endwith %}
-          </li>
         </ul>
         </div>
       </div>
