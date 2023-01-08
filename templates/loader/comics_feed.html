@@ -19,7 +19,7 @@
         <div class="card-footer">
           {% with comic.chapter_set.first as chapter %}
             <a href="{{chapter.get_absolute_url}}" class="text-dark"
-              >{{chapter.name}}</a
+              >{{chapter.name|truncatechars:50}}</a
             >
             {% endwith %}
         </ul>
