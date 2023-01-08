@@ -41,7 +41,7 @@
 
     <div class="card text-center">
       <div class="card-header">
-        {{comic.title}}
+        {{ comic.updated|timesince }} ago
         <img
           class="img-fluid rounded"
           src="{{comic.imageURL}}"
@@ -49,10 +49,10 @@
         />
       </div>
       <div class="card-body">
-        <h5 class="card-title">{{ comic.updated|timesince }} ago</h5>
+        <h5 class="card-title"> {{comic.title}}</h5>
         <p class="card-text">{{comic.description}}</p>
         {% include 'loader/bookmark.html' %} {% for genre in genres %}
-        <a class="btn btn-primary" href="{% url 'loader:genre' genre.name%}"
+        <a class="btn btn-outline-dark mb-4" href="{% url 'loader:genre' genre.name%}"
           >{{genre.name}}</a
         >
         {% endfor %}

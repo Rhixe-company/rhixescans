@@ -4,35 +4,7 @@
   img {
     display: block;
     width: 100%;
-  }
-  h3 {
-    font-weight: 400;
-    font-size: 1.2rem;
-    text-transform: capitalize;
-    margin: 0;
-  }
-  .button {
-    color: #fff;
-    padding: 0.5rem 2rem;
-    border: 1px #ccc solid;
-    display: inline-block;
-    margin: 2rem 0 0;
-    border-radius: 50px;
-    text-decoration: none;
-    transition: background 500ms ease;
-  }
-
-  .button:hover {
-    background: purple;
-  }
-
-  .list-group-item a {
-    text-decoration: none;
-    transition: background 500ms ease;
-  }
-
-  .list-group-item a:hover {
-    background: purple;
+    height: 100%;
   }
 </style>
 {% include '../base/nav-main.html' %}
@@ -58,7 +30,7 @@
     {% for chapter in chapters %}
 
     <li class="list-group-item">
-      <a class="text-white" href="{{chapter.get_absolute_url}}">
+      <a class="text-dark" href="{{chapter.get_absolute_url}}">
         {{chapter.name}}
       </a>
     </li>
