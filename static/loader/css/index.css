@@ -21,7 +21,6 @@ body {
   margin: 0;
   padding: 0;
   min-height: 5vh;
-  color: white;
 }
 
 .content {
@@ -43,29 +42,24 @@ body {
   color: silver;
 }
 
-.comics-container {
-  min-height: 100vh;
-}
-.comics-container img {
-  height: 300px;
-  width: 300px;
-}
-
-.comics-container h2 {
+.card {
   display: flex;
-  font-size: 20px;
-  color: #fff;
+  justify-content: space-around;
 }
 
-.comics-container p {
-  color: #fff;
-  opacity: 70%;
+.comics-container {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  justify-content: space-between;
 }
 
 .card-footer {
   display: flex;
-  align-items: center;
-  margin-bottom: 10px;
+  font-size: small;
+}
+ a {
+  text-decoration: none;
 }
 
 .pagination-container {
@@ -73,22 +67,22 @@ body {
 }
 
 .pagination-container a {
-  color: rebeccapurple;
+  margin: 0;
+
 }
 
 .avatar {
         height: 30px;
         width: 30px;
-        background-color: #333;
+        background-color: #000;
         border-radius: 50%;
         display: inline-block;
-   text-decoration: none;
-    }
-a{
-  text-decoration: none;
-}
 
-h3 {
+    }
+    .nav-link {
+        text-decoration: none;
+    }
+h2 {
     font-weight: 400;
     font-size: 1.2rem;
     text-transform: capitalize;

@@ -14,26 +14,32 @@
           </div>
           {% for post in catlist.posts %}
           <div class="col-md-4">
-            <a class="text-dark" href="{{post.get_absolute_url}}">
-              <div class="card mb-4 box-shadow">
-                <img class="card-img-top" src="{{post.imageURL}}" alt="{{ post.title }}">
-                <div class="card-body">
-                  <h2 class="header">{{post.title|truncatechars:50}}</h2>
-                  <p class="card-text">{{post.description|truncatechars:100}}</p>
-                  <div class="d-flex justify-content-between align-items-center">
-                    <small class="text-muted"><date>{{ post.updated|timesince }} ago</date></small>
-                  </div>
-                </div>
-                <ul class=" list-group list-group-flush">
-                  <li class="list-group-item">
-                    {% with post.chapter_set.first as chapter %}
-                    <a href="{{chapter.get_absolute_url}}" class="text-dark">{{chapter.name}}</a>
-                    {% endwith %}
-                  </li>
-                </ul>
-              </div>
-            </a>
+    <a class="text-dark" href="{{post.get_absolute_url}}">
+      <div class="card mb-1 box-shadow">
+        <img
+          class="card-img-top"
+          src="{{post.imageURL}}"
+          alt="{{ post.title }}"
+        />
+        <div class="card-body">
+          <h2 style="font-size: 16px">{{post.title|truncatechars:50}}</h2>
+          <p class="card-text">{{post.category|truncatechars:50}}</p>
+          <div class="d-flex justify-content-between align-items-center">
+            <small class="text-muted"><em>{{post.rating}}</em></small>
+            <p class="text-muted">{{post.status}}</p>
           </div>
+        </div>
+        <div class="card-footer">
+          {% with post.chapter_set.first as chapter %}
+            <a href="{{chapter.get_absolute_url}}" class="text-dark"
+              >{{chapter.name|truncatechars:50}}</a
+            >
+            {% endwith %}
+        </ul>
+        </div>
+      </div>
+    </a>
+  </div>
           {% endfor %}
         </div>
       </div>
