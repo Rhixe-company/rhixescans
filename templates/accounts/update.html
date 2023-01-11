@@ -26,7 +26,7 @@
                         Details successfully updated!
                     </div>
                     <p class="small text-center pt-0">
-                        <a href="{% url "accounts:profile" %}">Back to Dashboard</a>
+                        <a href="{% url "loader:user-profile" user.id %}">Back to Dashboard</a>
                     </p>
                     {%else%}
                     <p class=" h4 mb-4 font-weight-bold">Change your details</p>
