@@ -229,7 +229,7 @@ def registerUser(request):
 
             next_url = request.GET.get('next')
             if next_url == '' or next_url == None:
-                next_url = 'index'
+                next_url = 'loader:index'
             return redirect('loader:index')
         else:
             messages.error(request, 'An error has occured with registration')
@@ -247,7 +247,7 @@ def createComic(request):
             comic = form.save(commit=False)
             comic.user = request.user
             comic.save()
-            return redirect('index')
+            return redirect('loader:index')
     context = {'form': form}
     return render(request, 'loader/comic_form.html', context)
 
@@ -263,7 +263,7 @@ def updateComic(request, pk):
             comic = form.save(commit=False)
             comic.user = request.user
             comic.save()
-            return redirect('index')
+            return redirect('loader:index')
     context = {'form': form}
     return render(request, 'loader/comic_form.html', context)
 
@@ -273,7 +273,7 @@ def deleteComic(request, pk):
     comic = Comic.objects.get(id=pk)
     if request.method == 'POST':
         comic.delete()
-        return redirect('index')
+        return redirect('loader:index')
     return render(request, 'loader/delete.html', {'obj': comic})
 
 
@@ -286,7 +286,7 @@ def createChapter(request):
             chapter = form.save(commit=False)
             chapter.user = request.user
             chapter.save()
-            return redirect('index')
+            return redirect('loader:index')
     context = {'form': form}
     return render(request, 'loader/chapter_form.html', context)
 
@@ -302,7 +302,7 @@ def updateChapter(request, pk):
             chapter = form.save(commit=False)
             chapter.user = request.user
             chapter.save()
-            return redirect('index')
+            return redirect('loader:index')
     context = {'form': form}
     return render(request, 'loader/chapter_form.html', context)
 
@@ -312,7 +312,7 @@ def deleteChapter(request, pk):
     chapter = Chapter.objects.get(id=pk)
     if request.method == 'POST':
         chapter.delete()
-        return redirect('index')
+        return redirect('loader:index')
     return render(request, 'loader/delete.html', {'obj': chapter})
 
 
