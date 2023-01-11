@@ -9,126 +9,131 @@
         <i class="fas fa-book-open text-primary"></i> {{comic.title}}
       </p>
 
-      <br />
       {% if request.user.is_superuser %}
-
-      <a
-        class="btn-sm btn btn-primary my-1"
-        href="{% url 'loader:update-comic' comic.id %}"
-        >Edit</a
-      >
-
-      <a
-        class="btn-sm btn btn-primary my-1"
-        href="{% url 'loader:delete-comic' comic.id %}"
-        >Delete</a
-      >
-      <br />
-      <a
-        class="btn-sm btn btn-primary my-1"
-        href="{% url 'loader:create-comic' %}"
-        >Create New Comic</a
-      >
-
-      <a
-        class="btn-sm btn btn-primary my-1"
-        href="{% url 'loader:create-chapter' %}"
-        >Create New Chapter</a
-      >
-
-      {% endif %}
-    </div>
-
-    <div class="card text-center">
-      <div class="card-header">
-        {{ comic.updated|timesince }} ago
-        <img
-          class="img-fluid rounded"
-          src="{{comic.imageURL}}"
-          alt="{{ comic.imageURL }}"
-        />
-      </div>
-      <div class="card-body">
-        <h5 class="card-title"> {{comic.title}}</h5>
-        <p class="card-text">{{comic.description}}</p>
-        {% include 'loader/bookmark.html' %} {% for genre in genres %}
-        <a class="btn btn-outline-dark mb-4" href="{% url 'loader:genre' genre.name%}"
-          >{{genre.name}}</a
+      <div class="container">
+        <a
+          class="btn-sm btn btn-outline-secondary my-1"
+          href="{% url 'loader:update-comic' comic.id %}"
+          >Edit</a
         >
-        {% endfor %}
+        <a
+          class="btn-sm btn btn-danger my-1"
+          href="{% url 'loader:delete-comic' comic.id %}"
+          >Delete</a
+        >
       </div>
-      <div class="card-footer text-muted">
-        <table class="table">
-          <thead>
-            <tr>
-              <th>Author</th>
-              <th>Artist</th>
-              <th>Category</th>
-              <th>Status</th>
-              <th>Released</th>
-              <th>Published Date</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>{{comic.author}}</td>
-              <td>{{comic.artist}}</td>
-              <td>{{comic.category}}</td>
-              <td>{{comic.status}}</td>
-              <td>{{comic.released}}</td>
-              <td><date>{{ comic.created|timesince }}</date></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-    <div class="card" style="width: 100%">
-      <div class="card-header">
-        <b>Total Chapters {{comic.numChapters}}</b>
-      </div>
-      <ul class="list-group list-group-flush">
-        {% for chapter in chapters %}
-        <li class="list-group-item">
-          <a href="{{chapter.get_absolute_url}}">{{chapter.name}}</a>
-        </li>
-        {% if request.user.is_superuser %}
-        <div>
-          <a
-            class="btn-sm btn btn-primary my-1"
-            href="{% url 'loader:update-chapter' chapter.id %}"
-            >Edit</a
-          >
+      {% endif %}
 
-          <a
-            class="btn-sm btn btn-primary my-1"
-            href="{% url 'loader:delete-chapter' chapter.id %}"
-            >Delete</a
-          >
+      <div class="card text-center">
+        <div class="card-header">
+          <img
+            class="img-fluid rounded"
+            src="{{comic.imageURL}}"
+            alt="{{ comic.imageURL }}"
+          />
         </div>
-        {% endif %} {% empty %}
-        <small>No Chapter Found</small>
-        {% endfor %}
-      </ul>
+        <div class="card-body">
+          <h2 class="card-title">{{comic.title}}</h2>
+          <p class="card-text"><b>Description:</b>{{comic.description}}</p>
+          {% include 'loader/bookmark.html' %}
+
+          <div class="d-flex justify-content-between align-items-center">
+            <span class="card-text"><b>Status:</b> {{comic.status}}</span>
+            <em class="card-text"><b>Rating:</b>{{comic.rating}}</em>
+            <span class="card-text"
+              ><b>Last Updated:</b>
+              <time>{{ comic.updated|timesince }} ago</time></span
+            >
+          </div>
+
+          <div class="d-flex justify-content-between">
+            <b>Genres:</b>
+            {% for genre in genres %}
+            <a
+              class="btn btn-outline-dark mb-4"
+              href="{% url 'loader:genre' genre.name%}"
+              >{{genre.name}}</a
+            >
+            {% endfor %}
+          </div>
+        </div>
+        <div class="card-footer text-muted">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Alternativetitle</th>
+                <th>Author</th>
+                <th>Artist</th>
+                <th>Released</th>
+                <th>Serialization</th>
+                <th>Category</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>{{comic.alternativetitle}}</td>
+                <td>{{comic.author}}</td>
+                <td>{{comic.artist}}</td>
+                <td>{{comic.released}}</td>
+                <td>{{comic.serialization}}</td>
+                <td>
+                  {% for category in comic.category.all %}
+                  <span class="card-text">{{category.name}}</span>
+                  {% endfor %}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="card" style="width: 100%">
+        <div class="card-header">
+          <b>Total Chapters {{comic.numChapters}}</b>
+        </div>
+        <ul class="list-group list-group-flush">
+          {% for chapter in chapters %}
+          <li class="list-group-item">
+            <a href="{{chapter.get_absolute_url}}">{{chapter.name}}</a>
+          </li>
+          {% if request.user.is_superuser %}
+          <div>
+            <a
+              class="btn-sm btn btn-outline-secondary my-1"
+              href="{% url 'loader:update-chapter' chapter.id %}"
+              >Edit</a
+            >
+
+            <a
+              class="btn-sm btn btn-danger my-1"
+              href="{% url 'loader:delete-chapter' chapter.id %}"
+              >Delete</a
+            >
+          </div>
+          {% endif %} {% empty %}
+          <small>No Chapter Found</small>
+          {% endfor %}
+        </ul>
+      </div>
     </div>
   </div>
-</div>
-<script>
-  $(document).on("click", "#like-button", function (e) {
-    e.preventDefault();
-    $.ajax({
-      type: "POST",
-      url: '{% url "loader:like" %}',
-      data: {
-        postid: $("#like-button").val(),
-        csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val(),
-        action: "post",
-      },
-      success: function (json) {
-        document.getElementById("like_count").innerHTML = json["result"];
-      },
-      error: function (xhr, errmsg, err) {},
+  <script>
+    $(document).on("click", "#like-button", function (e) {
+      e.preventDefault();
+      $.ajax({
+        type: "POST",
+        url: '{% url "loader:like" %}',
+        data: {
+          postid: $("#like-button").val(),
+          csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val(),
+          action: "post",
+        },
+        success: function (json) {
+          document.getElementById("like_count").innerHTML = json["result"];
+        },
+        error: function (xhr, errmsg, err) {},
+      });
     });
-  });
-</script>
+  </script>
 
-{% include 'loader/footer.html' %}{% endblock content %}
+  {% include 'loader/footer.html' %}{% endblock content %}
+</div>
