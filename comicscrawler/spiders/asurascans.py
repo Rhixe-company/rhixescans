@@ -30,18 +30,18 @@ class AsurascansSpider(scrapy.Spider):
         serialization = response.css(
             '.flex-wrap .fmed span::text')[3].get().strip()
         obj, created = Comic.objects.filter(
-            Q(title__contains=title) |
-            Q(slug__contains=slug)
+            Q(title__icontains=title) |
+            Q(slug__icontains=slug)
         ).get_or_create(slug=slug, image_url=image_url,  rating=float(rating), status=status, description=description, released=released,  author=author,  artist=artist, alternativetitle=alternativetitle, serialization=serialization, defaults={'title': title, 'slug': slug})
         category = response.css('.imptdt a::text').get()
         obj2, created = Category.objects.filter(
-            Q(name__contains=category)
+            Q(name__icontains=category)
         ).get_or_create(
             name=category, defaults={'name': category})
         genres_list = response.css('.mgen a::text').getall()
         for genre in genres_list:
             obj1, created = Genre.objects.filter(
-                Q(name__contains=genre)
+                Q(name__icontains=genre)
             ).get_or_create(
                 name=genre, defaults={'name': genre})
             obj.genres.add(obj1)
@@ -73,14 +73,14 @@ class AsurascansSpider(scrapy.Spider):
         pages = response.css('.rdminimal img::attr(src)').getall()
         for img_url in pages:
             comic = Comic.objects.filter(
-                Q(title__contains=title) |
-                Q(slug__contains=slug)).get(title=title)
+                Q(title__icontains=title) |
+                Q(slug__icontains=slug)).get(title=title)
             if comic:
                 obj, created = Chapter.objects.filter(
-                    Q(name__contains=name)
+                    Q(name__icontains=name)
                 ).get_or_create(comic=comic, name=name, defaults={'name': name, 'comic': comic})
                 obj1, created = Page.objects.filter(
-                    Q(images_url__contains=img_url)
+                    Q(images_url__icontains=img_url)
                 ).get_or_create(images_url=img_url, chapter=obj, defaults={'images_url': img_url, 'chapter': obj})
                 obj.pages.add(obj1)
                 obj.numPages = obj.page_set.all().count()
