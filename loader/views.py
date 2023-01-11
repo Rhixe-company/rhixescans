@@ -142,8 +142,9 @@ def comic(request, pk):
         fav = True
     genres = comic.genres.all()
     chapters = comic.chapter_set.all()
+    numchapters = chapters.count()
     context = {'comic': comic, 'genres': genres,
-               'chapters': chapters, 'fav': fav}
+               'chapters': chapters, 'fav': fav, 'numchapters': numchapters}
     return render(request, 'loader/comic.html', context)
 
 
