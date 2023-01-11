@@ -3,8 +3,8 @@ from scrapy.crawler import CrawlerProcess
 from scrapy.settings import Settings
 #from Comics.robot import ComicSpider
 from comicscrawler import settings as my_settings
-#from comicscrawler.spiders.asura_spider import AsuraSpider
-from comicscrawler.spiders.manganato import ManganatoSpider
+from comicscrawler.spiders.asurascans import AsurascansSpider
+#from comicscrawler.spiders.manganato import ManganatoSpider
 
 
 class Command(BaseCommand):
@@ -16,5 +16,5 @@ class Command(BaseCommand):
 
         process = CrawlerProcess(settings=crawler_settings)
 
-        process.crawl(ManganatoSpider)
+        process.crawl(AsurascansSpider)
         process.start()

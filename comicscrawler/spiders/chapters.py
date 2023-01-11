@@ -24,8 +24,6 @@ class ChaptersSpider(Spider):
 
         for link in response.css('ul.clstyle li a::attr(href)'):
             yield response.follow(link.get(), callback=self.parse_chapters)
-        for link in response.css('ul.clstyle li a::attr(href)'):
-            yield response.follow(link.get(), callback=self.parse_chapters)
 
     async def parse_chapters(self, response):
         results = []

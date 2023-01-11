@@ -5,7 +5,6 @@ from django.utils import timezone
 from django.core import files
 from django.urls import reverse
 from requests_html import HTMLSession
-from PIL import Image
 from django.utils.translation import gettext_lazy as _
 
 # Create your models here.
@@ -14,6 +13,7 @@ s = HTMLSession()
 headers = {
     'User-Agent': "Mozilla/5.0 (Windows NT x.y; Win64; x64; rv:10.0) Gecko/20100101 Firefox/10.0"
 }
+
 
 
 def comics_images_location(instance, filename):
@@ -47,8 +47,14 @@ RATING_CHOICES = [
 
 
 class Genre(models.Model):
-    name = models.CharField(max_length=1000, unique=True,
-                            blank=False, null=False)
+    name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.name
+
+
+class Category(models.Model):
+    name = models.CharField(max_length=100)
 
     def __str__(self):
         return self.name
@@ -59,32 +65,26 @@ class Comic(models.Model):
         def get_queryset(self):
             return super().get_queryset() .filter(status='Ongoing')
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
-    slug = models.SlugField(
-        max_length=1000000, null=True, unique=True, blank=False)
-    title = models.CharField(max_length=2000, unique=True, null=False)
-    favourites = models.ManyToManyField(
-        User,  blank=True, related_name='favourite', default=None)
-    description = models.TextField(blank=True)
-    CategoryType = models.TextChoices('CategoryType', 'Manhua Manhwa Manga')
-
+    title = models.CharField(max_length=1000, unique=True, null=True)
+    alternativetitle = models.CharField(max_length=1000, blank=True, null=True)
+    slug = models.SlugField(max_length=1000, unique=True, null=True)
+    description = models.TextField(blank=True, null=True)
     image = models.ImageField(
         upload_to=comics_images_location, blank=False)
     image_url = models.URLField(blank=True, null=False)
-    rating = models.DecimalField(
-        max_digits=9, decimal_places=1, blank=False, null=False)
-    status = models.CharField(
-        max_length=100, choices=STATUS_CHOICES, blank=True)
-    author = models.CharField(max_length=1000, blank=True)
-    artist = models.CharField(max_length=1000, blank=True)
-    category = models.CharField(
-        max_length=10, choices=CategoryType.choices, blank=True, default=None)
-    numChapters = models.IntegerField(default=0, null=True, blank=True)
-    genres = models.ManyToManyField(
-        Genre, blank=True)
-    serialized = models.CharField(max_length=100, blank=True, null=False)
-    released = models.CharField(max_length=100, blank=True, null=False)
+    rating = models.DecimalField(max_digits=9, decimal_places=1, blank=True)
+    status = models.CharField(max_length=50)
+    author = models.CharField(max_length=100, blank=True, null=True)
+    artist = models.CharField(max_length=100, blank=True, null=True)
+    released = models.CharField(max_length=100, blank=True, null=True)
+    serialization = models.CharField(max_length=1000, blank=True, null=True)
     updated = models.DateTimeField(auto_now=True)
-    created = models.DateTimeField(default=timezone.now)
+    created = models.DateTimeField(auto_now_add=True)
+    favourites = models.ManyToManyField(
+        User, blank=True, related_name='favourite')
+    likes = models.ManyToManyField(User, blank=True, related_name='like')
+    genres = models.ManyToManyField(Genre, blank=True)
+    category = models.ManyToManyField(Category)
     likes = models.ManyToManyField(
         User, related_name='like', default=None, blank=True)
     like_count = models.BigIntegerField(default='0')
@@ -95,7 +95,7 @@ class Comic(models.Model):
         return reverse("loader:comic", args=[self.id])
 
     class Meta:
-        ordering = ['updated', 'created']
+        ordering = ['-updated', '-created']
 
     def __str__(self):
         return self.title
@@ -103,7 +103,6 @@ class Comic(models.Model):
     def save(self, *args, **kwargs):
 
         if self.image == '' and self.image_url != '':
-
             resp = s.get(self.image_url,  stream=True, headers=headers)
             pb = BytesIO()
             pb.write(resp.content)
@@ -111,8 +110,8 @@ class Comic(models.Model):
             file_name = self.image_url.split("/")[-1]
             self.image.save(file_name, files.File(pb),
                             save=True)
-        else:
             return super().save(*args, **kwargs)
+            
 
     @property
     def imageURL(self):
@@ -149,23 +148,22 @@ class ComicsManager(Comic, ExtraManagers):
 
 class Chapter(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
-    comic = models.ForeignKey(Comic, on_delete=models.CASCADE, null=True)
-    name = models.CharField(
-        max_length=1000, unique=True, blank=False, null=True)
+    comic = models.ForeignKey(Comic, on_delete=models.CASCADE)
+    name = models.CharField(max_length=1000, unique=True, null=True)
     pages = models.ManyToManyField('Page', blank=True, related_name='pages')
     numReviews = models.IntegerField(default=0, null=True, blank=True)
     numPages = models.IntegerField(default=0, null=True, blank=True)
     updated = models.DateTimeField(auto_now=True)
-    created = models.DateTimeField(default=timezone.now)
+    created = models.DateTimeField(auto_now_add=True)
 
     def get_absolute_url(self):
         return reverse("loader:chapter", args=[self.id])
 
     class Meta:
-        ordering = ['-id']
+        ordering = ['-updated', '-created']
 
     def __str__(self):
-        return '%s %s' % (self.name, self.comic)
+        return self.name
 
 
 class Page(models.Model):
@@ -173,14 +171,13 @@ class Page(models.Model):
     images = models.ImageField(
         upload_to=comics_chapters_images_location, max_length=10000, blank=False)
     images_url = models.URLField(
-        max_length=10000, blank=True, unique=True, default=None, null=True)
-    created = models.DateTimeField(default=timezone.now)
+        max_length=10000, blank=True)
 
     class Meta:
         ordering = ['id']
 
     def __str__(self):
-        return '%s %s' % (self.images, self.chapter)
+        return str(self.images)
 
     def save(self, *args, **kwargs):
 
@@ -192,7 +189,6 @@ class Page(models.Model):
             file_name = self.images_url.split("/")[-1]
             self.images.save(file_name, files.File(pb),
                              save=True)
-        else:
             return super().save(*args, **kwargs)
 
     @property

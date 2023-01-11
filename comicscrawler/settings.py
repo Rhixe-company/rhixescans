@@ -2,7 +2,7 @@ import django
 import os
 import sys
 sys.path.append('/home/bot/Desktop/dev/projects/rhixescans.com')
-
+os.environ["DJANGO_ALLOW_ASYNC_UNSAFE"] = "true"
 os.environ['DJANGO_SETTINGS_MODULE'] = 'home.settings'
 django.setup()
 # Scrapy settings for comicscrawler project
@@ -107,5 +107,5 @@ DUPEFILTER_CLASS = 'scrapy_splash.SplashAwareDupeFilter'
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
 
 # Set settings whose default value is deprecated to a future-proof value
-#REQUEST_FINGERPRINTER_IMPLEMENTATION = '2.7'
-#TWISTED_REACTOR = 'twisted.internet.asyncioreactor.AsyncioSelectorReactor'
+REQUEST_FINGERPRINTER_IMPLEMENTATION = '2.7'
+TWISTED_REACTOR = 'twisted.internet.asyncioreactor.AsyncioSelectorReactor'
