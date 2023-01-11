@@ -82,6 +82,7 @@ class Comic(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     favourites = models.ManyToManyField(
         User, blank=True, related_name='favourite')
+    numChapters = models.IntegerField(default=0, null=True, blank=True)
     likes = models.ManyToManyField(User, blank=True, related_name='like')
     genres = models.ManyToManyField(Genre, blank=True)
     category = models.ManyToManyField(Category)

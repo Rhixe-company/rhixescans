@@ -85,7 +85,8 @@ class AsurascansSpider(scrapy.Spider):
                 obj.pages.add(obj1)
                 obj.numPages = obj.page_set.all().count()
                 obj.save()
-                
+                comic.numChapters = comic.chapter_set.all().count()
+                comic.save()
         yield {
             'slug': slug,
             'title': title,
