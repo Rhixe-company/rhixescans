@@ -39,12 +39,12 @@ def like(request):
         id = int(request.POST.get('postid'))
         comic = get_object_or_404(Comic, id=id)
         if comic.likes.filter(id=request.user.id).exists():
-            comic.likes.remove(request.user)
+            comic.likes.remove(request.user.id)
             comic.like_count -= 1
             result = comic.like_count
             comic.save()
         else:
-            comic.likes.add(request.user)
+            comic.likes.add(request.user.id)
             comic.like_count += 1
             result = comic.like_count
             comic.save()
