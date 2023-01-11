@@ -15,7 +15,6 @@ headers = {
 }
 
 
-
 def comics_images_location(instance, filename):
     return '{}/{}'.format(str(instance.title).replace(" ", "_").replace(":", " ").replace("/", "").replace("\\", ""), filename)
 
@@ -112,7 +111,6 @@ class Comic(models.Model):
             self.image.save(file_name, files.File(pb),
                             save=True)
             return super().save(*args, **kwargs)
-            
 
     @property
     def imageURL(self):
@@ -161,7 +159,7 @@ class Chapter(models.Model):
         return reverse("loader:chapter", args=[self.id])
 
     class Meta:
-        ordering = ['-updated', '-created']
+        ordering = ['-id']
 
     def __str__(self):
         return self.name
