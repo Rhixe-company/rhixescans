@@ -1,27 +1,21 @@
-{% extends '../base/base.html' %}{% load static %} {% block title %} Welcome to
-Search {% endblock %} {% block content %} {% include '../base/nav-main.html'%}
-{% load crispy_forms_tags %}
-<div class="container pt-5">
-
+{% extends '../base/base.html' %} {% load static %} {% block title %} Welcome to
+Search {% endblock %} {% block content %} {% load crispy_forms_tags %} {%
+include '../base/nav-main.html'%}
+<div class="album py-5 bg-dark">
+  <div class="text-white">
     {% if q %}
-    <h1>Comics containing "{{ q }}"
-
-        {% if c %}
-        In genre "{{ c }}"
-        {% endif %}
-
+    <h1>
+      Comic containing "{{ q }}" {% if c %} In genre "{{ c }}" {% endif %}
     </h1>
     <p>
-        {% with results.count as total_results %}
-        Found {{ total_results }} result{{ total_results|pluralize }}
-        {% endwith %}
+      {% with results.count as total_results %} Found {{ total_results }}
+      result{{ total_results|pluralize }} {% endwith %}
     </p>
-
-
-    <div class="album py-5 bg-light">
-        <div class="container">
-            <div class="row">
-        {% for comic in results %}
+  </div>
+  <div class="container pt-5 text-dark">
+    <div class="container">
+      <div class="row">
+        {% for comic in comics %}
         <div class="col-md-4">
           <a class="text-dark" href="{{comic.get_absolute_url}}">
             <div class="card mb-1 box-shadow">
@@ -35,7 +29,8 @@ Search {% endblock %} {% block content %} {% include '../base/nav-main.html'%}
                   {{comic.title|truncatechars:50}}
                 </h2>
                 <br />
-                 <p class="card-text">{{comic.description|truncatechars:200}}</p>
+                {% for categor in comic.category.all %} {{categor.name
+                |truncatechars:50}} {% endfor %}
 
                 <div class="d-flex justify-content-between align-items-center">
                   <small class="text-muted"><em>{{comic.rating}}</em></small>
@@ -63,25 +58,28 @@ Search {% endblock %} {% block content %} {% include '../base/nav-main.html'%}
             </div>
           </a>
         </div>
-        {% empty %}
+      </div>
+      {% empty %}
       <p>There are no results for your query.</p>
       {% endfor %}
-      </div>
-        </div>
     </div>
-
-
-    <p><a href="{% url "loader:comic_search" %}" class="btn btn-primary" role="button" aria-disabled="true">New
-            Search</a>
+  </div>
+  <div> <p>
+      <a href="{% url "loader:comic_search" %}" class="btn btn-primary" role="button" aria-disabled="true">New Search</a>
     </p>
     {% else %}
     <h1>Search for comics</h1>
     <form method="get" action='{% url 'loader:comic_search' %}' class='dropdown show'>
-        {{ form.as_p}}
+      {% csrf_token %}
+       {{form.q}}
+       <ul class="dropdown-menu col-12 pl-2 text-dark" role="menu" aria-labelledby="menu" id="list">
+          
+        </ul>
+       
+        {{form.c}}
         <input class="btn btn-primary my-1" type="submit" value="Search">
     </form>
-    {% endif %}
-
+    {% endif %}</div>
 </div>
 
 {% include 'loader/footer.html' %} {% endblock content %}

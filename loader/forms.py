@@ -22,8 +22,6 @@ class ComicSearchForm(forms.Form):
         self.fields['q'].label = 'Search For'
         self.fields['q'].widget.attrs.update(
             {'class': 'form-control menudd'})
-        self.fields['q'].widget.attrs.update(
-            {'data-toggle': 'dropdown'})
 
 
 class CustomUserCreationForm(UserCreationForm):

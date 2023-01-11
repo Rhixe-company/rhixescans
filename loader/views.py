@@ -105,7 +105,10 @@ def bookmark(request, pk):
 
 
 def index(request):
-    comics = Comic.newmanager.all()
+    q = request.GET.get('q') if request.GET.get('q') != None else ''
+    comics = Comic.newmanager.filter(Q(title__icontains=q) |
+                                     Q(alternativetitle__icontains=q)
+                                     )
     page = request.GET.get('page')
     paginator = Paginator(comics, 21)
     try:

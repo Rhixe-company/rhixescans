@@ -12,25 +12,36 @@
           <div class="col-12 pb-1 text-white">
             <p> List of {{catlist.cat}} comics</p>
           </div>
-          {% for post in catlist.posts %}
-          <div class="col-md-4">
-    <a class="text-dark" href="{{post.get_absolute_url}}">
+          {% for comic in catlist.posts %}
+  <div class="col-md-4">
+    <a class="text-dark" href="{{comic.get_absolute_url}}">
       <div class="card mb-1 box-shadow">
         <img
           class="card-img-top"
-          src="{{post.imageURL}}"
-          alt="{{ post.title }}"
+          src="{{comic.imageURL}}"
+          alt="{{ comic.title }}"
         />
         <div class="card-body">
-          <h2 style="font-size: 16px">{{post.title|truncatechars:50}}</h2>
-          <p class="card-text">{{post.category|truncatechars:50}}</p>
+          <h2 style="font-size: 20px">{{comic.title|truncatechars:50}}</h2>
+          <br>
+          {% for categor in comic.category.all  %}
+         {{categor.name |truncatechars:50}}
+          {% endfor %}
+          
           <div class="d-flex justify-content-between align-items-center">
-            <small class="text-muted"><em>{{post.rating}}</em></small>
-            <p class="text-muted">{{post.status}}</p>
+            <small class="text-muted"><em>{{comic.rating}}</em></small>
+            <p class="text-muted">{{comic.status}}</p>
+          </div>
+          <div>
+            <small>Genres:</small>
+            {% for genre in comic.genres.all %}
+            <a class="btn btn-outline-dark btn-sm" href="{% url 'loader:genre' genre.name%}">{{genre.name}}</a>
+            {% endfor %}
           </div>
         </div>
+
         <div class="card-footer">
-          {% with post.chapter_set.first as chapter %}
+          {% with comic.chapter_set.first as chapter %}
             <a href="{{chapter.get_absolute_url}}" class="text-dark"
               >{{chapter.name|truncatechars:50}}</a
             >
@@ -40,7 +51,7 @@
       </div>
     </a>
   </div>
-          {% endfor %}
+  {% endfor %}
         </div>
       </div>
     </div>

@@ -9,13 +9,24 @@
           alt="{{ comic.title }}"
         />
         <div class="card-body">
-          <h2 style="font-size: 16px">{{comic.title|truncatechars:50}}</h2>
-          <p class="card-text">{{comic.description|truncatechars:50}}</p>
+          <h2 style="font-size: 20px">{{comic.title|truncatechars:50}}</h2>
+          <br>
+          {% for categor in comic.category.all  %}
+         {{categor.name |truncatechars:50}}
+          {% endfor %}
+          
           <div class="d-flex justify-content-between align-items-center">
             <small class="text-muted"><em>{{comic.rating}}</em></small>
             <p class="text-muted">{{comic.status}}</p>
           </div>
+          <div>
+            <small>Genres:</small>
+            {% for genre in comic.genres.all %}
+            <a class="btn btn-outline-dark btn-sm" href="{% url 'loader:genre' genre.name%}">{{genre.name}}</a>
+            {% endfor %}
+          </div>
         </div>
+
         <div class="card-footer">
           {% with comic.chapter_set.first as chapter %}
             <a href="{{chapter.get_absolute_url}}" class="text-dark"
